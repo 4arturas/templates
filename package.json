@@ -1,27 +1,56 @@
 {
-  "name": "template",
+  "name": "templates",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "prismaStudio": "prisma studio",
+    "prismaGenerate": "prisma generate",
+    "prismaDbPush": "prisma db push",
+    "prismaFormat": "prisma format",
+    "prismaMigrate": "prisma migrate dev --name init",
+    "buildNextPrisma": "prisma generate && next build",
+    "prismaSeed": "prisma db seed",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.13",
+    "@mui/material": "^5.14.13",
+    "@prisma/client": "^5.4.2",
+    "next": "13.5.4",
     "react": "^18",
-    "react-dom": "^18",
-    "next": "13.5.4"
+    "react-dom": "^18"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@storybook/addon-essentials": "^7.4.6",
+    "@storybook/addon-interactions": "^7.4.6",
+    "@storybook/addon-links": "^7.4.6",
+    "@storybook/addon-onboarding": "^1.0.8",
+    "@storybook/blocks": "^7.4.6",
+    "@storybook/nextjs": "^7.4.6",
+    "@storybook/react": "^7.4.6",
+    "@storybook/testing-library": "^0.2.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10",
-    "postcss": "^8",
-    "tailwindcss": "^3",
     "eslint": "^8",
-    "eslint-config-next": "13.5.4"
+    "eslint-config-next": "13.5.4",
+    "eslint-plugin-storybook": "^0.6.15",
+    "postcss": "^8",
+    "prisma": "^5.4.2",
+    "storybook": "^7.4.6",
+    "tailwindcss": "^3",
+    "ts-node": "^10.9.1",
+    "typescript": "^5"
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   }
 }
