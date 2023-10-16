@@ -15,9 +15,9 @@ export default function CategoriesCategoryPage() {
     let categories = use<Category[]>(getCategories());
 
     return <div>
-        <div>Categories</div>
+        <h3>Categories</h3>
         <Link href="/categories/new" passHref>
-            <Button>New</Button>
+            <Button>Create New Category</Button>
         </Link>
         <CategoriesComponent categories={categories}/>
     </div>

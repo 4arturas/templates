@@ -1,7 +1,7 @@
 "use client";
 
-
 import {
+    Button,
     Checkbox,
     IconButton,
     List,
@@ -17,18 +17,20 @@ import {Category} from "@prisma/client";
 
 type Props = {
     categories: Array<Category>
+    createNewTemplate: (name: string,
+                        categoryArr: Array<string>) => void
 }
-export const NewtTemplateComponent: React.FC<Props> = ({categories}) => {
+export const NewtTemplateComponent: React.FC<Props> = ({categories, createNewTemplate}) => {
     const [name, setName] = React.useState<string>('');
 
-    const [checked, setChecked] = React.useState([0]);
+    const [checked, setChecked] = React.useState<Array<string>>([]);
 
-    const handleToggle = (value: number) => () => {
-        const currentIndex = checked.indexOf(value);
+    const handleToggle = (categoryId: string) => () => {
+        const currentIndex = checked.indexOf(categoryId);
         const newChecked = [...checked];
 
         if (currentIndex === -1) {
-            newChecked.push(value);
+            newChecked.push(categoryId);
         } else {
             newChecked.splice(currentIndex, 1);
         }
@@ -55,14 +57,17 @@ export const NewtTemplateComponent: React.FC<Props> = ({categories}) => {
                             }
                             disablePadding
                         >
-                            <ListItemButton role={undefined} onClick={handleToggle(idx)} dense>
+                            <ListItemButton role={undefined} onClick={handleToggle(category.id)} dense>
                                 <ListItemIcon>
                                     <Checkbox
                                         edge="start"
-                                        checked={checked.indexOf(idx) !== -1}
+                                        checked={checked.indexOf(category.id) !== -1}
                                         tabIndex={-1}
                                         disableRipple
                                         inputProps={{ 'aria-labelledby': labelId }}
+                                        onClick={()=>{
+
+                                        }}
                                     />
                                 </ListItemIcon>
                                 <ListItemText id={labelId} primary={category.name} />
@@ -71,6 +76,13 @@ export const NewtTemplateComponent: React.FC<Props> = ({categories}) => {
                     );
                 })}
             </List>
+            <Button
+                disabled={name.length === 0 || checked.length === 0}
+                onClick={()=>
+                    createNewTemplate(name, checked)
+                }>
+                Create New Template
+            </Button>
         </>
     )
 }
