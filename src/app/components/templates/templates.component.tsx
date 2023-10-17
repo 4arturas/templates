@@ -12,7 +12,6 @@ export const TemplatesComponent: React.FC<Props> = ({templates}) => {
 
     return (
         <>
-            { templates && 'No templates'}
             {templates.map((template) => (
                 <div key={template.id}>
                     <h3>{template.name}</h3>
