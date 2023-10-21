@@ -1,11 +1,27 @@
 "use client";
 
-// import './globals.css'
+import './globals.css'
 import type {Metadata} from 'next'
 import {Inter} from 'next/font/google'
-import {ThemeProvider} from "@mui/material";
+import {
+    AppBar, BottomNavigationAction,
+    Box, Breadcrumbs,
+    Chip,
+    emphasize,
+    Stack, styled,
+    ThemeProvider,
+    Toolbar,
+    Typography
+} from "@mui/material";
 import {createTheme} from '@mui/material/styles';
 import Link from "next/link";
+import {lightBlue} from "@mui/material/colors";
+import React from "react";
+import Button from "@mui/material/Button";
+
+import HomeIcon from '@mui/icons-material/Home';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { usePathname } from 'next/navigation'
 
 const inter = Inter({subsets: ['latin']})
 
@@ -19,7 +35,7 @@ let theme = createTheme({
             main: '#0052cc',
         },
         secondary: {
-            main: '#edf2ff',
+            main: '#000',
         },
     },
 });
@@ -35,18 +51,51 @@ export default function RootLayout({
                                    }: {
     children: React.ReactNode
 }) {
+    const pathname = usePathname()
+
+    const getColor = (p:string) => {
+        return pathname===p ? 'primary': 'info';
+    }
+
     return (
         <html lang="en">
-        <body className={inter.className} style={{background:'white'}}>
+        <body className={inter.className} style={{background: 'white'}}>
         <ThemeProvider theme={theme}>
-            <h1>Template management</h1>
-            <Link href='/templates'>Templates</Link>
-            &nbsp;&nbsp;&nbsp;
-            <Link href='/categories'>Categories</Link>
-            <hr/>
-            <br/>
-            <br/>
-            {children}
+                <Box>
+                    <Box sx={{flexGrow: 1}}>
+                        <AppBar position="static">
+                            <Toolbar>
+                                <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
+                                    Template management
+                                </Typography>
+                                <Button color="inherit">Login</Button>
+                            </Toolbar>
+                        </AppBar>
+                    </Box>
+                    <Stack gap={2} sx={{p: 1}} alignItems="center">
+                        <Breadcrumbs aria-label="breadcrumb">
+                            <Link href='/'>
+                                <Chip label="Home" variant={pathname==='/' ? 'filled':'outlined'} color={pathname==='/' ? 'primary':'secondary'} icon={<HomeIcon fontSize="small" />} />
+                            </Link>
+                            <Link href='/templates'>
+                                <Chip label="Templates" variant={pathname==='/templates' ? 'filled':'outlined'} color={pathname==='/templates' ? 'primary':'secondary'} />
+                            </Link>
+
+                            <Link href='/templates/new'>
+                                <Chip label="Add Template" variant={pathname==='/templates/new' ? 'filled':'outlined'} color={pathname==='/templates/new' ? 'primary':'secondary'} />
+                            </Link>
+                            <Link href='/categories'>
+                                <Chip label="Categories" variant={pathname==='/categories' ? 'filled':'outlined'} color={pathname==='/categories' ? 'primary':'secondary'} />
+                            </Link>
+                            <Link href='/categories/new'>
+                                <Chip label="Add Category" variant={pathname==='/categories/new' ? 'filled':'outlined'} color={pathname==='/categories/new' ? 'primary':'secondary'} />
+                            </Link>
+                        </Breadcrumbs>
+                        <Stack direction="row" style={{marginTop: '40px'}}>
+                            {children}
+                        </Stack>
+                    </Stack>
+                </Box>
         </ThemeProvider>
         </body>
 

@@ -1,7 +1,18 @@
 "use client";
 
 import {Category} from "@prisma/client";
-import {Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
+import {
+    Box,
+    Button, MenuItem,
+    Paper, Tab,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Tabs, Typography
+} from "@mui/material";
 import Link from "next/link";
 import React from "react";
 
@@ -9,36 +20,35 @@ type Props = {
     categories: Array<Category>
 }
 export const CategoriesComponent: React.FC<Props> = ({categories}) => {
-
     return (
-        <>
             <TableContainer component={Paper}>
                 <Table sx={{minWidth: 0}} aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Name</TableCell>
+                            <TableCell>Category Name</TableCell>
                             <TableCell>Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {categories.map((catetory) => (
+                        {categories.map((category, index) => (
                             <TableRow
-                                key={catetory.name}
+                                key={category.id}
                                 sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                                style={{backgroundColor: (index%2===0)?'':'whitesmoke'}}
                             >
                                 <TableCell component="th" scope="row">
-                                    {catetory.name}
+                                    {category.name}
                                 </TableCell>
                                 <TableCell align="right">
-                                    <Link href={`/categories/category/${catetory.id}`} passHref>
+                                    <Link href={`/categories/${category.id}`} passHref>
                                         View
                                     </Link>
                                     &nbsp;
-                                    <Link href={`/categories/categories/${catetory.id}`} passHref>
+                                    <Link href={`/categories/categories/${category.id}`} passHref>
                                         Edit
                                     </Link>
                                     &nbsp;
-                                    <Link href={`/categories/categories/${catetory.id}`} passHref>
+                                    <Link href={`/categories/categories/${category.id}`} passHref>
                                         Delete
                                     </Link>
                                 </TableCell>
@@ -47,7 +57,5 @@ export const CategoriesComponent: React.FC<Props> = ({categories}) => {
                     </TableBody>
                 </Table>
             </TableContainer>
-
-        </>
     );
 }

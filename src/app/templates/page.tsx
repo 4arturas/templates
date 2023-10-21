@@ -24,19 +24,13 @@ export default function TemplatesPage() {
         return () => { };
     }, []);
 
-    return <div>
-        <h3>Templates Component</h3>
+    return <>
 
         { templates.length === 0 ?
             <CircularProgress />
             :
-            <>
-                <Link href="/templates/new" passHref>
-                    <Button>Create New Template</Button>
-                </Link>
-                <TemplatesComponent templates={templates}/>
-            </>
+            <TemplatesComponent templates={templates}/>
 
         }
-    </div>
+    </>
 }

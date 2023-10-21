@@ -17,10 +17,10 @@ import React from "react";
 export default function CategoriesCategoryNew() {
     const [categoryData, setCategoryData] = React.useState<Array<CategoryData>>([]);
 
-    return <div>
+    return <div>bbaba
         <div>Create new Category</div>
         <TextField id="outlined-basic" label="Category Name" variant="outlined" />
-        <Button>Create</Button>
+        <Button variant="contained">Create</Button>
         <TableContainer component={Paper}>
             <Table sx={{minWidth: 0}} aria-label="simple table">
                 <TableHead>

@@ -14,11 +14,8 @@ export default function CategoriesCategoryPage() {
 
     }
     return <>
-        <h3>New category</h3>
-        <div style={{width:'50%'}}>
             <CategoryNewComponent
                 addNewCategory={addNewCategory}
             />
-        </div>
     </>
 }

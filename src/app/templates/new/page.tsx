@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import React, {cache} from "react";
-import {NewtTemplateComponent} from "@/app/components/templates/newtemplate.component";
+import {NewTemplateComponent} from "@/app/components/templates/newtemplate.component";
 import {Category} from "@prisma/client";
 import {CircularProgress} from "@mui/material";
 import {postData} from "@/app/utils";
@@ -31,16 +31,13 @@ export default function TemplatesNewPage() {
     }, []);
 
     return <>
-        <h3>New Template</h3>
-        <div style={{width:'50%'}}>
             { categories.length === 0 ?
                 <CircularProgress />
                 :
-                <NewtTemplateComponent
+                <NewTemplateComponent
                     categories={categories}
                     createNewTemplate={createNewTemplate}
                 />
             }
-        </div>
     </>
 }
