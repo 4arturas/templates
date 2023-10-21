@@ -1,3 +1,6 @@
+import {Category, CategoryData} from "@prisma/client";
+import {cache} from "react";
+
 export async function postData(url = "", data = {}) {
     // Default options are marked with *
     const response = await fetch(url, {
@@ -15,3 +18,30 @@ export async function postData(url = "", data = {}) {
     });
     return response.json(); // parses JSON response into native JavaScript objects
 }
+
+export const getTemplates = cache(() =>
+    fetch("http://localhost:3000/api/templates").then((res) => res.json())
+);
+
+export const getTemplate = (async (id: string): Promise<Category> => {
+    const item = fetch(`http://localhost:3000/api/templates/${id}`).then((res) => res.json())
+    return item
+})
+
+export const getTemplateCategories = (async (id: string) : Promise<Array<CategoryData>> => {
+    return  fetch(`http://localhost:3000/api/templates/categories/${id}`).then((res) => res.json())
+})
+
+export const getCategories = cache(async () => {
+    const item = fetch(`http://localhost:3000/api/categories`).then((res) => res.json())
+    return item
+})
+
+export const getCategory = (async (id: string): Promise<Category> => {
+    const item = fetch(`http://localhost:3000/api/categories/${id}`).then((res) => res.json())
+    return item
+})
+
+export const getCategoryValues = (async (id: string) : Promise<Array<CategoryData>> => {
+    return  fetch(`http://localhost:3000/api/categories/data/${id}`).then((res) => res.json())
+})

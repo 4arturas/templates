@@ -1,8 +1,9 @@
 "use client";
 
-import {CategoryNewComponent} from "@/app/components/categories/category/new/categorynew.component";
 import { useRouter } from 'next/navigation'
 import {postData} from "@/app/utils";
+import React from "react";
+import {CategoryNewComponent} from "@/app/categories/new/categorynew.component";
 
 export default function CategoriesCategoryPage() {
     const router = useRouter();
@@ -14,8 +15,6 @@ export default function CategoriesCategoryPage() {
 
     }
     return <>
-            <CategoryNewComponent
-                addNewCategory={addNewCategory}
-            />
+            <CategoryNewComponent addNewCategory={addNewCategory} />
     </>
 }

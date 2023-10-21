@@ -2,14 +2,11 @@
 
 import { useRouter } from 'next/navigation'
 import React, {cache} from "react";
-import {NewTemplateComponent} from "@/app/components/templates/newtemplate.component";
+import {NewTemplateComponent} from "@/app/templates/new/newtemplate.component";
 import {Category} from "@prisma/client";
 import {CircularProgress} from "@mui/material";
-import {postData} from "@/app/utils";
+import {getCategories, postData} from "@/app/utils";
 
-const getCategories = cache(async () : Promise<Array<Category>> => {
-    return await fetch(`http://localhost:3000/api/categories`).then((res) => res.json())
-})
 
 export default function TemplatesNewPage() {
     const router = useRouter();

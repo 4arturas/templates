@@ -1,18 +1,11 @@
 "use client";
 
 import React, {cache} from "react";
-import {CategoryComponent} from "@/app/components/categories/category/category.component";
+import {CategoryComponent} from "@/app/categories/[id]/category.component";
 import {Category, CategoryData} from "@prisma/client";
 import {CircularProgress} from "@mui/material";
+import {getCategory, getCategoryValues} from "@/app/utils";
 
-const getCategory = (async (id: string): Promise<Category> => {
-    const item = fetch(`http://localhost:3000/api/categories/${id}`).then((res) => res.json())
-    return item
-})
-
-const getCategoryValues = (async (id: string) : Promise<Array<CategoryData>> => {
-    return  fetch(`http://localhost:3000/api/categoryvalues/${id}`).then((res) => res.json())
-})
 export default function CategoriesCategory( { params }: {params: { id: string }; } ) {
 
     const [category, setCategory] = React.useState<Category>();

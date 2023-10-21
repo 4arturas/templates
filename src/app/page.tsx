@@ -1,4 +1,3 @@
-import ListUsers from "@/app/components/listusers.component";
 import Link from "next/link";
 
 export default async function Home() {

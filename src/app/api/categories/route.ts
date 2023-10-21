@@ -9,7 +9,6 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
     try {
-        throw new Error('Not implemented exception');
         const json = await request.json();
 
         const newCategory: any = { name: json.name };

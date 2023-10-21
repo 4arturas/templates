@@ -78,14 +78,18 @@ export default function RootLayout({
                                 <Chip label="Home" variant={pathname==='/' ? 'filled':'outlined'} color={pathname==='/' ? 'primary':'secondary'} icon={<HomeIcon fontSize="small" />} />
                             </Link>
                             <Link href='/templates'>
-                                <Chip label="Templates" variant={pathname==='/templates' ? 'filled':'outlined'} color={pathname==='/templates' ? 'primary':'secondary'} />
+                                <Chip label="Templates"
+                                      variant={!pathname.includes('/templates/new') && pathname.includes('/templates') ? 'filled':'outlined'}
+                                      color={!pathname.includes('/templates/new') && pathname.includes('/templates') ? 'primary':'secondary'} />
                             </Link>
 
                             <Link href='/templates/new'>
                                 <Chip label="Add Template" variant={pathname==='/templates/new' ? 'filled':'outlined'} color={pathname==='/templates/new' ? 'primary':'secondary'} />
                             </Link>
                             <Link href='/categories'>
-                                <Chip label="Categories" variant={pathname==='/categories' ? 'filled':'outlined'} color={pathname==='/categories' ? 'primary':'secondary'} />
+                                <Chip label="Categories"
+                                      variant={!pathname.includes('/categories/new') && pathname.includes('/categories') ? 'filled':'outlined'}
+                                      color={!pathname.includes('/categories/new') && pathname.includes('/categories') ? 'primary':'secondary'} />
                             </Link>
                             <Link href='/categories/new'>
                                 <Chip label="Add Category" variant={pathname==='/categories/new' ? 'filled':'outlined'} color={pathname==='/categories/new' ? 'primary':'secondary'} />

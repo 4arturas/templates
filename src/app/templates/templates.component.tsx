@@ -28,7 +28,17 @@ export const TemplatesComponent: React.FC<Props> = ({templates}) => {
                                 {template.name}
                             </TableCell>
                             <TableCell align="right">
-                                View Edit Delete
+                                <Link href={`/templates/${template.id}`} passHref>
+                                    View
+                                </Link>
+                                &nbsp;
+                                <Link href={`#`} passHref>
+                                    Edit
+                                </Link>
+                                &nbsp;
+                                <Link href={`#`} passHref>
+                                    Delete
+                                </Link>
                             </TableCell>
                         </TableRow>
                     ))}
