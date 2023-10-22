@@ -12,7 +12,7 @@ export async function POST(request: Request) {
         const json = await request.json();
 
         const template = await prisma.template.create({
-            data: { name: json.name },
+            data: { name: json.name, subject: json.subject, to: json.to, icon: json.icon, templateText: json.templateText },
         });
 
         for ( let i = 0; i < json.categoryArr.length; i++ ) {

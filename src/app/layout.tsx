@@ -59,7 +59,7 @@ export default function RootLayout({
 
     return (
         <html lang="en">
-        <body className={inter.className} style={{background: 'white'}}>
+        <body>
         <ThemeProvider theme={theme}>
                 <Box>
                     <Box sx={{flexGrow: 1}}>
@@ -95,10 +95,14 @@ export default function RootLayout({
                                 <Chip label="Add Category" variant={pathname==='/categories/new' ? 'filled':'outlined'} color={pathname==='/categories/new' ? 'primary':'secondary'} />
                             </Link>
                         </Breadcrumbs>
-                        <Stack direction="row" style={{marginTop: '40px'}}>
-                            {children}
-                        </Stack>
                     </Stack>
+                    {/*<Stack style={{marginTop: '40px', marginLeft: '40px', marginRight: '40px'}}>*/}
+                    <Stack gap={2} sx={{p: 1, marginTop: '40px'}} alignItems="center">
+                        {children}
+                    </Stack>
+                    <AppBar position="static" style={{bottom: 0, position: 'fixed'}}>
+                        <Typography>&nbsp;&nbsp;&copy;2023</Typography>
+                    </AppBar>
                 </Box>
         </ThemeProvider>
         </body>

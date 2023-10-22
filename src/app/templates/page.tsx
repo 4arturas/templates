@@ -1,18 +1,25 @@
 "use client"
 
 import {TemplatesComponent} from "@/app/templates/templates.component";
-import Button from '@mui/material/Button';
-import Link from "next/link";
-import React, {cache, use} from "react";
-import {Category, Template} from "@prisma/client";
+import React from "react";
+import {Template} from "@prisma/client";
 import {CircularProgress} from "@mui/material";
-import {CategoriesComponent} from "@/app/categories/categories.component";
-import {getTemplates} from "@/app/utils";
+import {deleteTemplate, EMethod, getTemplates, postData} from "@/app/utils";
+import {useRouter} from "next/navigation";
 
 export default function TemplatesPage() {
     // let templates = use<Template[]>(getTemplates());
+    const router = useRouter();
 
-    const [templates, setTemplates] = React.useState<Array<Template>>([]);
+    const [templates, setTemplates] = React.useState<Array<Template>>();
+
+    const deleteTemplateAndRedirect = (id:string) => {
+        deleteTemplate(id).then((response)=>{
+            // router.push(`/templates`, { scroll: false })
+            router.refresh()
+        })
+    }
+
 
     React.useEffect( () => {
         async function startFetching() {
@@ -24,10 +31,10 @@ export default function TemplatesPage() {
 
     return <>
 
-        { templates.length === 0 ?
+        { !templates ?
             <CircularProgress />
             :
-            <TemplatesComponent templates={templates}/>
+            <TemplatesComponent templates={templates} deleteTemplateAndRedirect={deleteTemplateAndRedirect} />
 
         }
     </>

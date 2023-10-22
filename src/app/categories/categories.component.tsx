@@ -15,12 +15,22 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import React from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import {useRouter} from "next/navigation";
+import {deleteCategory} from "@/app/utils";
 
 type Props = {
     categories: Array<Category>
 }
 export const CategoriesComponent: React.FC<Props> = ({categories}) => {
+    const router = useRouter();
+    const deleteCategoryAndRedirect = async (id:string) => {
+        deleteCategory(id).then(r=>{
+            router.push(`/categories`, { scroll: false })
+        })
+    }
     return (
+        <Box style={{width: '600px'}}>
             <TableContainer component={Paper}>
                 <Table sx={{minWidth: 0}} aria-label="simple table">
                     <TableHead>
@@ -34,7 +44,7 @@ export const CategoriesComponent: React.FC<Props> = ({categories}) => {
                             <TableRow
                                 key={category.id}
                                 sx={{'&:last-child td, &:last-child th': {border: 0}}}
-                                style={{backgroundColor: (index%2===0)?'':'whitesmoke'}}
+                                style={{backgroundColor: (index%2!==0)?'':'whitesmoke'}}
                             >
                                 <TableCell component="th" scope="row">
                                     {category.name}
@@ -48,14 +58,13 @@ export const CategoriesComponent: React.FC<Props> = ({categories}) => {
                                         Edit
                                     </Link>
                                     &nbsp;
-                                    <Link href={`/categories/categories/${category.id}`} passHref>
-                                        Delete
-                                    </Link>
+                                    <DeleteIcon onClick={()=>deleteCategoryAndRedirect(category.id)} />
                                 </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
+        </Box>
     );
 }

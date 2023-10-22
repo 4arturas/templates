@@ -5,16 +5,16 @@ import React, {cache} from "react";
 import {NewTemplateComponent} from "@/app/templates/new/newtemplate.component";
 import {Category} from "@prisma/client";
 import {CircularProgress} from "@mui/material";
-import {getCategories, postData} from "@/app/utils";
+import {EMethod, getCategories, postData} from "@/app/utils";
 
 
 export default function TemplatesNewPage() {
     const router = useRouter();
-    const [categories, setCategories] = React.useState<Array<Category>>([]);
+    const [categories, setCategories] = React.useState<Array<Category>>();
 
-    const createNewTemplate = (name:string, categoryArr:Array<string>) => {
-        const data = { name: name, categoryArr: categoryArr };
-        postData('http://localhost:3000/api/templates', data ).then((data) => {
+    const createNewTemplate = (name:string, subject: string, to: string, icon: string, templateText: string, categoryArr:Array<string>) => {
+        const data = { name: name, subject: subject, to: to, icon: icon, templateText: templateText, categoryArr: categoryArr };
+        postData('http://localhost:3000/api/templates', EMethod.POST, data ).then((data) => {
             router.push('/templates', { scroll: false })
         });
     }
@@ -28,7 +28,7 @@ export default function TemplatesNewPage() {
     }, []);
 
     return <>
-            { categories.length === 0 ?
+            { !categories ?
                 <CircularProgress />
                 :
                 <NewTemplateComponent

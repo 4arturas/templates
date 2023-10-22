@@ -1,6 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import {Category, CategoryData, CategoryHasCategoryData} from "@prisma/client";
+import {Category, CategoryData, CategoryHasCategoryData, Prisma} from "@prisma/client";
+import CategoryHasCategoryDataScalarFieldEnum = Prisma.CategoryHasCategoryDataScalarFieldEnum;
+
+const _404 = "No category with ID found";
 
 export async function GET(request: Request) {
     const categories = await prisma.category.findMany();

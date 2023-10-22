@@ -23,7 +23,7 @@ export default function CategoriesCategoryPage() {
 
     return <React.Fragment>
         {
-            categories.length === 0 ? <CircularProgress /> :<CategoriesComponent categories={categories}/>
+            !categories ? <CircularProgress /> :<CategoriesComponent categories={categories}/>
         }
     </React.Fragment>
 }

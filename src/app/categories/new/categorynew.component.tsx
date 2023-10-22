@@ -2,7 +2,8 @@
 
 import React from "react";
 import {
-    Button,
+    Box,
+    Button, InputLabel,
     Paper,
     Table,
     TableBody,
@@ -10,7 +11,7 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    TextField, Typography
+    TextField, Typography, Stack
 } from "@mui/material";
 import {Add, PlusOne} from "@mui/icons-material";
 
@@ -24,21 +25,21 @@ export const CategoryNewComponent: React.FC<Props> = ({addNewCategory}) => {
     const [categoryData, setCategoryData] = React.useState<Array<string>>([])
 
     return (
-        <>
+
             <table>
                 <tbody>
                 <tr>
                     <td colSpan={3}></td>
                 </tr>
                 <tr>
-                    <td><Typography>Category Name:</Typography></td>
-                    <td><TextField label="Enter New Category Name Here" style={{width: '100%'}} value={name}
+                    <td style={{width: '200px'}}><InputLabel>Category Name:</InputLabel></td>
+                    <td><TextField label="Enter New Category Name Here" style={{width: '500px'}} value={name}
                                    onChange={(v) => setName(v.target.value)}/></td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td><Typography>New Category Value:</Typography></td>
-                    <td><TextField label="Enter New Category Value Here" style={{width: '100%'}} value={value}
+                    <td><InputLabel>New Category Value:</InputLabel></td>
+                    <td><TextField label="Enter New Category Value Here" style={{width: '500px'}} value={value}
                                    onChange={(v) => setValue(v.target.value)}/></td>
                     <td>
                         <Button
@@ -54,26 +55,27 @@ export const CategoryNewComponent: React.FC<Props> = ({addNewCategory}) => {
                 </tr>
                 <tr>
                     <td colSpan={3}>
-                        { (categoryData.length > 0) &&
-                        <TableContainer component={Paper}>
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>Name</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {categoryData.map((val) => (
-                                        <TableRow sx={{'&:last-child td, &:last-child th': {border: 0}}}
-                                                  key={Math.random()}>
-                                            <TableCell component="th" scope="row">
-                                                {val}
-                                            </TableCell>
+                        {(categoryData.length > 0) &&
+                            <TableContainer component={Paper}>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Name</TableCell>
                                         </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
+                                    </TableHead>
+                                    <TableBody>
+                                        {categoryData.map((val, index) => (
+                                            <TableRow sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                                                      style={{backgroundColor: (index%2!==0)?'':'whitesmoke'}}
+                                                      key={Math.random()}>
+                                                <TableCell component="th" scope="row">
+                                                    {val}
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
                         }
                     </td>
                 </tr>
@@ -90,6 +92,5 @@ export const CategoryNewComponent: React.FC<Props> = ({addNewCategory}) => {
                 </tbody>
             </table>
 
-        </>
     );
 }

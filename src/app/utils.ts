@@ -1,10 +1,17 @@
 import {Category, CategoryData} from "@prisma/client";
 import {cache} from "react";
 
-export async function postData(url = "", data = {}) {
+export interface ICategoryWithCategoryData {
+    category: Category,
+    data: Array<CategoryData>
+}
+
+export enum EMethod {'POST', 'PUT', 'DELETE'}
+
+export async function postData(url = "", method: EMethod ,data = {}) {
     // Default options are marked with *
     const response = await fetch(url, {
-        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
         mode: "cors", // no-cors, *cors, same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
         credentials: "same-origin", // include, *same-origin, omit
@@ -32,6 +39,24 @@ export const getTemplateCategories = (async (id: string) : Promise<Array<Categor
     return  fetch(`http://localhost:3000/api/templates/categories/${id}`).then((res) => res.json())
 })
 
+export const deleteTemplate = (async (id: string) => {
+    const data = { id: id };
+    return fetch('http://localhost:3000/api/templates/delete', {
+        method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
+        mode: "cors", // no-cors, *cors, same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: "same-origin", // include, *same-origin, omit
+        headers: {
+            "Content-Type": "application/json",
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: "follow", // manual, *follow, error
+        referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: JSON.stringify(data), // body data type must match "Content-Type" header
+    });
+    // return response.json(); // parses JSON response into native JavaScript objects
+})
+
 export const getCategories = cache(async () => {
     const item = fetch(`http://localhost:3000/api/categories`).then((res) => res.json())
     return item
@@ -42,6 +67,46 @@ export const getCategory = (async (id: string): Promise<Category> => {
     return item
 })
 
+export const deleteCategory = (async (id: string) => {
+    const data = { id: id };
+    const response = await fetch('http://localhost:3000/api/categories/delete', {
+        method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
+        mode: "cors", // no-cors, *cors, same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: "same-origin", // include, *same-origin, omit
+        headers: {
+            "Content-Type": "application/json",
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: "follow", // manual, *follow, error
+        referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: JSON.stringify(data), // body data type must match "Content-Type" header
+    });
+    return response.json(); // parses JSON response into native JavaScript objects
+})
+
 export const getCategoryValues = (async (id: string) : Promise<Array<CategoryData>> => {
     return  fetch(`http://localhost:3000/api/categories/data/${id}`).then((res) => res.json())
+})
+
+export const deleteCategoryDataByCategoryId = (async (id: string) => {
+    const data = { id: id };
+    const response = await fetch('http://localhost:3000/api/categorydata/delete/bycategoryid', {
+        method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
+        mode: "cors", // no-cors, *cors, same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: "same-origin", // include, *same-origin, omit
+        headers: {
+            "Content-Type": "application/json",
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: "follow", // manual, *follow, error
+        referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: JSON.stringify(data), // body data type must match "Content-Type" header
+    });
+    return response.json(); // parses JSON response into native JavaScript objects
+})
+
+export const getCategoryHasCategoryData = (async (categoryId: string) : Promise<Array<CategoryData>> => {
+    return  fetch(`http://localhost:3000/api/categoryhascategorydata/bycategory/${categoryId}`).then((res) => res.json())
 })
