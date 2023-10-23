@@ -12,6 +12,7 @@ import {
     ICategoryWithCategoryData
 } from "@/app/utils";
 import {TemplateComponent} from "@/app/templates/[id]/template.component";
+import {template} from "@babel/core";
 
 export default function TemplatePage({ params }: {params: { id: string }; } ) {
 
@@ -31,7 +32,8 @@ export default function TemplatePage({ params }: {params: { id: string }; } ) {
                 testArr.push(obj);
             }
             setCategoryWithCategoryData( testArr );
-            setTemplate(await getTemplate(params.id));
+            const template:Template = await getTemplate(params.id);
+            setTemplate(template);
         })();
     }, []);
 
