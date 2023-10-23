@@ -1,4 +1,4 @@
-import {Category, CategoryData} from "@prisma/client";
+import {Category, CategoryData, Template} from "@prisma/client";
 import {cache} from "react";
 
 export interface ICategoryWithCategoryData {
@@ -30,7 +30,7 @@ export const getTemplates = cache(() =>
     fetch("http://localhost:3000/api/templates").then((res) => res.json())
 );
 
-export const getTemplate = (async (id: string): Promise<Category> => {
+export const getTemplate = (async (id: string): Promise<Template> => {
     const item = fetch(`http://localhost:3000/api/templates/${id}`).then((res) => res.json())
     return item
 })
