@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import {Category, CategoryData, CategoryHasCategoryData} from "@prisma/client";
+import {Category, CategoryValue, OneCategoryHasManyCategoryValues} from "@prisma/client";
 
 export async function GET(request: Request) {
     const categories = await prisma.category.findMany();
@@ -17,12 +17,12 @@ export async function POST(request: Request) {
         });
 
         for ( let i = 0; i < json.categoryData.length; i++ ) {
-            const newCategoryData: { name: string } = { name: json.categoryData[i] };
-            const createdCategoryData: CategoryData = await prisma.categoryData.create({
-                data: newCategoryData
+            const newCategoryValue: { name: string } = { name: json.categoryData[i] };
+            const createdCategoryValue: CategoryValue = await prisma.categoryValue.create({
+                data: newCategoryValue
             })
-            const createdCategoryHasCategoryData: CategoryHasCategoryData =  await prisma.categoryHasCategoryData.create({
-                data: { categoryId: createdCategory.id, categoryDataId: createdCategoryData.id }
+            const createdOneCategoryHasManyCategoryValues: OneCategoryHasManyCategoryValues =  await prisma.oneCategoryHasManyCategoryValues.create({
+                data: { categoryId: createdCategory.id, categoryDataId: createdCategoryValue.id }
             })
         }
 

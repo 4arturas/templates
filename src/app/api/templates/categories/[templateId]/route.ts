@@ -13,7 +13,7 @@ export async function GET(
         },
     });
 
-    const templateHasCategoryArr = await prisma.templateHasCategory.findMany({
+    const templateHasCategoryArr = await prisma.oneTemplateHasManyCategories.findMany({
         where: {
             templateId: templateId
         }

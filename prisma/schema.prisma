@@ -7,6 +7,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
+  // provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -20,18 +21,19 @@ model User {
 }
 
 model Template {
-  id                  String                @id @default(uuid())
-  name                String
-  icon                String
-  subject             String
-  to                  String
-  templateText        String
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @updatedAt
-  TemplateHasCategory TemplateHasCategory[]
+  id                               String                             @id @default(uuid())
+  name                             String
+  icon                             String
+  subject                          String
+  to                               String
+  templateText                     String
+  createdAt                        DateTime                           @default(now())
+  updatedAt                        DateTime                           @updatedAt
+  OneTemplateHasManyCategories     OneTemplateHasManyCategories[]
+  OneTemplateHasManyCategoryValues OneTemplateHasManyCategoryValues[]
 }
 
-model TemplateHasCategory {
+model OneTemplateHasManyCategories {
   id         String   @id @default(uuid())
   template   Template @relation(fields: [templateId], references: [id])
   templateId String
@@ -40,28 +42,37 @@ model TemplateHasCategory {
 }
 
 model Category {
-  id                      String                    @id @default(uuid())
-  name                    String
-  createdAt               DateTime                  @default(now())
-  updatedAt               DateTime                  @updatedAt
-  TemplateHasCategory     TemplateHasCategory[]
-  CategoryHasCategoryData CategoryHasCategoryData[]
+  id                               String                             @id @default(uuid())
+  name                             String
+  createdAt                        DateTime                           @default(now())
+  updatedAt                        DateTime                           @updatedAt
+  OneTemplateHasManyCategories     OneTemplateHasManyCategories[]
+  OneCategoryHasManyCategoryValues OneCategoryHasManyCategoryValues[]
 }
 
-model CategoryHasCategoryData {
-  id             String       @id @default(uuid())
+model OneCategoryHasManyCategoryValues {
+  id             String        @id @default(uuid())
   categoryId     String
-  category       Category     @relation(fields: [categoryId], references: [id])
+  category       Category      @relation(fields: [categoryId], references: [id])
   categoryDataId String
-  categoryData   CategoryData @relation(fields: [categoryDataId], references: [id])
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  categoryData   CategoryValue @relation(fields: [categoryDataId], references: [id])
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 }
 
-model CategoryData {
-  id                      String                    @id @default(uuid())
-  name                    String
-  createdAt               DateTime                  @default(now())
-  updatedAt               DateTime                  @updatedAt
-  CategoryHasCategoryData CategoryHasCategoryData[]
+model CategoryValue {
+  id                               String                             @id @default(uuid())
+  name                             String
+  createdAt                        DateTime                           @default(now())
+  updatedAt                        DateTime                           @updatedAt
+  OneCategoryHasManyCategoryValues OneCategoryHasManyCategoryValues[]
+  OneTemplateHasManyCategoryValues OneTemplateHasManyCategoryValues[]
+}
+
+model OneTemplateHasManyCategoryValues {
+  id              String        @id @default(uuid())
+  template        Template      @relation(fields: [templateId], references: [id])
+  templateId      String
+  categoryValueId String
+  category        CategoryValue @relation(fields: [categoryValueId], references: [id])
 }

@@ -1,21 +1,21 @@
 "use client";
 
-import {Category, CategoryData} from "@prisma/client";
+import {Category, CategoryValue} from "@prisma/client";
 import React from "react";
 import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, InputLabel} from "@mui/material";
 import Link from "next/link";
-import {deleteCategoryDataByCategoryId, EMethod, postData} from "@/app/utils";
+import {deleteCategoryValueByCategoryId, EMethod, postData} from "@/app/utils";
 import DeleteIcon from '@mui/icons-material/Delete';
 import {useRouter} from "next/navigation";
 
 type Props = {
     category: Category | undefined,
-    categoryData: Array<CategoryData>,
+    categoryData: Array<CategoryValue>,
 }
 export const CategoryComponent: React.FC<Props> = ({category, categoryData}) => {
     const router = useRouter();
     const deleteValue = async (id:string) => {
-        deleteCategoryDataByCategoryId(id).then(r=>{
+        deleteCategoryValueByCategoryId(id).then(r=>{
                 router.push(`/categories/${id}`, { scroll: false })
         })
     }

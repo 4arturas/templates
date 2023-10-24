@@ -2,14 +2,14 @@
 
 import React, {cache, use} from "react";
 import {CategoryComponent} from "@/app/categories/[id]/category.component";
-import {Category, CategoryData, Template, User} from "@prisma/client";
+import {Category, CategoryValue, Template, User} from "@prisma/client";
 import {CircularProgress} from "@mui/material";
 import {
-    getCategoryHasCategoryData,
+    getOneCategoryHasManyCategoryValues,
     getCategoryValues,
     getTemplate,
     getTemplateCategories,
-    ICategoryWithCategoryData
+    ICategoryWithCategoryValue
 } from "@/app/utils";
 import {TemplateComponent} from "@/app/templates/[id]/template.component";
 import {template} from "@babel/core";
@@ -17,21 +17,21 @@ import {template} from "@babel/core";
 export default function TemplatePage({ params }: {params: { id: string }; } ) {
 
     const [template, setTemplate] = React.useState<Template>();
-    const [categoryWithCategoryData, setCategoryWithCategoryData] = React.useState<Array<ICategoryWithCategoryData>>([]);
+    const [categoryWithCategoryValue, setCategoryWithCategoryValue] = React.useState<Array<ICategoryWithCategoryValue>>([]);
 
     React.useEffect(() => {
         (async () => {
             const categoriesArr = await getTemplateCategories(params.id);
 
-            const testArr: Array<ICategoryWithCategoryData> = [];
+            const testArr: Array<ICategoryWithCategoryValue> = [];
             for ( let i = 0; i < categoriesArr.length; i++ )
             {
                 const category = categoriesArr[i];
-                const categoryDataArr: Array<CategoryData> = await getCategoryValues(category.id);
-                const obj: ICategoryWithCategoryData = { category: category, data: categoryDataArr };
+                const categoryDataArr: Array<CategoryValue> = await getCategoryValues(category.id);
+                const obj: ICategoryWithCategoryValue = { category: category, data: categoryDataArr };
                 testArr.push(obj);
             }
-            setCategoryWithCategoryData( testArr );
+            setCategoryWithCategoryValue( testArr );
             const template:Template = await getTemplate(params.id);
             setTemplate(template);
         })();
@@ -40,7 +40,7 @@ export default function TemplatePage({ params }: {params: { id: string }; } ) {
 
     return <>
         {
-            !template ? <CircularProgress /> : <TemplateComponent template={template} categoryWithCategoryData={categoryWithCategoryData} />
+            !template ? <CircularProgress /> : <TemplateComponent template={template} categoryWithCategoryValue={categoryWithCategoryValue} />
         }
     </>
 }

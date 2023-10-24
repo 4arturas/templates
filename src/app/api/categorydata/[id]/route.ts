@@ -7,7 +7,7 @@ export async function GET(
     { params }: { params: { id: string } }
 ) {
     const id = params.id;
-    const category = await prisma.categoryData.findUnique({
+    const category = await prisma.categoryValue.findUnique({
         where: {
             id,
         },
@@ -27,7 +27,7 @@ export async function PATCH(
     const id = params.id;
     let json = await request.json();
 
-    const updated_category = await prisma.categoryData.update({
+    const updated_category = await prisma.categoryValue.update({
         where: { id },
         data: json,
     });

@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import {Prisma, TemplateHasCategory} from "@prisma/client";
+import {Prisma, OneTemplateHasManyCategories} from "@prisma/client";
 
 const _404 = "No Template with ID found";
 
@@ -11,13 +11,13 @@ export async function DELETE(
     const templateId:string = json.id;
 
     try {
-        const templateHasCategoryArr:Array<TemplateHasCategory> = await prisma.templateHasCategory.findMany({
+        const templateHasCategoryArr:Array<OneTemplateHasManyCategories> = await prisma.oneTemplateHasManyCategories.findMany({
             where: { templateId: templateId }
         });
 
-        const templateHasCategoryIdArr:Array<string> = templateHasCategoryArr.map( (t:TemplateHasCategory) => t.id );
+        const templateHasCategoryIdArr:Array<string> = templateHasCategoryArr.map( (t:OneTemplateHasManyCategories) => t.id );
         templateHasCategoryIdArr.map( async (id:string) => {
-            await prisma.templateHasCategory.delete({ where: {id: id } });
+            await prisma.oneTemplateHasManyCategories.delete({ where: {id: id } });
         })
 
         await prisma.template.delete({

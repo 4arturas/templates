@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import {CategoryData, CategoryHasCategoryData, TemplateHasCategory} from "@prisma/client";
+import {CategoryValue, OneCategoryHasManyCategoryValues, OneTemplateHasManyCategories} from "@prisma/client";
 
 export async function GET(request: Request) {
     const templates = await prisma.template.findMany();
@@ -17,7 +17,7 @@ export async function POST(request: Request) {
 
         for ( let i = 0; i < json.categoryArr.length; i++ ) {
             const categoryId = json.categoryArr[i];
-            const templateHasCategory: TemplateHasCategory = await prisma.templateHasCategory.create({
+            const templateHasCategory: OneTemplateHasManyCategories = await prisma.oneTemplateHasManyCategories.create({
                 data: { templateId: template.id, categoryId: categoryId }
             })
         }

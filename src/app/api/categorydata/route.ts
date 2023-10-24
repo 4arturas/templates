@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import {Category, CategoryData, CategoryHasCategoryData, Prisma} from "@prisma/client";
-import CategoryHasCategoryDataScalarFieldEnum = Prisma.CategoryHasCategoryDataScalarFieldEnum;
+import {Category, CategoryValue, OneCategoryHasManyCategoryValues, Prisma} from "@prisma/client";
+import OneCategoryHasManyCategoryValuesScalarFieldEnum = Prisma.OneCategoryHasManyCategoryValuesScalarFieldEnum;
 
 const _404 = "No category with ID found";
 
@@ -20,12 +20,12 @@ export async function POST(request: Request) {
         });
 
         for ( let i = 0; i < json.categoryData.length; i++ ) {
-            const newCategoryData: { name: string } = { name: json.categoryData[i] };
-            const createdCategoryData: CategoryData = await prisma.categoryData.create({
-                data: newCategoryData
+            const newCategoryValue: { name: string } = { name: json.categoryData[i] };
+            const createdCategoryValue: CategoryValue = await prisma.categoryValue.create({
+                data: newCategoryValue
             })
-            const createdCategoryHasCategoryData: CategoryHasCategoryData =  await prisma.categoryHasCategoryData.create({
-                data: { categoryId: createdCategory.id, categoryDataId: createdCategoryData.id }
+            const createdOneCategoryHasManyCategoryValues: OneCategoryHasManyCategoryValues =  await prisma.oneCategoryHasManyCategoryValues.create({
+                data: { categoryId: createdCategory.id, categoryDataId: createdCategoryValue.id }
             })
         }
 

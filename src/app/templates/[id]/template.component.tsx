@@ -1,6 +1,6 @@
 "use client";
 
-import {Category, CategoryData, Template, User} from "@prisma/client";
+import {Category, CategoryValue, Template, User} from "@prisma/client";
 import React, {cache, use} from "react";
 import {
     Box,
@@ -15,19 +15,19 @@ import {
     Typography
 } from "@mui/material";
 import Link from "next/link";
-import {ICategoryWithCategoryData} from "@/app/utils";
+import {ICategoryWithCategoryValue} from "@/app/utils";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 type Props = {
     template: Template
-    categoryWithCategoryData: Array<ICategoryWithCategoryData>
+    categoryWithCategoryValue: Array<ICategoryWithCategoryValue>
 }
 
 export const TemplateComponent: React.FC<Props> = (
     {
         template,
-        categoryWithCategoryData
+        categoryWithCategoryValue
     }) => {
 
     const [age, setAge] = React.useState('');
@@ -44,7 +44,7 @@ export const TemplateComponent: React.FC<Props> = (
                 <Typography><img src={`data:image/svg+xml;utf8,${encodeURIComponent(template.icon)}`} />&nbsp;{template.name}</Typography>
                 <Typography>{template.subject}</Typography>
                 <Typography>{template.to}</Typography>
-                {categoryWithCategoryData.map((categoryWithDataElement, index) => (
+                {categoryWithCategoryValue.map((categoryWithDataElement, index) => (
                     <FormControl variant="standard" sx={{m: 1, width: 120}} key={`formControl${categoryWithDataElement.category.id}`}>
                         <InputLabel id={categoryWithDataElement.category.id} key={`inputLabel${categoryWithDataElement.category.id}`}>
                             {categoryWithDataElement.category.name}

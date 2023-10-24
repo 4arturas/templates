@@ -1,9 +1,9 @@
-import {Category, CategoryData, Template} from "@prisma/client";
+import {Category, CategoryValue, Template} from "@prisma/client";
 import {cache} from "react";
 
-export interface ICategoryWithCategoryData {
+export interface ICategoryWithCategoryValue {
     category: Category,
-    data: Array<CategoryData>
+    data: Array<CategoryValue>
 }
 
 export enum EMethod {'POST', 'PUT', 'DELETE'}
@@ -35,7 +35,7 @@ export const getTemplate = (async (id: string): Promise<Template> => {
     return item
 })
 
-export const getTemplateCategories = (async (id: string) : Promise<Array<CategoryData>> => {
+export const getTemplateCategories = (async (id: string) : Promise<Array<CategoryValue>> => {
     return  fetch(`http://localhost:3000/api/templates/categories/${id}`).then((res) => res.json())
 })
 
@@ -85,11 +85,11 @@ export const deleteCategory = (async (id: string) => {
     return response.json(); // parses JSON response into native JavaScript objects
 })
 
-export const getCategoryValues = (async (id: string) : Promise<Array<CategoryData>> => {
+export const getCategoryValues = (async (id: string) : Promise<Array<CategoryValue>> => {
     return  fetch(`http://localhost:3000/api/categories/data/${id}`).then((res) => res.json())
 })
 
-export const deleteCategoryDataByCategoryId = (async (id: string) => {
+export const deleteCategoryValueByCategoryId = (async (id: string) => {
     const data = { id: id };
     const response = await fetch('http://localhost:3000/api/categorydata/delete/bycategoryid', {
         method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
@@ -107,6 +107,6 @@ export const deleteCategoryDataByCategoryId = (async (id: string) => {
     return response.json(); // parses JSON response into native JavaScript objects
 })
 
-export const getCategoryHasCategoryData = (async (categoryId: string) : Promise<Array<CategoryData>> => {
+export const getOneCategoryHasManyCategoryValues = (async (categoryId: string) : Promise<Array<CategoryValue>> => {
     return  fetch(`http://localhost:3000/api/categoryhascategorydata/bycategory/${categoryId}`).then((res) => res.json())
 })

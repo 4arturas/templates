@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import {Category, CategoryData, CategoryHasCategoryData, Prisma} from "@prisma/client";
-import CategoryHasCategoryDataScalarFieldEnum = Prisma.CategoryHasCategoryDataScalarFieldEnum;
+import {Category, CategoryValue, OneCategoryHasManyCategoryValues, Prisma} from "@prisma/client";
+import OneCategoryHasManyCategoryValuesScalarFieldEnum = Prisma.OneCategoryHasManyCategoryValuesScalarFieldEnum;
 
 const _404 = "No category with ID found";
 
@@ -12,19 +12,19 @@ export async function DELETE(
     const categoryDataId:string = json.id;
 
     try {
-        const categoryHasCategoryDataArr: Array<CategoryHasCategoryData> = await prisma.categoryHasCategoryData.findMany( {
+        const categoryHasCategoryValueArr: Array<OneCategoryHasManyCategoryValues> = await prisma.oneCategoryHasManyCategoryValues.findMany( {
             where: {
                 categoryDataId: categoryDataId
             }
         });
-        const categoryHasCategoryDataIdArr: Array<string> = categoryHasCategoryDataArr.map( (c:CategoryHasCategoryData) => c.id);
-        categoryHasCategoryDataIdArr.map( async (id: string) => {
-            await prisma.categoryHasCategoryData.delete({
+        const categoryHasCategoryValueIdArr: Array<string> = categoryHasCategoryValueArr.map( (c:OneCategoryHasManyCategoryValues) => c.id);
+        categoryHasCategoryValueIdArr.map( async (id: string) => {
+            await prisma.oneCategoryHasManyCategoryValues.delete({
                 where: { id: id }
             });
         });
 
-        await prisma.categoryData.delete({
+        await prisma.categoryValue.delete({
             where: { id: categoryDataId },
         });
 

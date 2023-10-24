@@ -22,7 +22,7 @@ export const CategoryNewComponent: React.FC<Props> = ({addNewCategory}) => {
 
     const [name, setName] = React.useState<string>('')
     const [value, setValue] = React.useState<string>('');
-    const [categoryData, setCategoryData] = React.useState<Array<string>>([])
+    const [categoryData, setCategoryValue] = React.useState<Array<string>>([])
 
     return (
 
@@ -46,7 +46,7 @@ export const CategoryNewComponent: React.FC<Props> = ({addNewCategory}) => {
                             variant="contained"
                             disabled={value.length === 0}
                             onClick={() => {
-                                setCategoryData([...categoryData, value])
+                                setCategoryValue([...categoryData, value])
                                 setValue('')
                             }}>
                             <Add/>

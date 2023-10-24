@@ -7,13 +7,13 @@ export async function GET(
     { params }: { params: { categoryId: string } }
 ) {
     const categoryId = params.categoryId;
-    const categoryHasCategoryData = await prisma.categoryHasCategoryData.findMany({
+    const categoryHasCategoryValue = await prisma.oneCategoryHasManyCategoryValues.findMany({
         where: {
             categoryId: { in: [categoryId] },
         }
     })
-    const categoryDataIdArr: Array<string> = categoryHasCategoryData.map( c => c.categoryDataId );
-    const categoryDataArr = await prisma.categoryData.findMany({
+    const categoryDataIdArr: Array<string> = categoryHasCategoryValue.map( c => c.categoryDataId );
+    const categoryDataArr = await prisma.categoryValue.findMany({
         where: {
             id: { in: categoryDataIdArr },
         }

@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import {Category, CategoryData, CategoryHasCategoryData, Prisma, TemplateHasCategory} from "@prisma/client";
-import CategoryHasCategoryDataScalarFieldEnum = Prisma.CategoryHasCategoryDataScalarFieldEnum;
+import {Category, CategoryValue, OneCategoryHasManyCategoryValues, Prisma, OneTemplateHasManyCategories} from "@prisma/client";
+import OneCategoryHasManyCategoryValuesScalarFieldEnum = Prisma.OneCategoryHasManyCategoryValuesScalarFieldEnum;
 
 const _404 = "No category with ID found";
 
@@ -12,31 +12,31 @@ export async function DELETE(
         const categoryId:string = json.id;
 
     try {
-        const categoryHasCategoryDataArr: Array<CategoryHasCategoryData> = await prisma.categoryHasCategoryData.findMany( {
+        const categoryHasCategoryValueArr: Array<OneCategoryHasManyCategoryValues> = await prisma.oneCategoryHasManyCategoryValues.findMany( {
             where: {
                 categoryId: categoryId
             }
         });
-        const categoryHasCategoryDataIdArr: Array<string> = categoryHasCategoryDataArr.map( (c:CategoryHasCategoryData) => c.id);
-        categoryHasCategoryDataIdArr.map( async (id: string) => {
-            await prisma.categoryHasCategoryData.delete({
+        const categoryHasCategoryValueIdArr: Array<string> = categoryHasCategoryValueArr.map( (c:OneCategoryHasManyCategoryValues) => c.id);
+        categoryHasCategoryValueIdArr.map( async (id: string) => {
+            await prisma.oneCategoryHasManyCategoryValues.delete({
                 where: { id: id }
             });
         });
-        const categoryDataIdArr: Array<string> = categoryHasCategoryDataArr.map( (c:CategoryHasCategoryData) => c.categoryDataId);
+        const categoryDataIdArr: Array<string> = categoryHasCategoryValueArr.map( (c:OneCategoryHasManyCategoryValues) => c.categoryDataId);
         categoryDataIdArr.map( async (categoryDataId: string) => {
-           await prisma.categoryData.delete({
+           await prisma.categoryValue.delete({
                where: { id: categoryDataId }
            });
         });
 
-        const templateHasCategoryArr:Array<TemplateHasCategory> = await prisma.templateHasCategory.findMany({
+        const templateHasCategoryArr:Array<OneTemplateHasManyCategories> = await prisma.oneTemplateHasManyCategories.findMany({
             where: { categoryId: categoryId }
         });
 
-        const templateHasCategoryIdArr:Array<string> = templateHasCategoryArr.map( (t:TemplateHasCategory) => t.id );
+        const templateHasCategoryIdArr:Array<string> = templateHasCategoryArr.map( (t:OneTemplateHasManyCategories) => t.id );
         templateHasCategoryIdArr.map( async (id:string) => {
-            await prisma.templateHasCategory.delete({ where: {id: id } });
+            await prisma.oneTemplateHasManyCategories.delete({ where: {id: id } });
         })
 
         await prisma.category.delete({

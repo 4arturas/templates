@@ -93,6 +93,9 @@ export const NewTemplateComponent: React.FC<Props> = ({categories, createNewTemp
                                         Select Categories For The Template:
                                     </InputLabel>
                                 </legend>
+                            <div>
+                                values here
+                            </div>
                                 <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                                     {categories.map((category: Category, idx:number) => {
                                         const labelId = `checkbox-list-label-${category}`;

@@ -7,15 +7,15 @@ export async function GET(
     { params }: { params: { categoryId: string } }
 ) {
     const categoryId = params.categoryId;
-    const categoryHasCategoryData = await prisma.categoryHasCategoryData.findMany({
+    const categoryHasCategoryValue = await prisma.oneCategoryHasManyCategoryValues.findMany({
         where: {
             categoryId: categoryId
         },
     });
 
-    if (!categoryHasCategoryData) {
+    if (!categoryHasCategoryValue) {
         return new NextResponse(_404, { status: 404 });
     }
 
-    return NextResponse.json(categoryHasCategoryData);
+    return NextResponse.json(categoryHasCategoryValue);
 }
