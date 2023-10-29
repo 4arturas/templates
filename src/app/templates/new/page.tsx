@@ -3,15 +3,14 @@
 import { useRouter } from 'next/navigation'
 import React, {cache} from "react";
 import {NewTemplateComponent} from "@/app/templates/new/newtemplate.component";
-import {Category, CategoryValue} from "@prisma/client";
 import {CircularProgress} from "@mui/material";
 import {
-    EMethod,
+    createNewTemplate,
     getCategories,
-    getCategoryValues,
     ICategoryMenuItem, ICategorySelect,
-    postData
 } from "@/app/utils";
+import {Value} from "@prisma/client";
+import {getCategoryValuesApi} from "@/app/categories/api/[id]/values/route";
 
 
 export default function TemplatesNewPage() {
@@ -21,9 +20,8 @@ export default function TemplatesNewPage() {
     const [categorySelectOptions, setCategorySelectOptions] = React.useState<Array<ICategoryMenuItem>>([]);
     const [initialized, setInitialized] = React.useState<boolean>(false);
 
-    const createNewTemplate = (name:string, subject: string, to: string, icon: string, templateText: string, categoryValueArr:Array<{ categoryId:string, categoryValueId:string }>) => {
-        const data = { name: name, subject: subject, to: to, icon: icon, templateText: templateText, categoryValueIdArr: categoryValueArr };
-        postData('http://localhost:3000/api/templates', EMethod.POST, data ).then((data) => {
+    const createNewTemplateAndRedirect = (name:string, subject: string, to: string, icon: string, templateText: string, categoryValueArr:Array<{ categoryId:string, categoryValueId:string }>) => {
+        createNewTemplate(name, subject, to, icon, templateText, categoryValueArr).then((data) => {
             router.push('/templates', { scroll: false })
         });
     }
@@ -37,7 +35,7 @@ export default function TemplatesNewPage() {
             for ( let i = 0; i < categoriesArr.length; i++ )
             {
                 const category = categoriesArr[i];
-                const categoryDataArr: Array<CategoryValue> = await getCategoryValues(category.id);
+                const categoryDataArr: Array<Value> = await getCategoryValuesApi(category.id);
                 _categoryOptions.push({name:category.name, categoryId:category.id, selectedValue: [], selectedCategoryValueId: []});
 
                 categoryDataArr.map( d => {
@@ -61,7 +59,7 @@ export default function TemplatesNewPage() {
                     templateResponse={undefined}
                     categoryOptions={categorySelects}
                     options={categorySelectOptions}
-                    templateFunction={createNewTemplate}
+                    templateFunction={createNewTemplateAndRedirect}
                 />
             }
     </>

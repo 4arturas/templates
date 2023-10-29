@@ -3,7 +3,8 @@
 import {TemplatesComponent} from "@/app/templates/templates.component";
 import React from "react";
 import {CircularProgress} from "@mui/material";
-import {deleteTemplate, EMethod, getTemplates, ITemplateResponse, postData} from "@/app/utils";
+import {getTemplates, ITemplateResponse, postData} from "@/app/utils";
+import {deleteTemplate} from "@/app/templates/api/route";
 
 export default function TemplatesPage() {
 

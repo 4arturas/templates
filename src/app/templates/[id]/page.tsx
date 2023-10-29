@@ -1,15 +1,16 @@
 "use client";
 
 import React, {cache, use} from "react";
-import {CategoryValue} from "@prisma/client";
+import {Value} from "@prisma/client";
 import {CircularProgress} from "@mui/material";
 import {
     getCategories,
-    getCategoryValues,
-    getTemplateWithCategoryValues, ICategoryMenuItem, ICategorySelect, ITemplateResponse
+    ICategoryMenuItem, ICategorySelect, ITemplateResponse
 } from "@/app/utils";
 
 import {NewTemplateComponent} from "@/app/templates/new/newtemplate.component";
+import {getTemplateWithCategoryValues} from "@/app/templates/api/template/[id]/withcategoryvalues/route";
+import {getCategoryValuesApi} from "@/app/categories/api/[id]/values/route";
 
 export default function TemplatePage({ params }: {params: { id: string }; } ) {
 
@@ -30,9 +31,9 @@ export default function TemplatePage({ params }: {params: { id: string }; } ) {
             for ( let i = 0; i < categoriesArr.length; i++ )
             {
                 const category = categoriesArr[i];
-                const categoryDataArr: Array<CategoryValue> = await getCategoryValues(category.id);
+                const categoryDataArr: Array<Value> = await getCategoryValuesApi(category.id);
 
-                const tmp: Array<{ id: string, name: string }> = templateResponseTmp.OneTemplateHasManyCategoryValues.filter( f => f.category.id === category.id ).map( m => m.categoryValue );
+                const tmp: Array<{ id: string, name: string }> = templateResponseTmp.OneTemplateHasManyValues.filter(f => f.category.id === category.id ).map(m => m.values );
                 const selectedValue: Array<string> = tmp.map( m => m.name );
                 const selectedCategoryValueId: Array<string> = tmp.map( m => m.id );
 

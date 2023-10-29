@@ -21,51 +21,51 @@ model User {
 }
 
 model Template {
-  id                               String                             @id @default(uuid())
-  name                             String
-  icon                             String
-  subject                          String
-  to                               String
-  templateText                     String
-  createdAt                        DateTime                           @default(now())
-  updatedAt                        DateTime                           @updatedAt
-  OneTemplateHasManyCategoryValues OneTemplateHasManyCategoryValues[]
+  id                       String                     @id @default(uuid())
+  name                     String
+  icon                     String
+  subject                  String
+  to                       String
+  templateText             String
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt
+  OneTemplateHasManyValues OneTemplateHasManyValues[]
 }
 
 model Category {
-  id                               String                             @id @default(uuid())
-  name                             String
-  createdAt                        DateTime                           @default(now())
-  updatedAt                        DateTime                           @updatedAt
-  OneCategoryHasManyCategoryValues OneCategoryHasManyCategoryValues[]
-  OneTemplateHasManyCategoryValues OneTemplateHasManyCategoryValues[]
+  id                       String                     @id @default(uuid())
+  name                     String
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt
+  OneCategoryHasManyValues OneCategoryHasManyValues[]
+  OneTemplateHasManyValues OneTemplateHasManyValues[]
 }
 
-model OneCategoryHasManyCategoryValues {
-  id             String        @id @default(uuid())
-  categoryId     String
-  category       Category      @relation(fields: [categoryId], references: [id])
-  categoryDataId String
-  categoryData   CategoryValue @relation(fields: [categoryDataId], references: [id])
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+model OneCategoryHasManyValues {
+  id         String   @id @default(uuid())
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+  valueId    String
+  values     Value    @relation(fields: [valueId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
-model CategoryValue {
-  id                               String                             @id @default(uuid())
-  name                             String
-  createdAt                        DateTime                           @default(now())
-  updatedAt                        DateTime                           @updatedAt
-  OneCategoryHasManyCategoryValues OneCategoryHasManyCategoryValues[]
-  OneTemplateHasManyCategoryValues OneTemplateHasManyCategoryValues[]
+model Value {
+  id                       String                     @id @default(uuid())
+  name                     String
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt
+  OneCategoryHasManyValues OneCategoryHasManyValues[]
+  OneTemplateHasManyValues OneTemplateHasManyValues[]
 }
 
-model OneTemplateHasManyCategoryValues {
-  id              String        @id @default(uuid())
-  template        Template      @relation(fields: [templateId], references: [id])
-  templateId      String
-  categoryValueId String
-  categoryValue   CategoryValue @relation(fields: [categoryValueId], references: [id])
-  categoryId      String
-  category        Category      @relation(fields: [categoryId], references: [id])
+model OneTemplateHasManyValues {
+  id         String   @id @default(uuid())
+  template   Template @relation(fields: [templateId], references: [id])
+  templateId String
+  valueId    String
+  values     Value    @relation(fields: [valueId], references: [id])
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
 }

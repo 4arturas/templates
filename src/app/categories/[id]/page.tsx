@@ -2,24 +2,26 @@
 
 import React, {cache} from "react";
 import {CategoryComponent} from "@/app/categories/[id]/category.component";
-import {Category, CategoryValue} from "@prisma/client";
+import {Category, Value} from "@prisma/client";
 import {CircularProgress} from "@mui/material";
-import {deleteCategoryValueByCategoryId, getCategory, getCategoryValues} from "@/app/utils";
+import {deleteValueApi} from "@/app/values/api/route";
+import {getCategoryApi} from "@/app/categories/api/route";
+import {getCategoryValuesApi} from "@/app/categories/api/[id]/values/route";
 
 export default function CategoriesCategory( { params }: {params: { id: string }; } ) {
 
     const [category, setCategory] = React.useState<Category>();
-    const [categoryData, setCategoryValue] = React.useState<Array<CategoryValue>>([]);
+    const [categoryData, setCategoryValue] = React.useState<Array<Value>>([]);
 
-    const deleteValue = async (id:string) => {
+    const deleteValueAndFetchData = async (id:string) => {
         setCategory(undefined);
-        deleteCategoryValueByCategoryId(id).then(r=>{
+        deleteValueApi(id).then(r=>{
             fetchData();
         })
     }
     async function fetchData() {
-        setCategory(await getCategory(params.id));
-        setCategoryValue(await getCategoryValues(params.id));
+        setCategory(await getCategoryApi(params.id));
+        setCategoryValue(await getCategoryValuesApi(params.id));
     }
 
     React.useEffect( () => {
@@ -36,7 +38,7 @@ export default function CategoriesCategory( { params }: {params: { id: string };
                 <CategoryComponent
                     category={category}
                     categoryData={categoryData}
-                    deleteValue={deleteValue}/>
+                    deleteValue={deleteValueAndFetchData}/>
         }
     </div>
 }

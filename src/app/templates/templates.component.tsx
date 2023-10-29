@@ -5,7 +5,7 @@ import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
 import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { TableVirtuoso, TableComponents } from 'react-virtuoso';
-import {ITemplateResponse} from "@/app/utils";
+import {IOneTemplateHasManyValues, ITemplateResponse} from "@/app/utils";
 
 type Props = {
     templates:Array<ITemplateResponse>
@@ -70,7 +70,7 @@ export const TemplatesComponent: React.FC<Props> = ({templates, deleteTemplateAn
     React.useEffect(() => {
         const uniqueCategoryTmp = new Map<string,string>()
         templates.map( (template: ITemplateResponse) => {
-            template.OneTemplateHasManyCategoryValues.map( o => {
+            template.OneTemplateHasManyValues.map(o => {
                 const category:{id:string, name:string} = o.category;
                 uniqueCategoryTmp.set(category.id, category.name);
             })
@@ -102,11 +102,11 @@ export const TemplatesComponent: React.FC<Props> = ({templates, deleteTemplateAn
                     /></div>
             };
             uniqueCategoryTmp.forEach((categoryName/*value*/, categoryId/*key*/) => {
-                const OneTemplateHasManyCategoryValues = template.OneTemplateHasManyCategoryValues;
-                const categoryValueNameArr = OneTemplateHasManyCategoryValues
+                const OneTemplateHasManyValues = template.OneTemplateHasManyValues;
+                const categoryValueNameArr = OneTemplateHasManyValues
                     .filter( f => f.category.name === categoryName )
-                    .map( m => m.categoryValue )
-                    .map( m => m.name );
+                    .map( (m:IOneTemplateHasManyValues) => m.values )
+                    .map( (m:{id:string, name:string}) => m.name );
                 tmpRow[categoryName] = categoryValueNameArr.join(',');
             })
             tmpRows.push(tmpRow);

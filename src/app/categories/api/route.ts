@@ -1,9 +1,14 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import {Category, CategoryValue, OneCategoryHasManyCategoryValues} from "@prisma/client";
+import {Category, OneCategoryHasManyValues, Value} from "@prisma/client";
 
 const _404 = "No category with ID found";
 
+
+export const getCategoryApi = (async (id: string): Promise<Category> => {
+    const item = fetch(`http://localhost:3000/categories/api/${id}`).then((res) => res.json())
+    return item
+})
 export async function GET(request: Request) {
     const categories:Array<Category> = await prisma.category.findMany();
     return NextResponse.json(categories);
@@ -20,11 +25,11 @@ export async function POST(request: Request) {
 
         for ( let i = 0; i < json.categoryData.length; i++ ) {
             const newCategoryValue: { name: string } = { name: json.categoryData[i] };
-            const createdCategoryValue: CategoryValue = await prisma.categoryValue.create({
+            const createdCategoryValue: Value = await prisma.value.create({
                 data: newCategoryValue
             })
-            const createdOneCategoryHasManyCategoryValues: OneCategoryHasManyCategoryValues =  await prisma.oneCategoryHasManyCategoryValues.create({
-                data: { categoryId: createdCategory.id, categoryDataId: createdCategoryValue.id }
+            const createdOneCategoryHasManyCategoryValues: OneCategoryHasManyValues =  await prisma.oneCategoryHasManyValues.create({
+                data: { categoryId: createdCategory.id, valueId: createdCategoryValue.id }
             })
         }
 
@@ -42,6 +47,23 @@ export async function POST(request: Request) {
     }
 }
 
+export const deleteCategory = (async (id: string) => {
+    const data = {id: id};
+    const response = await fetch('http://localhost:3000/categories/api', {
+        method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
+        mode: "cors", // no-cors, *cors, same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: "same-origin", // include, *same-origin, omit
+        headers: {
+            "Content-Type": "application/json",
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: "follow", // manual, *follow, error
+        referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: JSON.stringify(data), // body data type must match "Content-Type" header
+    });
+    // return response.json(); // parses JSON response into native JavaScript objects
+})
 export async function DELETE(
     request: Request
 ) {
@@ -50,40 +72,37 @@ export async function DELETE(
 
     try {
 
-        const categoryValueIdArr = await prisma.oneCategoryHasManyCategoryValues.findMany({
+        const _oneCategoryHasManyValues = await prisma.oneCategoryHasManyValues.findMany({
             where: {
                 categoryId: categoryId
             }
         })
 
-        const res1 = await prisma.oneCategoryHasManyCategoryValues.deleteMany({
+        const res1 = await prisma.oneCategoryHasManyValues.deleteMany({
             where: {
                 categoryId: categoryId
             }
         })
 
-        const valueIdArr = categoryValueIdArr.map( m => m.id );
-        const res2 = await prisma.oneTemplateHasManyCategoryValues.deleteMany({
+        const valueIdArr:Array<string> = _oneCategoryHasManyValues.map( m => m.valueId );
+
+        const res2 = await prisma.oneTemplateHasManyValues.deleteMany({
             where: {
-                categoryValueId: {
+                valueId: {
                     in: valueIdArr
                 }
             }
         })
 
-        const res3 = await prisma.categoryValue.deleteMany({
+        const res3 = await prisma.value.deleteMany({
             where: {
-                id: { in: valueIdArr }
+                id: {
+                    in: valueIdArr
+                }
             }
         })
 
-        const res4 = await prisma.oneTemplateHasManyCategoryValues.deleteMany({
-            where: {
-                categoryId: categoryId
-            }
-        })
-
-        await prisma.category.delete({
+        const res4 = await prisma.category.delete({
             where: { id: categoryId },
         });
 
