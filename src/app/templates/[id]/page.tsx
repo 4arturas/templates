@@ -1,46 +1,69 @@
 "use client";
 
 import React, {cache, use} from "react";
-import {CategoryComponent} from "@/app/categories/[id]/category.component";
-import {Category, CategoryValue, Template, User} from "@prisma/client";
+import {CategoryValue} from "@prisma/client";
 import {CircularProgress} from "@mui/material";
 import {
-    getOneCategoryHasManyCategoryValues,
+    getCategories,
     getCategoryValues,
-    getTemplate,
-    getTemplateCategories,
-    ICategoryWithCategoryValue
+    getTemplateWithCategoryValues, ICategoryMenuItem, ICategorySelect, ITemplateResponse
 } from "@/app/utils";
-import {TemplateComponent} from "@/app/templates/[id]/template.component";
-import {template} from "@babel/core";
+
+import {NewTemplateComponent} from "@/app/templates/new/newtemplate.component";
 
 export default function TemplatePage({ params }: {params: { id: string }; } ) {
 
-    const [template, setTemplate] = React.useState<Template>();
-    const [categoryWithCategoryValue, setCategoryWithCategoryValue] = React.useState<Array<ICategoryWithCategoryValue>>([]);
+    const [templateResponse, setTemplateResponse] = React.useState<ITemplateResponse>();
+    const [categorySelects, setCategorySelects] = React.useState<Array<ICategorySelect>>([]);
+    const [categorySelectOptions, setCategorySelectOptions] = React.useState<Array<ICategoryMenuItem>>([]);
+    const [initialized, setInitialized] = React.useState<boolean>(false);
 
-    React.useEffect(() => {
-        (async () => {
-            const categoriesArr = await getTemplateCategories(params.id);
+    React.useEffect( () => {
+        async function startFetching() {
 
-            const testArr: Array<ICategoryWithCategoryValue> = [];
+            const templateResponseTmp = await getTemplateWithCategoryValues(params.id);
+            setTemplateResponse(templateResponseTmp);
+
+            const categoriesArr = await getCategories();
+            const _categoryOptions:Array<ICategorySelect> = [];
+            const _options:Array<ICategoryMenuItem> = [];
             for ( let i = 0; i < categoriesArr.length; i++ )
             {
                 const category = categoriesArr[i];
                 const categoryDataArr: Array<CategoryValue> = await getCategoryValues(category.id);
-                const obj: ICategoryWithCategoryValue = { category: category, data: categoryDataArr };
-                testArr.push(obj);
+
+                const tmp: Array<{ id: string, name: string }> = templateResponseTmp.OneTemplateHasManyCategoryValues.filter( f => f.category.id === category.id ).map( m => m.categoryValue );
+                const selectedValue: Array<string> = tmp.map( m => m.name );
+                const selectedCategoryValueId: Array<string> = tmp.map( m => m.id );
+
+                const item : ICategorySelect = {name:category.name, categoryId:category.id, selectedValue: selectedValue, selectedCategoryValueId: selectedCategoryValueId };
+                _categoryOptions.push(item);
+
+                categoryDataArr.map( d => {
+                    _options.push({name:d.name, categoryValueId:d.id, categoryId:category.id})
+                });
             }
-            setCategoryWithCategoryValue( testArr );
-            const template:Template = await getTemplate(params.id);
-            setTemplate(template);
-        })();
+
+            setCategorySelects(_categoryOptions);
+            setCategorySelectOptions(_options);
+            setInitialized(true)
+        }
+        startFetching();
+        // return () => { };
     }, []);
 
 
     return <>
         {
-            !template ? <CircularProgress /> : <TemplateComponent template={template} categoryWithCategoryValue={categoryWithCategoryValue} />
+            !initialized ?
+                <CircularProgress /> :
+                <NewTemplateComponent
+                    templateResponse={templateResponse}
+                    categoryOptions={categorySelects}
+                    options={categorySelectOptions}
+                    templateFunction={()=>{
+                        alert( 'Not implemented' );
+                    }}/>
         }
     </>
 }

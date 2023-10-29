@@ -12,8 +12,20 @@ async function main() {
             role: "admin",
         },
     });
-
     console.log({ user });
+
+
+
+    /*const categoryValue = await prisma.categoryValue.upsert({
+        create: {
+            where: {name: 'LT'},
+            update: {},
+            create: {
+                name: 'LT'
+            }
+        }
+    });
+    console.log({ categoryValue });*/
 }
 
 main()

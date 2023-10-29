@@ -3,7 +3,6 @@
 import {Category} from "@prisma/client";
 import {
     Box,
-    Button, MenuItem,
     Paper, Tab,
     Table,
     TableBody,
@@ -16,19 +15,13 @@ import {
 import Link from "next/link";
 import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {useRouter} from "next/navigation";
-import {deleteCategory} from "@/app/utils";
 
 type Props = {
-    categories: Array<Category>
+    categories: Array<Category>,
+    deleteCategory: (id:string) => void
 }
-export const CategoriesComponent: React.FC<Props> = ({categories}) => {
-    const router = useRouter();
-    const deleteCategoryAndRedirect = async (id:string) => {
-        deleteCategory(id).then(r=>{
-            router.push(`/categories`, { scroll: false })
-        })
-    }
+export const CategoriesComponent: React.FC<Props> = ({categories, deleteCategory}) => {
+
     return (
         <Box style={{width: '600px'}}>
             <TableContainer component={Paper}>
@@ -58,7 +51,7 @@ export const CategoriesComponent: React.FC<Props> = ({categories}) => {
                                         Edit
                                     </Link>
                                     &nbsp;
-                                    <DeleteIcon onClick={()=>deleteCategoryAndRedirect(category.id)} />
+                                    <DeleteIcon sx={{cursor:'pointer'}} onClick={()=>deleteCategory(category.id)} />
                                 </TableCell>
                             </TableRow>
                         ))}

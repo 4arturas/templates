@@ -29,16 +29,7 @@ model Template {
   templateText                     String
   createdAt                        DateTime                           @default(now())
   updatedAt                        DateTime                           @updatedAt
-  OneTemplateHasManyCategories     OneTemplateHasManyCategories[]
   OneTemplateHasManyCategoryValues OneTemplateHasManyCategoryValues[]
-}
-
-model OneTemplateHasManyCategories {
-  id         String   @id @default(uuid())
-  template   Template @relation(fields: [templateId], references: [id])
-  templateId String
-  categoryId String
-  category   Category @relation(fields: [categoryId], references: [id])
 }
 
 model Category {
@@ -46,8 +37,8 @@ model Category {
   name                             String
   createdAt                        DateTime                           @default(now())
   updatedAt                        DateTime                           @updatedAt
-  OneTemplateHasManyCategories     OneTemplateHasManyCategories[]
   OneCategoryHasManyCategoryValues OneCategoryHasManyCategoryValues[]
+  OneTemplateHasManyCategoryValues OneTemplateHasManyCategoryValues[]
 }
 
 model OneCategoryHasManyCategoryValues {
@@ -74,5 +65,7 @@ model OneTemplateHasManyCategoryValues {
   template        Template      @relation(fields: [templateId], references: [id])
   templateId      String
   categoryValueId String
-  category        CategoryValue @relation(fields: [categoryValueId], references: [id])
+  categoryValue   CategoryValue @relation(fields: [categoryValueId], references: [id])
+  categoryId      String
+  category        Category      @relation(fields: [categoryId], references: [id])
 }

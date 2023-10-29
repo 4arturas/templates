@@ -11,14 +11,11 @@ import {useRouter} from "next/navigation";
 type Props = {
     category: Category | undefined,
     categoryData: Array<CategoryValue>,
+    deleteValue: (id:string) => void
 }
-export const CategoryComponent: React.FC<Props> = ({category, categoryData}) => {
+export const CategoryComponent: React.FC<Props> = ({category, categoryData, deleteValue}) => {
     const router = useRouter();
-    const deleteValue = async (id:string) => {
-        deleteCategoryValueByCategoryId(id).then(r=>{
-                router.push(`/categories/${id}`, { scroll: false })
-        })
-    }
+
     return (
         <>
             <InputLabel>
@@ -52,7 +49,7 @@ export const CategoryComponent: React.FC<Props> = ({category, categoryData}) => 
                                         Edit
                                     </Link>
                                     &nbsp;
-                                    <DeleteIcon onClick={()=>deleteValue(data.id)} />
+                                    <DeleteIcon sx={{cursor:'pointer'}} onClick={()=>deleteValue(data.id)} />
                                 </TableCell>
                             </TableRow>
                         ))}
