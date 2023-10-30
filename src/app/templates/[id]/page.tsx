@@ -4,13 +4,13 @@ import React, {cache, use} from "react";
 import {Value} from "@prisma/client";
 import {CircularProgress} from "@mui/material";
 import {
-    getCategories,
-    ICategoryMenuItem, ICategorySelect, ITemplateResponse
+        ICategoryMenuItem, ICategorySelect, ITemplateResponse
 } from "@/app/utils";
 
 import {NewTemplateComponent} from "@/app/templates/new/newtemplate.component";
 import {getTemplateWithCategoryValues} from "@/app/templates/api/template/[id]/withcategoryvalues/route";
 import {getCategoryValuesApi} from "@/app/categories/api/[id]/values/route";
+import {getCategoriesApi} from "@/app/categories/api/route";
 
 export default function TemplatePage({ params }: {params: { id: string }; } ) {
 
@@ -25,7 +25,7 @@ export default function TemplatePage({ params }: {params: { id: string }; } ) {
             const templateResponseTmp = await getTemplateWithCategoryValues(params.id);
             setTemplateResponse(templateResponseTmp);
 
-            const categoriesArr = await getCategories();
+            const categoriesArr = await getCategoriesApi();
             const _categoryOptions:Array<ICategorySelect> = [];
             const _options:Array<ICategoryMenuItem> = [];
             for ( let i = 0; i < categoriesArr.length; i++ )

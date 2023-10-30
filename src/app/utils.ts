@@ -1,7 +1,7 @@
 import {Category, Template, Value} from "@prisma/client";
 import {cache} from "react";
 
-export enum EMethod {'POST', 'PUT', 'DELETE'}
+export enum EMethod {'POST' = 'POST', 'PUT' = 'PUT', 'DELETE' = 'DELETE', PATCH = 'PATCH'}
 
 export interface ICategorySelect {
     name: string,
@@ -33,8 +33,8 @@ export interface ITemplateResponse {
 
 export async function postData(url = "", method: EMethod, data = {}) {
     // Default options are marked with *
-    const response = await fetch(url, {
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    return await fetch(url, {
+        method: method, // *GET, POST, PUT, DELETE, etc.
         mode: "cors", // no-cors, *cors, same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
         credentials: "same-origin", // include, *same-origin, omit
@@ -46,25 +46,9 @@ export async function postData(url = "", method: EMethod, data = {}) {
         referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
         body: JSON.stringify(data), // body data type must match "Content-Type" header
     });
-    return response.json(); // parses JSON response into native JavaScript objects
+    // return response.json(); // parses JSON response into native JavaScript objects
 }
 
-export const getTemplates = cache(() =>
+/*export const getTemplates = cache(() =>
     fetch("http://localhost:3000/templates/api").then((res) => res.json())
-);
-
-export const createNewTemplate = (name:string, subject: string, to: string, icon: string, templateText: string, categoryValueArr:Array<{ categoryId:string, categoryValueId:string }>) => {
-    console.log( 'baba', categoryValueArr)
-    const data = { name: name, subject: subject, to: to, icon: icon, templateText: templateText, categoryValueIdArr: categoryValueArr };
-    return postData('http://localhost:3000/templates/api', EMethod.POST, data );
-}
-
-export const getCategories = cache(async () : Promise<Array<Category>> => {
-    const item = fetch(`http://localhost:3000/categories/api`).then((res) => res.json())
-    return item
-})
-
-export const createCategory = async (name: string, categoryData: Array<string>) => {
-    const data = { name: name, categoryData: categoryData };
-    return postData('http://localhost:3000/categories/api', EMethod.POST, data );
-}
+);*/

@@ -3,9 +3,13 @@ import {NextResponse} from "next/server";
 import {
     OneTemplateHasManyValues
 } from "@prisma/client";
+import {EMethod, postData} from "@/app/utils";
+
+export async function getTemplatesApi(): Promise<Array<any>> {
+    return fetch("http://localhost:3000/templates/api").then((res) => res.json());
+}
 
 export async function GET(request: Request) {
-
     try {
         const templates = await prisma.template.findMany({
             select: {
@@ -42,6 +46,21 @@ export async function GET(request: Request) {
         }
         return new NextResponse(error.message, {status: 500});
     }
+}
+
+export const createNewTemplateApi = (name: string, subject: string, to: string, icon: string, templateText: string, categoryValueArr: Array<{
+    categoryId: string,
+    categoryValueId: string
+}>) => {
+    const data = {
+        name: name,
+        subject: subject,
+        to: to,
+        icon: icon,
+        templateText: templateText,
+        categoryValueIdArr: categoryValueArr
+    };
+    return postData('http://localhost:3000/templates/api', EMethod.POST, data);
 }
 
 export async function POST(request: Request) {
@@ -83,36 +102,23 @@ export async function POST(request: Request) {
 
 const _404 = "No Template with ID found";
 
-
-export const deleteTemplate = (async (id: string) => {
+export const deleteTemplateApi = (id: string)  => {
     const data = {id: id};
-    return fetch('http://localhost:3000/templates/api', {
-        method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
-        mode: "cors", // no-cors, *cors, same-origin
-        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: "same-origin", // include, *same-origin, omit
-        headers: {
-            "Content-Type": "application/json",
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        redirect: "follow", // manual, *follow, error
-        referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-        body: JSON.stringify(data), // body data type must match "Content-Type" header
-    });
-    // return response.json(); // parses JSON response into native JavaScript objects
-})
+    return postData( 'http://localhost:3000/templates/api', EMethod.DELETE, data );
+}
+
 export async function DELETE(
     request: Request
 ) {
     const json = await request.json();
-    const templateId:string = json.id;
+    const templateId: string = json.id;
 
     try {
-        const templateHasCategoryValuesArr:Array<OneTemplateHasManyValues> = await prisma.oneTemplateHasManyValues.findMany({
-            where: { templateId: templateId }
+        const templateHasCategoryValuesArr: Array<OneTemplateHasManyValues> = await prisma.oneTemplateHasManyValues.findMany({
+            where: {templateId: templateId}
         });
 
-        const oneTemplateHasManyCategoryValuesIdArr: Array<string> = templateHasCategoryValuesArr.map( (m) => m.id );
+        const oneTemplateHasManyCategoryValuesIdArr: Array<string> = templateHasCategoryValuesArr.map((m) => m.id);
         await prisma.oneTemplateHasManyValues.deleteMany({
             where: {
                 id: {
@@ -122,15 +128,15 @@ export async function DELETE(
         });
 
         await prisma.template.delete({
-            where: { id: templateId }
+            where: {id: templateId}
         });
 
-        return new NextResponse(null, { status: 204 });
+        return new NextResponse(null, {status: 204});
     } catch (error: any) {
         if (error.code === "P2025") {
-            return new NextResponse(_404, { status: 404 });
+            return new NextResponse(_404, {status: 404});
         }
 
-        return new NextResponse(error.message, { status: 500 });
+        return new NextResponse(error.message, {status: 500});
     }
 }

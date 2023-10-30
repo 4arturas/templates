@@ -1,19 +1,22 @@
-import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import {prisma} from "@/lib/prisma";
+import {NextResponse} from "next/server";
 import {Category, OneCategoryHasManyValues, Value} from "@prisma/client";
+import {EMethod, postData} from "@/app/utils";
 
 const _404 = "No category with ID found";
 
-
-export const getCategoryApi = (async (id: string): Promise<Category> => {
-    const item = fetch(`http://localhost:3000/categories/api/${id}`).then((res) => res.json())
-    return item
-})
+export async function getCategoriesApi(): Promise<Array<Category>> {
+    return fetch(`http://localhost:3000/categories/api`).then((res) => res.json())
+}
 export async function GET(request: Request) {
     const categories:Array<Category> = await prisma.category.findMany();
     return NextResponse.json(categories);
 }
 
+export const createCategoryApi = async (name: string, categoryData: Array<string>) => {
+    const data = { name: name, categoryData: categoryData };
+    return postData('http://localhost:3000/categories/api', EMethod.POST, data );
+}
 export async function POST(request: Request) {
     try {
         const json = await request.json();
@@ -46,24 +49,10 @@ export async function POST(request: Request) {
         return new NextResponse(error.message, { status: 500 });
     }
 }
-
-export const deleteCategory = (async (id: string) => {
+export const deleteCategoryApi = (id: string)  => {
     const data = {id: id};
-    const response = await fetch('http://localhost:3000/categories/api', {
-        method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
-        mode: "cors", // no-cors, *cors, same-origin
-        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: "same-origin", // include, *same-origin, omit
-        headers: {
-            "Content-Type": "application/json",
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        redirect: "follow", // manual, *follow, error
-        referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-        body: JSON.stringify(data), // body data type must match "Content-Type" header
-    });
-    // return response.json(); // parses JSON response into native JavaScript objects
-})
+    return postData( 'http://localhost:3000/categories/api', EMethod.DELETE, data );
+}
 export async function DELETE(
     request: Request
 ) {

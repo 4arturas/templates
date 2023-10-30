@@ -4,8 +4,7 @@ import React, {cache, use} from "react";
 import {Category} from "@prisma/client";
 import {CategoriesComponent} from "@/app/categories/categories.component";
 import {CircularProgress} from "@mui/material";
-import {getCategories} from "@/app/utils";
-import {deleteCategory} from "@/app/categories/api/route";
+import {deleteCategoryApi, getCategoriesApi} from "@/app/categories/api/route";
 
 
 export default function CategoriesCategoryPage() {
@@ -15,13 +14,14 @@ export default function CategoriesCategoryPage() {
 
     const deleteCategoryAndRefresh = async (id: string) => {
         setCategories(undefined);
-        deleteCategory(id).then(r => {
+        deleteCategoryApi(id).then((data) => {
+            alert( 1111 );
             fetchData();
-        })
+        });
     }
 
     async function fetchData() {
-        const categoriesTmp:Array<Category> = await getCategories();
+        const categoriesTmp:Array<Category> = await getCategoriesApi();
         setCategories(categoriesTmp);
     }
 

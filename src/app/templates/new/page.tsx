@@ -5,12 +5,12 @@ import React, {cache} from "react";
 import {NewTemplateComponent} from "@/app/templates/new/newtemplate.component";
 import {CircularProgress} from "@mui/material";
 import {
-    createNewTemplate,
-    getCategories,
     ICategoryMenuItem, ICategorySelect,
 } from "@/app/utils";
 import {Value} from "@prisma/client";
 import {getCategoryValuesApi} from "@/app/categories/api/[id]/values/route";
+import {getCategoriesApi} from "@/app/categories/api/route";
+import {createNewTemplateApi} from "@/app/templates/api/route";
 
 
 export default function TemplatesNewPage() {
@@ -21,14 +21,14 @@ export default function TemplatesNewPage() {
     const [initialized, setInitialized] = React.useState<boolean>(false);
 
     const createNewTemplateAndRedirect = (name:string, subject: string, to: string, icon: string, templateText: string, categoryValueArr:Array<{ categoryId:string, categoryValueId:string }>) => {
-        createNewTemplate(name, subject, to, icon, templateText, categoryValueArr).then((data) => {
+        createNewTemplateApi(name, subject, to, icon, templateText, categoryValueArr).then((data) => {
             router.push('/templates', { scroll: false })
         });
     }
 
     React.useEffect( () => {
         async function startFetching() {
-            const categoriesArr = await getCategories();
+            const categoriesArr = await getCategoriesApi();
 
             const _categoryOptions:Array<ICategorySelect> = [];
             const _options:Array<ICategoryMenuItem> = [];
