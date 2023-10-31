@@ -2,31 +2,28 @@
 
 import {
     Box,
-    Button,
-    Checkbox, Chip, FormControl,
+    Button, FormControl,
     InputLabel,
-    List,
-    ListItem,
-    ListItemButton,
-    ListItemIcon,
-    ListItemText, MenuItem, OutlinedInput, Select, SelectChangeEvent,
+    ListItemText, MenuItem, Select, SelectChangeEvent,
     TextField
 } from "@mui/material";
 import React from "react";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import {ICategoryMenuItem, ICategorySelect, ITemplateResponse} from "@/app/utils";
-import {Theme, useTheme} from '@mui/material/styles';
 
 type Props = {
     templateResponse: ITemplateResponse | undefined
     categoryOptions: Array<ICategorySelect>
     options: Array<ICategoryMenuItem>
-    templateFunction: (name: string, subject: string, to: string, icon: string, templateText: string, categoryValueIdArr: Array<{ categoryId: string, categoryValueId: string }>) => void
+    templateFunction: (name: string, subject: string, to: string, icon: string, templateText: string, categoryValueIdArr: Array<{
+        categoryId: string,
+        categoryValueId: string
+    }>) => void
 }
 
 
-export const NewTemplateComponent: React.FC<Props> = ({templateResponse, categoryOptions, options, templateFunction}) => {
+export const TemplateComponent: React.FC<Props> = ({templateResponse, categoryOptions, options, templateFunction}) => {
     const [name, setName] = React.useState<string>(templateResponse ? templateResponse.name : '');
     const [subject, setSubject] = React.useState<string>(templateResponse ? templateResponse.subject : '');
     const [to, setTo] = React.useState<string>(templateResponse ? templateResponse.to : '');
@@ -45,7 +42,7 @@ export const NewTemplateComponent: React.FC<Props> = ({templateResponse, categor
         });
 
         setSelectedElements([...selectedElements]);
-        console.log( selectedElements );
+        console.log(selectedElements);
     };
 
     return (
@@ -152,7 +149,10 @@ export const NewTemplateComponent: React.FC<Props> = ({templateResponse, categor
                                 disabled={name.length === 0 || subject.length === 0 || to.length === 0 || templateText.length === 0 || selectedElements.length === 0}
                                 onClick={() => {
 
-                                    const selectedCategoryValueIdArr: Array<{ categoryId: string, categoryValueId: string }> = [];
+                                    const selectedCategoryValueIdArr: Array<{
+                                        categoryId: string,
+                                        categoryValueId: string
+                                    }> = [];
                                     const selected = selectedElements.flatMap((category: ICategorySelect) => {
                                         return {categoryId: category.categoryId, selectedValue: category.selectedValue}
                                     })
@@ -163,12 +163,15 @@ export const NewTemplateComponent: React.FC<Props> = ({templateResponse, categor
                                             const categoryValueId: string | undefined = options.find(f => f.categoryId === categoryId && f.name === selectedCategoryDataValue)?.categoryValueId;
                                             if (!categoryValueId)
                                                 continue;
-                                            selectedCategoryValueIdArr.push({categoryId: categoryId, categoryValueId: categoryValueId})
+                                            selectedCategoryValueIdArr.push({
+                                                categoryId: categoryId,
+                                                categoryValueId: categoryValueId
+                                            })
                                         } // end for j
                                     } // end for i
                                     templateFunction(name, subject, to, iconSvg, templateText, selectedCategoryValueIdArr);
                                 }}>
-                            { templateResponse ? 'Edit Template' : 'Create New Template' }
+                            {templateResponse ? 'Edit Template' : 'Create New Template'}
                         </Button>
                     </td>
                 </tr>

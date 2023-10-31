@@ -7,7 +7,7 @@ import {
         ICategoryMenuItem, ICategorySelect, ITemplateResponse
 } from "@/app/utils";
 
-import {NewTemplateComponent} from "@/app/templates/new/newtemplate.component";
+import {TemplateComponent} from "@/app/templates/new/template.component";
 import {getTemplateWithCategoryValues} from "@/app/templates/api/template/[id]/withcategoryvalues/route";
 import {getCategoryValuesApi} from "@/app/categories/api/[id]/values/route";
 import {getCategoriesApi} from "@/app/categories/api/route";
@@ -58,7 +58,7 @@ export default function TemplatePage({ params }: {params: { id: string }; } ) {
         {
             !initialized ?
                 <CircularProgress /> :
-                <NewTemplateComponent
+                <TemplateComponent
                     templateResponse={templateResponse}
                     categoryOptions={categorySelects}
                     options={categorySelectOptions}

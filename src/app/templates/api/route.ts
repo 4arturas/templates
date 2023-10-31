@@ -18,6 +18,7 @@ export async function GET(request: Request) {
                 to: true,
                 subject: true,
                 icon: true,
+                templateText: true,
                 OneTemplateHasManyValues: {
                     select: {
                         values: {

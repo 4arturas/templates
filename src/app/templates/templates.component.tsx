@@ -76,6 +76,8 @@ export const TemplatesComponent: React.FC<Props> = ({templates, deleteTemplateAn
             })
         })
 
+        console.log(JSON.stringify(templates))
+
         const tmpRows: Array<any> = [];
         templates.map( (template: ITemplateResponse) => {
             let tmpRow:any ={

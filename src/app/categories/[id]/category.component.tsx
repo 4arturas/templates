@@ -5,7 +5,6 @@ import React from "react";
 import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, InputLabel} from "@mui/material";
 import Link from "next/link";
 import DeleteIcon from '@mui/icons-material/Delete';
-import {useRouter} from "next/navigation";
 
 type Props = {
     category: Category | undefined,
@@ -13,8 +12,6 @@ type Props = {
     deleteValue: (id:string) => void
 }
 export const CategoryComponent: React.FC<Props> = ({category, categoryData, deleteValue}) => {
-    const router = useRouter();
-
     return (
         <>
             <InputLabel>

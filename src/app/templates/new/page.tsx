@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import React, {cache} from "react";
-import {NewTemplateComponent} from "@/app/templates/new/newtemplate.component";
+import {TemplateComponent} from "@/app/templates/new/template.component";
 import {CircularProgress} from "@mui/material";
 import {
     ICategoryMenuItem, ICategorySelect,
@@ -55,7 +55,7 @@ export default function TemplatesNewPage() {
             { !initialized ?
                 <CircularProgress />
                 :
-                <NewTemplateComponent
+                <TemplateComponent
                     templateResponse={undefined}
                     categoryOptions={categorySelects}
                     options={categorySelectOptions}
