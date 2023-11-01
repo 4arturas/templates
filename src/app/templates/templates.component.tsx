@@ -6,6 +6,7 @@ import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { TableVirtuoso, TableComponents } from 'react-virtuoso';
 import {IOneTemplateHasManyValues, ITemplateResponse} from "@/app/utils";
+import Image from "next/image";
 
 type Props = {
     templates:Array<ITemplateResponse>
@@ -25,7 +26,6 @@ const VirtuosoTableComponents: TableComponents<any> = {
         <TableBody {...props} ref={ref} />
     )),
 };
-
 
 export const TemplatesComponent: React.FC<Props> = ({templates, deleteTemplateAndRedirect}) => {
 
@@ -85,7 +85,7 @@ export const TemplatesComponent: React.FC<Props> = ({templates, deleteTemplateAn
                 name: template.name,
                 subject: template.subject,
                 to: template.to,
-                icon: <img src={`data:image/svg+xml;utf8,${encodeURIComponent(template.icon)}`} />,
+                icon: <Image src={`data:image/svg+xml;utf8,${encodeURIComponent(template.icon)}`} alt={'icon'}/>,
                 actions: <div>
                     <Link href={`#`} passHref>
                         View
