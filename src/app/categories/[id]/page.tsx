@@ -6,7 +6,7 @@ import {Category, Value} from "@prisma/client";
 import {CircularProgress} from "@mui/material";
 import {deleteValueApi} from "@/app/values/api/route";
 import {getCategoryValuesApi} from "@/app/categories/api/[id]/values/route";
-import {getCategoryApi} from "@/app/categories/api/[id]/route";
+import {getCategoryApi} from "@/app/utils";
 
 export default function CategoriesCategory( { params }: {params: { id: string }; } ) {
 

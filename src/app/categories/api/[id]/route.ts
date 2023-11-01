@@ -1,12 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import {Category} from "@prisma/client";
 
 const _404 = "No category with ID found";
 
-export const getCategoryApi = (async (id: string): Promise<Category> => {
-    return fetch(`http://localhost:3000/categories/api/${id}`).then((res) => res.json())
-})
+
 
 export async function GET(
     request: Request,
