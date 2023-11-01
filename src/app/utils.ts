@@ -48,9 +48,7 @@ export async function postData(url = "", method: EMethod, data = {}) {
     });
     // return response.json(); // parses JSON response into native JavaScript objects
 }
-export const getCategoryApi = (async (id: string): Promise<Category> => {
-    return fetch(`http://localhost:3000/categories/api/${id}`).then((res) => res.json())
-})
+
 /*export const getTemplates = cache(() =>
     fetch("http://localhost:3000/templates/api").then((res) => res.json())
 );*/
