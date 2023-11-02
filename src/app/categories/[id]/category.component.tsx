@@ -37,11 +37,11 @@ export const CategoryComponent: React.FC<Props> = ({category, categoryData, dele
                                     {data.name}
                                 </TableCell>
                                 <TableCell align="right">
-                                    <Link href={`#`} passHref>
+                                    <Link href={`/values/${data.id}`} passHref>
                                         View
                                     </Link>
                                     &nbsp;
-                                    <Link href={`#`} passHref>
+                                    <Link href={`/values/${data.id}/edit`} passHref>
                                         Edit
                                     </Link>
                                     &nbsp;

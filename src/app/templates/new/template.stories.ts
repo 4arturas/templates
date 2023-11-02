@@ -16,8 +16,8 @@ const meta = {
   tags: ['autodocs'],
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {
-    categoryOptions: [],
-    options: [],
+    categorySelectArr: [],
+    categorySelectItemArr: [],
     templateResponse: [],
     templateFunction: (name: string, subject: string, to: string, icon: string, templateText: string, categoryValueIdArr: Array<{categoryId: string, categoryValueId: string}>) => { alert( 'Not implemented' ) }
   },

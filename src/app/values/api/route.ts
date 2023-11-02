@@ -42,3 +42,35 @@ export async function DELETE(
         return new NextResponse(error.message, { status: 500 });
     }
 }
+
+export const updateValueApi = (valueId: string, newValue: string)  => {
+    const data = {id: valueId, name: newValue};
+    return postData( 'http://localhost:3000/values/api', EMethod.PATCH, data );
+}
+export async function PATCH(
+    request: Request
+) {
+    try {
+
+        let json = await request.json();
+        const valueId = json.id;
+        const name = json.name;
+
+        const r1 = await prisma.value.update({
+            where: {
+                id: valueId
+            },
+            data: {
+                name: name
+            },
+        })
+
+        return new NextResponse(null, { status: 204 });
+    } catch (error: any) {
+        if (error.code === "P2025") {
+            return new NextResponse(_404, { status: 404 });
+        }
+
+        return new NextResponse(error.message, { status: 500 });
+    }
+}

@@ -84,7 +84,6 @@ export async function POST(request: Request) {
             const templateHasCategoryValue: OneTemplateHasManyValues = await prisma.oneTemplateHasManyValues.create({
                 data: {templateId: template.id, categoryId: categoryId, valueId: categoryValueId}
             })
-            console.log(templateHasCategoryValue);
         }
 
         return new NextResponse(JSON.stringify(template), {

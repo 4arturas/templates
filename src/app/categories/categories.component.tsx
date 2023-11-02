@@ -47,7 +47,7 @@ export const CategoriesComponent: React.FC<Props> = ({categories, deleteCategory
                                         View
                                     </Link>
                                     &nbsp;
-                                    <Link href={`/categories/categories/${category.id}`} passHref>
+                                    <Link href={`/categories/${category.id}`} passHref>
                                         Edit
                                     </Link>
                                     &nbsp;

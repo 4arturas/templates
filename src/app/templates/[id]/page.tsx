@@ -4,7 +4,7 @@ import React, {cache, use} from "react";
 import {Value} from "@prisma/client";
 import {CircularProgress} from "@mui/material";
 import {
-        ICategoryMenuItem, ICategorySelect, ITemplateResponse
+        ICategorySelectItem, ICategorySelect, ITemplateResponse
 } from "@/app/utils";
 
 import {TemplateComponent} from "@/app/templates/new/template.component";
@@ -16,7 +16,7 @@ export default function TemplatePage({ params }: {params: { id: string }; } ) {
 
     const [templateResponse, setTemplateResponse] = React.useState<ITemplateResponse>();
     const [categorySelects, setCategorySelects] = React.useState<Array<ICategorySelect>>([]);
-    const [categorySelectOptions, setCategorySelectOptions] = React.useState<Array<ICategoryMenuItem>>([]);
+    const [categorySelectOptions, setCategorySelectOptions] = React.useState<Array<ICategorySelectItem>>([]);
     const [initialized, setInitialized] = React.useState<boolean>(false);
 
     React.useEffect( () => {
@@ -27,7 +27,7 @@ export default function TemplatePage({ params }: {params: { id: string }; } ) {
 
             const categoriesArr = await getCategoriesApi();
             const _categoryOptions:Array<ICategorySelect> = [];
-            const _options:Array<ICategoryMenuItem> = [];
+            const _options:Array<ICategorySelectItem> = [];
             for ( let i = 0; i < categoriesArr.length; i++ )
             {
                 const category = categoriesArr[i];
@@ -60,8 +60,8 @@ export default function TemplatePage({ params }: {params: { id: string }; } ) {
                 <CircularProgress /> :
                 <TemplateComponent
                     templateResponse={templateResponse}
-                    categoryOptions={categorySelects}
-                    options={categorySelectOptions}
+                    categorySelectArr={categorySelects}
+                    categorySelectItemArr={categorySelectOptions}
                     templateFunction={()=>{
                         alert( 'Not implemented' );
                     }}/>

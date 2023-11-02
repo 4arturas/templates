@@ -2,20 +2,31 @@
 
 import {
     Box,
-    Button, FormControl,
+    Button, Card, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputAdornment,
     InputLabel,
     ListItemText, MenuItem, Select, SelectChangeEvent,
     TextField
 } from "@mui/material";
-import React from "react";
+import React, {lazy, Suspense} from "react";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import {ICategoryMenuItem, ICategorySelect, ITemplateResponse} from "@/app/utils";
+import {
+    ICategorySelectItem,
+    ICategorySelect,
+    ITemplateResponse,
+    googleIconNames,
+    googleIconNames2,
+    googleIcons3187
+} from "@/app/utils";
+import {bottom} from "@popperjs/core";
+import {Search} from "@mui/icons-material";
+
+
 
 type Props = {
     templateResponse: ITemplateResponse | undefined
-    categoryOptions: Array<ICategorySelect>
-    options: Array<ICategoryMenuItem>
+    categorySelectArr: Array<ICategorySelect>
+    categorySelectItemArr: Array<ICategorySelectItem>
     templateFunction: (name: string, subject: string, to: string, icon: string, templateText: string, categoryValueIdArr: Array<{
         categoryId: string,
         categoryValueId: string
@@ -23,13 +34,18 @@ type Props = {
 }
 
 
-export const TemplateComponent: React.FC<Props> = ({templateResponse, categoryOptions, options, templateFunction}) => {
+export const TemplateComponent: React.FC<Props> = ({templateResponse, categorySelectArr, categorySelectItemArr, templateFunction}) => {
     const [name, setName] = React.useState<string>(templateResponse ? templateResponse.name : '');
     const [subject, setSubject] = React.useState<string>(templateResponse ? templateResponse.subject : '');
     const [to, setTo] = React.useState<string>(templateResponse ? templateResponse.to : '');
-    const [iconSvg, setIconSvg] = React.useState<string>(templateResponse ? templateResponse.icon : '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32">REPLACE_THIS_TEXT_WITH_PATH</svg>');
+    const [iconSvg, setIconSvg] = React.useState<string>(templateResponse? templateResponse.icon : '');
     const [templateText, setTemplateText] = React.useState<string>(templateResponse ? templateResponse.templateText : '');
-    const [selectedElements, setSelectedElements] = React.useState<Array<ICategorySelect>>(categoryOptions);
+    const [selectedElements, setSelectedElements] = React.useState<Array<ICategorySelect>>(categorySelectArr);
+
+
+    const [open, setOpen] = React.useState<boolean>(false);
+    const [searchPhrase, setSearchPhrase] = React.useState<string>('');
+
 
     const onSelectionChange = (event: SelectChangeEvent<Array<string>>, group: ICategorySelect) => {
         //const {target: { value },} = event;
@@ -42,11 +58,17 @@ export const TemplateComponent: React.FC<Props> = ({templateResponse, categoryOp
         });
 
         setSelectedElements([...selectedElements]);
-        console.log(selectedElements);
     };
+
+    const handleClose = () => {
+        setOpen(false)
+        // onClose(selectedValue);
+    };
+
 
     return (
         <Box sx={{width: '1000px'}}>
+
             <table style={{width: '100%'}}>
                 <tbody>
                 <tr>
@@ -87,12 +109,13 @@ export const TemplateComponent: React.FC<Props> = ({templateResponse, categoryOp
                             <tr>
                                 <td>
                                     <InputLabel>
-                                        Icon(<a href='http://svgicons.sparkk.fr/' target='_blank'>svg</a>):
+                                        Icon
                                     </InputLabel>
                                 </td>
                                 <td>
-                                    <TextField label="Enter Icon Address" style={{width: '500px'}} value={iconSvg}
-                                               onChange={(v) => setIconSvg(v.target.value)} multiline={true}/>
+                                    <Button variant="contained" onClick={()=>{setOpen(true)}}>Select Icon</Button>
+
+                                    { iconSvg.length > 0 && <i style={{width: '32px', height: '32px', marginLeft: '20px'}} className="material-icons">{iconSvg}</i> }
                                 </td>
                             </tr>
 
@@ -117,7 +140,7 @@ export const TemplateComponent: React.FC<Props> = ({templateResponse, categoryOp
                                         id={group.categoryId}
                                         renderValue={(selected) => selected.join(", ")}
                                     >
-                                        {options.map(function (option) {
+                                        {categorySelectItemArr.map(function (option) {
                                             if (option.categoryId === group.categoryId) {
                                                 return (
                                                     <MenuItem key={`menuItem${option.categoryValueId}`}
@@ -160,7 +183,7 @@ export const TemplateComponent: React.FC<Props> = ({templateResponse, categoryOp
                                         const {categoryId, selectedValue} = selected[i];
                                         for (let j = 0; j < selectedValue.length; j++) {
                                             const selectedCategoryDataValue: string = selectedValue[j];
-                                            const categoryValueId: string | undefined = options.find(f => f.categoryId === categoryId && f.name === selectedCategoryDataValue)?.categoryValueId;
+                                            const categoryValueId: string | undefined = categorySelectItemArr.find(f => f.categoryId === categoryId && f.name === selectedCategoryDataValue)?.categoryValueId;
                                             if (!categoryValueId)
                                                 continue;
                                             selectedCategoryValueIdArr.push({
@@ -177,6 +200,60 @@ export const TemplateComponent: React.FC<Props> = ({templateResponse, categoryOp
                 </tr>
                 </tbody>
             </table>
+
+
+            <Dialog sx={{height:'500px'}}
+                open={open} style={{position:'absolute', top: 0}}
+            >
+                <DialogTitle>
+                    Select icon
+                    <TextField
+                        label="Search for the Icon"
+                        style={{width: '100%', marginBottom:'10px'}}
+                        value={searchPhrase}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <Search />
+                                </InputAdornment>
+                            ),
+                        }}
+                        variant="standard"
+                        onChange={(v) => setSearchPhrase(v.target.value)}/>
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        {/*googleIcons3187*/}
+                        {googleIconNames2.map(( (icon) => {
+                            if ( searchPhrase.length > 0 && !icon.includes(searchPhrase) )
+                                return <></>
+                            return <Card style={{width: '40px',display: 'inline', marginRight: '10px', cursor: 'pointer'}}
+                                        onClick={() => {
+                                            setIconSvg(icon);
+                                            setOpen(false);
+                                        }}>
+                                <table style={{display: "inline-table", marginBottom: '10px'}}>
+                                    <tbody>
+                                    <tr>
+                                        <td style={{textAlign: 'center'}}>
+                                            <i style={{width: '32px', height: '32px'}} className="material-icons">{icon}</i>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style={{textTransform: 'capitalize'}}>{icon.replaceAll('_', ' ')}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </Card>
+                        }))}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} autoFocus>
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     )
 }
