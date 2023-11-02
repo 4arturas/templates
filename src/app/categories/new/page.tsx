@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from 'next/navigation'
-import {EMethod, postData} from "@/app/utils";
 import React from "react";
 import {CategoryNewComponent} from "@/app/categories/new/categorynew.component";
 import {createCategoryApi} from "@/app/categories/api/route";

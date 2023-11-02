@@ -2,7 +2,6 @@
 
 import React from "react";
 import {
-    Box,
     Button, InputLabel,
     Paper,
     Table,
@@ -11,7 +10,7 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    TextField, Typography, Stack
+    TextField
 } from "@mui/material";
 import {Add, PlusOne} from "@mui/icons-material";
 

@@ -30,8 +30,8 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {
   args: {
     templateResponse: templatesResponse,
-    categoryOptions: [],
-    options: [],
+    categorySelectArr: [],
+    categorySelectItemArr: [],
     templateFunction: (name: string, subject: string, to: string, icon: string, templateText: string, categoryValueIdArr: Array<{categoryId: string, categoryValueId: string}>) => { alert( 'Not implemented' ) }
   },
 };

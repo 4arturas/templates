@@ -3,14 +3,13 @@
 import {Category} from "@prisma/client";
 import {
     Box,
-    Paper, Tab,
+    Paper,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
-    TableRow,
-    Tabs, Typography
+    TableRow
 } from "@mui/material";
 import Link from "next/link";
 import React from "react";

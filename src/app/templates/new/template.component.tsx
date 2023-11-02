@@ -7,18 +7,15 @@ import {
     ListItemText, MenuItem, Select, SelectChangeEvent,
     TextField
 } from "@mui/material";
-import React, {lazy, Suspense} from "react";
+import React from "react";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import {
     ICategorySelectItem,
     ICategorySelect,
     ITemplateResponse,
-    googleIconNames,
     googleIconNames2,
-    googleIcons3187
 } from "@/app/utils";
-import {bottom} from "@popperjs/core";
 import {Search} from "@mui/icons-material";
 
 

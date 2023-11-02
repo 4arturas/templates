@@ -16,7 +16,6 @@ import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {TableVirtuoso, TableComponents} from 'react-virtuoso';
 import {ICategorySelect, ICategorySelectItem, IOneTemplateHasManyValues, ITemplateResponse} from "@/app/utils";
-import Image from "next/image";
 
 interface ITmpInterface {
     category: { id: string, name: string },
