@@ -241,7 +241,7 @@ export const TemplateComponent: React.FC<Props> = ({templateResponse, categorySe
                                     </tr>
                                     <tr>
                                         <td style={{textTransform: 'capitalize'}}>
-
+                                            {icon.replace(/_/g, " ")}
                                         </td>
                                     </tr>
                                     </tbody>
