@@ -62,7 +62,7 @@ export default function TemplatePage({ params }: {params: { id: string }; } ) {
                     templateResponse={templateResponse}
                     categorySelectArr={categorySelects}
                     categorySelectItemArr={categorySelectOptions}
-                    templateFunction={()=>{
+                    templateFunctionCreateNew={()=>{
                         alert( 'Not implemented' );
                     }}/>
         }

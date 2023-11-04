@@ -20,8 +20,8 @@ export default function TemplatesNewPage() {
     const [categorySelectOptions, setCategorySelectOptions] = React.useState<Array<ICategorySelectItem>>([]);
     const [initialized, setInitialized] = React.useState<boolean>(false);
 
-    const createNewTemplateAndRedirect = (name:string, subject: string, to: string, icon: string, templateText: string, categoryValueArr:Array<{ categoryId:string, categoryValueId:string }>) => {
-        createNewTemplateApi(name, subject, to, icon, templateText, categoryValueArr).then((data) => {
+    const createNewTemplateAndRedirect = (name:string, subject: string, to: string, icon: string, templateText: string, valueIdArr:Array<{ categoryId:string, valueId:string }>) => {
+        createNewTemplateApi(name, subject, to, icon, templateText, valueIdArr).then((data) => {
             router.push('/templates', { scroll: false })
         });
     }
@@ -59,7 +59,7 @@ export default function TemplatesNewPage() {
                     templateResponse={undefined}
                     categorySelectArr={categorySelects}
                     categorySelectItemArr={categorySelectOptions}
-                    templateFunction={createNewTemplateAndRedirect}
+                    templateFunctionCreateNew={createNewTemplateAndRedirect}
                 />
             }
     </>

@@ -19,7 +19,7 @@ const meta = {
     categorySelectArr: [],
     categorySelectItemArr: [],
     templateResponse: [],
-    templateFunction: (name: string, subject: string, to: string, icon: string, templateText: string, categoryValueIdArr: Array<{categoryId: string, categoryValueId: string}>) => { alert( 'Not implemented' ) }
+    templateFunctionCreateNew: (name: string, subject: string, to: string, icon: string, templateText: string, categoryValueIdArr: Array<{categoryId: string, valueId: string}>) => { alert( 'Not implemented' ) }
   },
 } satisfies Meta<typeof TemplateComponent>;
 
@@ -32,6 +32,6 @@ export const Primary: Story = {
     templateResponse: templatesResponse,
     categorySelectArr: [],
     categorySelectItemArr: [],
-    templateFunction: (name: string, subject: string, to: string, icon: string, templateText: string, categoryValueIdArr: Array<{categoryId: string, categoryValueId: string}>) => { alert( 'Not implemented' ) }
+    templateFunctionCreateNew: (name: string, subject: string, to: string, icon: string, templateText: string, valueIdArr: Array<{categoryId: string, valueId: string}>) => { alert( 'Not implemented' ) }
   },
 };

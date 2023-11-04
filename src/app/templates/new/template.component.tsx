@@ -19,23 +19,27 @@ import {
 import {Search} from "@mui/icons-material";
 
 
-
 type Props = {
     templateResponse: ITemplateResponse | undefined
     categorySelectArr: Array<ICategorySelect>
     categorySelectItemArr: Array<ICategorySelectItem>
-    templateFunction: (name: string, subject: string, to: string, icon: string, templateText: string, categoryValueIdArr: Array<{
+    templateFunctionCreateNew: (name: string, subject: string, to: string, icon: string, templateText: string, valueIdArr: Array<{
         categoryId: string,
-        categoryValueId: string
+        valueId: string
     }>) => void
 }
 
 
-export const TemplateComponent: React.FC<Props> = ({templateResponse, categorySelectArr, categorySelectItemArr, templateFunction}) => {
+export const TemplateComponent: React.FC<Props> = ({
+                                                       templateResponse,
+                                                       categorySelectArr,
+                                                       categorySelectItemArr,
+                                                       templateFunctionCreateNew
+                                                   }) => {
     const [name, setName] = React.useState<string>(templateResponse ? templateResponse.name : '');
     const [subject, setSubject] = React.useState<string>(templateResponse ? templateResponse.subject : '');
     const [to, setTo] = React.useState<string>(templateResponse ? templateResponse.to : '');
-    const [iconSvg, setIconSvg] = React.useState<string>(templateResponse? templateResponse.icon : '');
+    const [iconSvg, setIconSvg] = React.useState<string>(templateResponse ? templateResponse.icon : '');
     const [templateText, setTemplateText] = React.useState<string>(templateResponse ? templateResponse.templateText : '');
     const [selectedElements, setSelectedElements] = React.useState<Array<ICategorySelect>>(categorySelectArr);
 
@@ -66,11 +70,11 @@ export const TemplateComponent: React.FC<Props> = ({templateResponse, categorySe
     return (
         <Box sx={{width: '1000px'}}>
 
-            <table style={{width: '100%'}}>
+            <table style={{width: '100%'}} cellPadding={20}>
                 <tbody>
                 <tr>
                     <td>
-                        <table>
+                        <table cellPadding={20}>
                             <tbody>
                             <tr>
                                 <td style={{width: '200px'}}>
@@ -110,9 +114,13 @@ export const TemplateComponent: React.FC<Props> = ({templateResponse, categorySe
                                     </InputLabel>
                                 </td>
                                 <td>
-                                    <Button variant="contained" onClick={()=>{setOpen(true)}}>Select Icon</Button>
+                                    <Button variant="contained" onClick={() => {
+                                        setOpen(true)
+                                    }}>Select Icon</Button>
 
-                                    { iconSvg.length > 0 && <i style={{width: '32px', height: '32px', marginLeft: '20px'}} className="material-icons">{iconSvg}</i> }
+                                    {iconSvg.length > 0 &&
+                                        <i style={{width: '32px', height: '32px', marginLeft: '20px'}}
+                                           className="material-icons">{iconSvg}</i>}
                                 </td>
                             </tr>
 
@@ -127,7 +135,9 @@ export const TemplateComponent: React.FC<Props> = ({templateResponse, categorySe
                             return (
                                 <FormControl key={`formControl${group.categoryId}`} variant="standard"
                                              sx={{m: 1, width: 300, mt: 3}}>
-                                    <InputLabel id={`label${group.categoryId}`}>{group.name}</InputLabel>
+                                    <InputLabel id={`label${group.categoryId}`} key={`label${group.categoryId}`}>
+                                        {group.name}
+                                    </InputLabel>
                                     <Select
                                         labelId={`label${group.categoryId}`}
                                         key={`select${group.categoryId}`}
@@ -157,10 +167,10 @@ export const TemplateComponent: React.FC<Props> = ({templateResponse, categorySe
 
                 <tr>
                     <td colSpan={2}>
-                        <InputLabel>
+                        <InputLabel key={`labelTemplateText`}>
                             Template Text:
                         </InputLabel>
-                        <ReactQuill theme="snow" value={templateText} onChange={setTemplateText}/>
+                        <ReactQuill key={`reactQuill`} theme="snow" value={templateText} onChange={setTemplateText}/>
                     </td>
                 </tr>
                 <tr>
@@ -169,9 +179,9 @@ export const TemplateComponent: React.FC<Props> = ({templateResponse, categorySe
                                 disabled={name.length === 0 || subject.length === 0 || to.length === 0 || templateText.length === 0 || selectedElements.length === 0}
                                 onClick={() => {
 
-                                    const selectedCategoryValueIdArr: Array<{
+                                    const selectedValueIdArr: Array<{
                                         categoryId: string,
-                                        categoryValueId: string
+                                        valueId: string
                                     }> = [];
                                     const selected = selectedElements.flatMap((category: ICategorySelect) => {
                                         return {categoryId: category.categoryId, selectedValue: category.selectedValue}
@@ -180,16 +190,16 @@ export const TemplateComponent: React.FC<Props> = ({templateResponse, categorySe
                                         const {categoryId, selectedValue} = selected[i];
                                         for (let j = 0; j < selectedValue.length; j++) {
                                             const selectedCategoryDataValue: string = selectedValue[j];
-                                            const categoryValueId: string | undefined = categorySelectItemArr.find(f => f.categoryId === categoryId && f.name === selectedCategoryDataValue)?.categoryValueId;
-                                            if (!categoryValueId)
+                                            const valueId: string | undefined = categorySelectItemArr.find(f => f.categoryId === categoryId && f.name === selectedCategoryDataValue)?.categoryValueId;
+                                            if (!valueId)
                                                 continue;
-                                            selectedCategoryValueIdArr.push({
+                                            selectedValueIdArr.push({
                                                 categoryId: categoryId,
-                                                categoryValueId: categoryValueId
+                                                valueId: valueId
                                             })
                                         } // end for j
                                     } // end for i
-                                    templateFunction(name, subject, to, iconSvg, templateText, selectedCategoryValueIdArr);
+                                    templateFunctionCreateNew(name, subject, to, iconSvg, templateText, selectedValueIdArr);
                                 }}>
                             {templateResponse ? 'Edit Template' : 'Create New Template'}
                         </Button>
@@ -199,19 +209,19 @@ export const TemplateComponent: React.FC<Props> = ({templateResponse, categorySe
             </table>
 
 
-            <Dialog sx={{height:'500px'}}
-                open={open} style={{position:'absolute', top: 0}}
+            <Dialog sx={{height: '500px'}}
+                    open={open} style={{position: 'absolute', top: 0}}
             >
                 <DialogTitle>
                     Select icon
                     <TextField
                         label="Search for the Icon"
-                        style={{width: '100%', marginBottom:'10px'}}
+                        style={{width: '100%', marginBottom: '10px'}}
                         value={searchPhrase}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
-                                    <Search />
+                                    <Search/>
                                 </InputAdornment>
                             ),
                         }}
@@ -221,19 +231,21 @@ export const TemplateComponent: React.FC<Props> = ({templateResponse, categorySe
                 <DialogContent>
                     <DialogContentText>
                         {/*googleIcons3187*/}
-                        {googleIconNames2.map(( (icon) => {
-                            if ( searchPhrase.length > 0 && !icon.includes(searchPhrase) )
+                        {googleIconNames2.map(((icon) => {
+                            if (searchPhrase.length > 0 && !icon.includes(searchPhrase))
                                 return <></>
-                            return <Card style={{width: '40px',display: 'inline', marginRight: '10px', cursor: 'pointer'}}
-                                        onClick={() => {
-                                            setIconSvg(icon);
-                                            setOpen(false);
-                                        }}>
-                                <table style={{display: "inline-table", marginBottom: '10px'}}>
+                            return <Card key={`cardIcon${icon}`}
+                                style={{width: '40px', display: 'inline', marginRight: '10px', cursor: 'pointer'}}
+                                onClick={() => {
+                                    setIconSvg(icon);
+                                    setOpen(false);
+                                }}>
+                                <table  key={`tableIcon${icon}`} style={{display: "inline-table", marginBottom: '10px'}}>
                                     <tbody>
                                     <tr>
                                         <td style={{textAlign: 'center'}}>
-                                            <i style={{width: '32px', height: '32px'}} className="material-icons">{icon}</i>
+                                            <i style={{width: '32px', height: '32px'}}
+                                               className="material-icons">{icon}</i>
                                         </td>
                                     </tr>
                                     <tr>

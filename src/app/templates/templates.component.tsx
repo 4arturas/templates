@@ -101,48 +101,7 @@ export const TemplatesComponent: React.FC<Props> = ({templates, deleteTemplateAn
         initTable(groupedCategories, selectedElements)
     };
 
-    React.useEffect(() => {
 
-
-        const tmpGroupedCategories:{[key:string]:Array<ITmpInterface>} = templates
-            .flatMap(f => f.OneTemplateHasManyValues)
-            .reduce((group: { [key: string]: Array<ITmpInterface> }, item) => {
-                if (!group[item.category.id]) {
-                    group[item.category.id] = [];
-                }
-                group[item.category.id].push(item);
-                return group;
-            }, {});
-
-        const tmpCategorySelectArr: Array<ICategorySelect> = [];
-        const tmpCategorySelectItemArr: Array<ICategorySelectItem> = [];
-        Object.keys((tmpGroupedCategories)).map((categoryId: string) => {
-            const value: Array<ITmpInterface> = tmpGroupedCategories[categoryId];
-
-            value.map((v) => {
-                tmpCategorySelectItemArr.push({name: v.values.name, categoryValueId: v.values.id, categoryId: v.category.id})
-            })
-
-            const categoryName = value.map(m => m.category).find(f => f.id === categoryId)?.name || 'Should not be like this';
-            tmpCategorySelectArr.push({
-                    categoryId: categoryId,
-                    name: categoryName,
-                    selectedCategoryValueId: [categoryId],
-                    selectedValue: value.map(m => m.values).map(m => m.name)
-                }
-            );
-        })
-
-        setGroupedCategories( tmpGroupedCategories );
-        setCategorySelectArr(tmpCategorySelectArr);
-        setCategorySelectItemArr(tmpCategorySelectItemArr);
-        setSelectedElements(tmpCategorySelectArr);
-        ///////////////////////////////////
-
-        initTable(tmpGroupedCategories, tmpCategorySelectArr);
-
-
-    }, []);
 
     function initTable(groupedCategories:{[key:string]:Array<ITmpInterface>}, selected:Array<ICategorySelect>) {
         const tmpRows: Array<any> = [];
@@ -230,6 +189,49 @@ export const TemplatesComponent: React.FC<Props> = ({templates, deleteTemplateAn
         setColumns(tmpColumns);
         setRows(tmpRows)
     }
+
+    React.useEffect(() => {
+
+
+        const tmpGroupedCategories:{[key:string]:Array<ITmpInterface>} = templates
+            .flatMap(f => f.OneTemplateHasManyValues)
+            .reduce((group: { [key: string]: Array<ITmpInterface> }, item) => {
+                if (!group[item.category.id]) {
+                    group[item.category.id] = [];
+                }
+                group[item.category.id].push(item);
+                return group;
+            }, {});
+
+        const tmpCategorySelectArr: Array<ICategorySelect> = [];
+        const tmpCategorySelectItemArr: Array<ICategorySelectItem> = [];
+        Object.keys((tmpGroupedCategories)).map((categoryId: string) => {
+            const value: Array<ITmpInterface> = tmpGroupedCategories[categoryId];
+
+            value.map((v) => {
+                tmpCategorySelectItemArr.push({name: v.values.name, categoryValueId: v.values.id, categoryId: v.category.id})
+            })
+
+            const categoryName = value.map(m => m.category).find(f => f.id === categoryId)?.name || 'Should not be like this';
+            tmpCategorySelectArr.push({
+                    categoryId: categoryId,
+                    name: categoryName,
+                    selectedCategoryValueId: [categoryId],
+                    selectedValue: value.map(m => m.values).map(m => m.name)
+                }
+            );
+        })
+
+        setGroupedCategories( tmpGroupedCategories );
+        setCategorySelectArr(tmpCategorySelectArr);
+        setCategorySelectItemArr(tmpCategorySelectItemArr);
+        setSelectedElements(tmpCategorySelectArr);
+        ///////////////////////////////////
+
+        initTable(tmpGroupedCategories, tmpCategorySelectArr);
+
+
+    }, []);
 
 
     return (

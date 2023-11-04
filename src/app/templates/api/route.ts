@@ -49,9 +49,9 @@ export async function GET(request: Request) {
     }
 }
 
-export const createNewTemplateApi = (name: string, subject: string, to: string, icon: string, templateText: string, categoryValueArr: Array<{
+export const createNewTemplateApi = (name: string, subject: string, to: string, icon: string, templateText: string, valueIdArr: Array<{
     categoryId: string,
-    categoryValueId: string
+    valueId: string
 }>) => {
     const data = {
         name: name,
@@ -59,7 +59,7 @@ export const createNewTemplateApi = (name: string, subject: string, to: string, 
         to: to,
         icon: icon,
         templateText: templateText,
-        categoryValueIdArr: categoryValueArr
+        categoryValueIdArr: valueIdArr
     };
     return postData('http://localhost:3000/templates/api', EMethod.POST, data);
 }

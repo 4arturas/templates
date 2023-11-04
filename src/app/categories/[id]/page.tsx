@@ -13,15 +13,16 @@ export default function CategoriesCategory( { params }: {params: { id: string };
     const [category, setCategory] = React.useState<Category>();
     const [categoryData, setCategoryValue] = React.useState<Array<Value>>([]);
 
+    const fetchData = async () => {
+        setCategory(await getCategoryApi(params.id));
+        setCategoryValue(await getCategoryValuesApi(params.id));
+    }
+
     const deleteValueAndFetchData = async (id:string) => {
         setCategory(undefined);
         deleteValueApi(id).then(r=>{
             fetchData();
         })
-    }
-    async function fetchData() {
-        setCategory(await getCategoryApi(params.id));
-        setCategoryValue(await getCategoryValuesApi(params.id));
     }
 
     React.useEffect( () => {
