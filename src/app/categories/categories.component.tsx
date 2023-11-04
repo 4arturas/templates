@@ -14,6 +14,8 @@ import {
 import Link from "next/link";
 import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
+import {STRING} from "postcss-selector-parser";
+import {formatDate} from "@/app/utils";
 
 type Props = {
     categories: Array<Category>,
@@ -28,6 +30,7 @@ export const CategoriesComponent: React.FC<Props> = ({categories, deleteCategory
                     <TableHead>
                         <TableRow>
                             <TableCell>Category Name</TableCell>
+                            <TableCell>Deleted At</TableCell>
                             <TableCell>Actions</TableCell>
                         </TableRow>
                     </TableHead>
@@ -40,6 +43,9 @@ export const CategoriesComponent: React.FC<Props> = ({categories, deleteCategory
                             >
                                 <TableCell component="th" scope="row">
                                     {category.name}
+                                </TableCell>
+                                <TableCell component="th" scope="row">
+                                    {formatDate(category?.deletedAt)}
                                 </TableCell>
                                 <TableCell align="right">
                                     <Link href={`/categories/${category.id}`} passHref>

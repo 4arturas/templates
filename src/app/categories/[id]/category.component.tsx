@@ -1,58 +1,110 @@
 "use client";
 
-import {Category, Value} from "@prisma/client";
 import React from "react";
-import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, InputLabel} from "@mui/material";
-import Link from "next/link";
-import DeleteIcon from '@mui/icons-material/Delete';
+import {
+    Button, InputLabel,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    TextField
+} from "@mui/material";
+import {Add, PlusOne} from "@mui/icons-material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import {Category, Value} from "@prisma/client";
 
 type Props = {
     category: Category | undefined,
-    categoryData: Array<Value>,
-    deleteValue: (id:string) => void
+    valuesArr: Array<Value>,
+    addNewCategory: (category: Category, values: Array<Value>) => void
 }
-export const CategoryComponent: React.FC<Props> = ({category, categoryData, deleteValue}) => {
+export const CategoryComponent: React.FC<Props> = ({category, valuesArr, addNewCategory}) => {
+
+    const [categoryName, setCategoryName] = React.useState<string>(category?.name || '')
+    const [value, setValue] = React.useState<string>('');
+    const [values, setValues] = React.useState<Array<Value>>(valuesArr)
+
     return (
-        <>
-            <InputLabel>
-                {category?.name}
-            </InputLabel>
-            { categoryData.length > 0 &&
-            <TableContainer component={Paper}>
-                <Table sx={{minWidth: 0}} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Name</TableCell>
-                            <TableCell>Actions</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {categoryData.map((data, index) => (
-                            <TableRow
-                                style={{backgroundColor: (index%2!==0)?'':'whitesmoke'}}
-                                key={data.id}
-                                sx={{'&:last-child td, &:last-child th': {border: 0}}}
-                            >
-                                <TableCell component="th" scope="row">
-                                    {data.name}
-                                </TableCell>
-                                <TableCell align="right">
-                                    <Link href={`/values/${data.id}`} passHref>
-                                        View
-                                    </Link>
-                                    &nbsp;
-                                    <Link href={`/values/${data.id}/edit`} passHref>
-                                        Edit
-                                    </Link>
-                                    &nbsp;
-                                    <DeleteIcon sx={{cursor:'pointer'}} onClick={()=>deleteValue(data.id)} />
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            }
-        </>
+
+            <table>
+                <tbody>
+                <tr>
+                    <td colSpan={3}></td>
+                </tr>
+                <tr>
+                    <td style={{width: '200px'}}><InputLabel>Category Name:</InputLabel></td>
+                    <td><TextField label="Enter New Category Name Here" style={{width: '500px'}} value={categoryName}
+                                   onChange={(v) => setCategoryName(v.target.value)}/></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><InputLabel>New Category Value:</InputLabel></td>
+                    <td><TextField label="Enter New Category Value Here" style={{width: '500px'}} value={value}
+                                   onChange={(v) => setValue(v.target.value)}/></td>
+                    <td>
+                        <Button
+                            variant="contained"
+                            disabled={value.length === 0 || (values.filter( f => f.name === value).length !== 0)}
+                            onClick={() => {
+                                setValues([...values, {id:'', name:value, createdAt: new Date(), updatedAt: new Date(), deletedAt: null}])
+                                setValue('')
+                            }}>
+                            <Add/>
+                        </Button>
+                    </td>
+                </tr>
+                <tr>
+                    <td colSpan={3}>
+                        {(values.length > 0) &&
+                            <TableContainer component={Paper}>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Name</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {values?.map((val, index) => (
+                                            <TableRow sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                                                      style={{backgroundColor: (index%2!==0)?'':'whitesmoke'}}
+                                                      key={Math.random()}>
+                                                <TableCell component="th" scope="row">
+                                                    {val.name}
+                                                    <Button
+                                                        key={`addNew${val}`}
+                                                        variant="contained"
+                                                        style={{float:'right'}}
+                                                        onClick={() => {
+                                                            const filteredValues:Array<Value> = values.filter( f => f.name !== val.name );
+                                                            setValues( filteredValues );
+                                                        }}
+                                                    >
+                                                        <DeleteIcon/>
+                                                    </Button>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td colSpan={3} style={{float: 'right'}}>
+                        <Button variant="contained"
+                                disabled={categoryName.length === 0 || values.length === 0}
+                                onClick={() => addNewCategory({ id: '', name: categoryName, createdAt: new Date(), deletedAt: null, updatedAt: new Date() }, values)}
+                        >
+                            Add New Category
+                        </Button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
     );
 }

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import {CategoryComponent} from "./category.component";
+import {CategoryComponent} from "@/app/categories/[id]/category.component";
 
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
@@ -15,7 +15,7 @@ const meta = {
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {
     category: {id: '1', name: 'Country', createdAt: new Date(), updatedAt: new Date() },
-    categoryData: [
+    valuesArr: [
       {id: '1', name: 'LT'},
       {id: '2', name: 'DK'},
     ]
@@ -29,7 +29,7 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {
   args: {
     category: {id: '1', name: 'Country', createdAt: new Date(), updatedAt: new Date(), deletedAt: null },
-    categoryData: [
+    valuesArr: [
       {id: '1', name: 'LT', createdAt: new Date(), updatedAt: new Date(), deletedAt: null },
       {id: '2', name: 'DK', createdAt: new Date(), updatedAt: new Date(), deletedAt: null },
     ]

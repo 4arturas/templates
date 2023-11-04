@@ -15,8 +15,7 @@ export async function GET(
     const categoryId = params.categoryId;
     const category = await prisma.category.findUnique({
         where: {
-            id: categoryId,
-            deletedAt: null
+            id: categoryId
         },
     });
 

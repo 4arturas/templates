@@ -69,23 +69,27 @@ export async function POST(request: Request) {
     try {
         const json = await request.json();
 
-        const template = await prisma.template.create({
-            data: {
-                name: json.name,
-                subject: json.subject,
-                to: json.to,
-                icon: json.icon,
-                templateText: json.templateText
-            },
+        let template;
+        await prisma.$transaction(async (tx) => {
+            template = await prisma.template.create({
+                data: {
+                    name: json.name,
+                    subject: json.subject,
+                    to: json.to,
+                    icon: json.icon,
+                    templateText: json.templateText
+                },
+            });
+
+            for (let i = 0; i < json.categoryValueIdArr.length; i++) {
+                const categoryId: string = json.categoryValueIdArr[i].categoryId;
+                const valueId: string = json.categoryValueIdArr[i].valueId;
+                const templateHasCategoryValue: OneTemplateHasManyValues = await prisma.oneTemplateHasManyValues.create({
+                    data: {templateId: template.id, categoryId: categoryId, valueId: valueId}
+                })
+            }
         });
 
-        for (let i = 0; i < json.categoryValueIdArr.length; i++) {
-            const categoryId: string = json.categoryValueIdArr[i].categoryId;
-            const categoryValueId: string = json.categoryValueIdArr[i].categoryValueId;
-            const templateHasCategoryValue: OneTemplateHasManyValues = await prisma.oneTemplateHasManyValues.create({
-                data: {templateId: template.id, categoryId: categoryId, valueId: categoryValueId}
-            })
-        }
 
         return new NextResponse(JSON.stringify(template), {
             status: 201,
@@ -128,8 +132,9 @@ export async function DELETE(
             }
         });
 
-        await prisma.template.delete({
-            where: {id: templateId}
+        await prisma.template.update({
+            where: { id: templateId },
+            data: { deletedAt: new Date() }
         });
 
         return new NextResponse(null, {status: 204});

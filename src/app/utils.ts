@@ -35,6 +35,7 @@ export interface ITemplateResponse {
     subject: string,
     icon: string,
     templateText: string,
+    deletedAt: Date,
     OneTemplateHasManyValues: Array<IOneTemplateHasManyValues>
 }
 
@@ -59,3 +60,12 @@ export async function postData(url = "", method: EMethod, data = {}) {
 /*export const getTemplates = cache(() =>
     fetch("http://localhost:3000/templates/api").then((res) => res.json())
 );*/
+
+export function formatDate(date:string|Date|undefined|null):string {
+    if ( !date )
+        return ''
+    if ( typeof date === 'string' )
+        return date.replace("T"," ").substring(0, 19);
+    else
+        return date.toISOString().replace("T"," ").substring(0, 19);
+}

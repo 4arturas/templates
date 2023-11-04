@@ -15,7 +15,13 @@ import {
 import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {TableVirtuoso, TableComponents} from 'react-virtuoso';
-import {ICategorySelect, ICategorySelectItem, IOneTemplateHasManyValues, ITemplateResponse} from "@/app/utils";
+import {
+    formatDate,
+    ICategorySelect,
+    ICategorySelectItem,
+    IOneTemplateHasManyValues,
+    ITemplateResponse
+} from "@/app/utils";
 
 interface ITmpInterface {
     category: { id: string, name: string },
@@ -113,6 +119,7 @@ export const TemplatesComponent: React.FC<Props> = ({templates, deleteTemplateAn
                 subject: template.subject,
                 to: template.to,
                 icon: <i style={{width: '32px', height: '32px'}} className="material-icons">{template.icon}</i>,
+                deletedAt: formatDate(template?.deletedAt),
                 actions: <div>
                     <Link href={`/templates/${template.id}`} passHref>
                         Edit
@@ -179,6 +186,7 @@ export const TemplatesComponent: React.FC<Props> = ({templates, deleteTemplateAn
             tmpColumns.push({width: 100, label: categoryName, dataKey: categoryName, numeric: false})
         })
 
+        tmpColumns.push({width: 100, label: 'Deleted At', dataKey: 'deletedAt', numeric: false})
         tmpColumns.push({width: 100, label: 'Actions', dataKey: 'actions', numeric: false})
 
 

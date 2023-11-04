@@ -9,31 +9,27 @@ export async function getCategoriesApi(): Promise<Array<Category>> {
     return fetch(`http://localhost:3000/categories/api`).then((res) => res.json())
 }
 export async function GET(request: Request) {
-    const categories:Array<Category> = await prisma.category.findMany({
-        where: {
-            deletedAt: null
-        }
-    });
+    const categories:Array<Category> = await prisma.category.findMany();
     return NextResponse.json(categories);
 }
 
-export const createCategoryApi = async (name: string, valueArr: Array<string>) => {
-    const data = { name: name, valueArr: valueArr };
+export const createCategoryApi = async (category: Category, values: Array<Value>) => {
+    const data = { category: category, values: values };
     return postData('http://localhost:3000/categories/api', EMethod.POST, data );
 }
 export async function POST(request: Request) {
     try {
         const json = await request.json();
 
-        const newCategory: any = { name: json.name };
+        const newCategory: Category = json.category;
         const createdCategory: Category = await prisma.category.create({
-            data: newCategory,
+            data: { name: newCategory.name },
         });
 
-        for ( let i = 0; i < json.valueArr.length; i++ ) {
-            const newValue: { name: string,  } = { name: json.valueArr[i] };
+        for ( let i = 0; i < json.values.length; i++ ) {
+            const value = json.values[i];
             const createdCategoryValue: Value = await prisma.value.create({
-                data: newValue
+                data: { name: value.name }
             })
             const createdOneCategoryHasManyCategoryValues: OneCategoryHasManyValues =  await prisma.oneCategoryHasManyValues.create({
                 data: { categoryId: createdCategory.id, valueId: createdCategoryValue.id }
@@ -87,16 +83,21 @@ export async function DELETE(
             }
         })
 
-        const res3 = await prisma.value.deleteMany({
+        const deletedAt = new Date();
+        const res3 = await prisma.value.updateMany({
             where: {
                 id: {
                     in: valueIdArr
                 }
+            },
+            data: {
+                deletedAt: deletedAt
             }
         })
 
-        const res4 = await prisma.category.delete({
+        const res4 = await prisma.category.update({
             where: { id: categoryId },
+            data: { deletedAt: deletedAt }
         });
 
         return new NextResponse(null, { status: 204 });
