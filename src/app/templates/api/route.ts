@@ -19,6 +19,7 @@ export async function GET(request: Request) {
                 subject: true,
                 icon: true,
                 templateText: true,
+                deletedAt: true,
                 OneTemplateHasManyValues: {
                     select: {
                         values: {
@@ -102,8 +103,8 @@ export async function POST(request: Request) {
 
 const _404 = "No Template with ID found";
 
-export const deleteTemplateApi = (id: string)  => {
-    const data = {id: id};
+export const deleteTemplateApi = (templateId: string)  => {
+    const data = {id: templateId};
     return postData( 'http://localhost:3000/templates/api', EMethod.DELETE, data );
 }
 

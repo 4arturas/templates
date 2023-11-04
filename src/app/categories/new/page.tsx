@@ -7,8 +7,8 @@ import {createCategoryApi} from "@/app/categories/api/route";
 
 export default function CategoriesCategoryPage() {
     const router = useRouter();
-    const addNewCategory = (name: string, categoryData: Array<string>) => {
-        createCategoryApi( name, categoryData ).then((data) => {
+    const addNewCategory = (name: string, valueArr: Array<string>) => {
+        createCategoryApi( name, valueArr ).then((data) => {
             router.push('/categories', { scroll: false })
         });
     }

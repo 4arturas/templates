@@ -13,15 +13,16 @@ import {
     TextField
 } from "@mui/material";
 import {Add, PlusOne} from "@mui/icons-material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 type Props = {
-    addNewCategory: (name: string, categoryData: Array<string>) => void
+    addNewCategory: (name: string, valueArr: Array<string>) => void
 }
 export const CategoryNewComponent: React.FC<Props> = ({addNewCategory}) => {
 
     const [name, setName] = React.useState<string>('')
     const [value, setValue] = React.useState<string>('');
-    const [categoryData, setCategoryValue] = React.useState<Array<string>>([])
+    const [values, setValues] = React.useState<Array<string>>([])
 
     return (
 
@@ -43,9 +44,9 @@ export const CategoryNewComponent: React.FC<Props> = ({addNewCategory}) => {
                     <td>
                         <Button
                             variant="contained"
-                            disabled={value.length === 0}
+                            disabled={value.length === 0 || values.includes(value)}
                             onClick={() => {
-                                setCategoryValue([...categoryData, value])
+                                setValues([...values, value])
                                 setValue('')
                             }}>
                             <Add/>
@@ -54,7 +55,7 @@ export const CategoryNewComponent: React.FC<Props> = ({addNewCategory}) => {
                 </tr>
                 <tr>
                     <td colSpan={3}>
-                        {(categoryData.length > 0) &&
+                        {(values.length > 0) &&
                             <TableContainer component={Paper}>
                                 <Table>
                                     <TableHead>
@@ -63,12 +64,23 @@ export const CategoryNewComponent: React.FC<Props> = ({addNewCategory}) => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {categoryData.map((val, index) => (
+                                        {values.map((val, index) => (
                                             <TableRow sx={{'&:last-child td, &:last-child th': {border: 0}}}
                                                       style={{backgroundColor: (index%2!==0)?'':'whitesmoke'}}
                                                       key={Math.random()}>
                                                 <TableCell component="th" scope="row">
                                                     {val}
+                                                    <Button
+                                                        key={`addNew${val}`}
+                                                        variant="contained"
+                                                        style={{float:'right'}}
+                                                        onClick={() => {
+                                                            const filteredValues:Array<string> = values.filter( f => f !== val );
+                                                            setValues( filteredValues );
+                                                        }}
+                                                    >
+                                                        <DeleteIcon/>
+                                                    </Button>
                                                 </TableCell>
                                             </TableRow>
                                         ))}
@@ -81,8 +93,8 @@ export const CategoryNewComponent: React.FC<Props> = ({addNewCategory}) => {
                 <tr>
                     <td colSpan={3} style={{float: 'right'}}>
                         <Button variant="contained"
-                                disabled={name.length === 0 || categoryData.length === 0}
-                                onClick={() => addNewCategory(name, categoryData)}
+                                disabled={name.length === 0 || values.length === 0}
+                                onClick={() => addNewCategory(name, values)}
                         >
                             Add New Category
                         </Button>

@@ -4,12 +4,12 @@ import { NextResponse } from "next/server";
 const _404 = "No template with ID found";
 export async function GET(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: { templateId: string } }
 ) {
-    const id = params.id;
+    const templateId = params.templateId;
     const template = await prisma.template.findUnique({
         where: {
-            id,
+            id: templateId,
         },
     });
 

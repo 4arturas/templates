@@ -4,7 +4,6 @@ import React, {cache, use} from "react";
 import {Value} from "@prisma/client";
 import {CircularProgress} from "@mui/material";
 import {getValueApi} from "@/app/values/api/[valueId]/route";
-import {ValueComponent} from "@/app/values/[valueId]/value.component";
 import {ValueEditComponent} from "@/app/values/[valueId]/edit/valueedit.component";
 import {updateValueApi} from "@/app/values/api/route";
 import {useRouter} from "next/navigation";

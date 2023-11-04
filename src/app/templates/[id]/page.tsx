@@ -8,46 +8,48 @@ import {
 } from "@/app/utils";
 
 import {TemplateComponent} from "@/app/templates/new/template.component";
-import {getTemplateWithCategoryValues} from "@/app/templates/api/template/[id]/withcategoryvalues/route";
-import {getCategoryValuesApi} from "@/app/categories/api/[id]/values/route";
 import {getCategoriesApi} from "@/app/categories/api/route";
+import {getCategoryValuesApi} from "@/app/categories/api/[categoryId]/values/route";
+import {getTemplateWithCategoryValues} from "@/app/templates/api/template/[templateId]/withcategoryvalues/route";
 
 export default function TemplatePage({ params }: {params: { id: string }; } ) {
 
     const [templateResponse, setTemplateResponse] = React.useState<ITemplateResponse>();
     const [categorySelects, setCategorySelects] = React.useState<Array<ICategorySelect>>([]);
     const [categorySelectOptions, setCategorySelectOptions] = React.useState<Array<ICategorySelectItem>>([]);
-    const [initialized, setInitialized] = React.useState<boolean>(false);
 
     React.useEffect( () => {
+
         async function startFetching() {
 
             const templateResponseTmp = await getTemplateWithCategoryValues(params.id);
-            setTemplateResponse(templateResponseTmp);
 
-            const categoriesArr = await getCategoriesApi();
+            const categories = await getCategoriesApi();
             const _categoryOptions:Array<ICategorySelect> = [];
             const _options:Array<ICategorySelectItem> = [];
-            for ( let i = 0; i < categoriesArr.length; i++ )
+            for ( let i = 0; i < categories.length; i++ )
             {
-                const category = categoriesArr[i];
-                const categoryDataArr: Array<Value> = await getCategoryValuesApi(category.id);
+                const category = categories[i];
+                const values: Array<Value> = await getCategoryValuesApi(category.id);
 
-                const tmp: Array<{ id: string, name: string }> = templateResponseTmp.OneTemplateHasManyValues.filter(f => f.category.id === category.id ).map(m => m.values );
-                const selectedValue: Array<string> = tmp.map( m => m.name );
-                const selectedCategoryValueId: Array<string> = tmp.map( m => m.id );
+                const templateHasValues: Array<{ id: string, name: string }> = templateResponseTmp.OneTemplateHasManyValues
+                    .filter(f => f.category.id === category.id ).map(m => m.values );
+                const selectedValue: Array<string> = templateHasValues
+                    .map( m => m.name );
+                const selectedValueId: Array<string> = templateHasValues
+                    .map( m => m.id );
 
-                const item : ICategorySelect = {name:category.name, categoryId:category.id, selectedValue: selectedValue, selectedCategoryValueId: selectedCategoryValueId };
-                _categoryOptions.push(item);
+                const categorySelect : ICategorySelect = {name:category.name, categoryId:category.id, selectedValue: selectedValue, selectedCategoryValueId: selectedValueId };
+                _categoryOptions.push(categorySelect);
 
-                categoryDataArr.map( d => {
+                values.map( d => {
                     _options.push({name:d.name, categoryValueId:d.id, categoryId:category.id})
                 });
             }
 
             setCategorySelects(_categoryOptions);
             setCategorySelectOptions(_options);
-            setInitialized(true)
+            setTemplateResponse(templateResponseTmp);
         }
         startFetching();
         // return () => { };
@@ -56,14 +58,14 @@ export default function TemplatePage({ params }: {params: { id: string }; } ) {
 
     return <>
         {
-            !initialized ?
+            !templateResponse ?
                 <CircularProgress /> :
                 <TemplateComponent
                     templateResponse={templateResponse}
                     categorySelectArr={categorySelects}
                     categorySelectItemArr={categorySelectOptions}
                     templateFunctionCreateNew={()=>{
-                        alert( 'Not implemented' );
+                        alert( 'Implement edit function' );
                     }}/>
         }
     </>

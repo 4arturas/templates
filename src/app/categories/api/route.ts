@@ -9,12 +9,16 @@ export async function getCategoriesApi(): Promise<Array<Category>> {
     return fetch(`http://localhost:3000/categories/api`).then((res) => res.json())
 }
 export async function GET(request: Request) {
-    const categories:Array<Category> = await prisma.category.findMany();
+    const categories:Array<Category> = await prisma.category.findMany({
+        where: {
+            deletedAt: null
+        }
+    });
     return NextResponse.json(categories);
 }
 
-export const createCategoryApi = async (name: string, categoryData: Array<string>) => {
-    const data = { name: name, categoryData: categoryData };
+export const createCategoryApi = async (name: string, valueArr: Array<string>) => {
+    const data = { name: name, valueArr: valueArr };
     return postData('http://localhost:3000/categories/api', EMethod.POST, data );
 }
 export async function POST(request: Request) {
@@ -26,10 +30,10 @@ export async function POST(request: Request) {
             data: newCategory,
         });
 
-        for ( let i = 0; i < json.categoryData.length; i++ ) {
-            const newCategoryValue: { name: string } = { name: json.categoryData[i] };
+        for ( let i = 0; i < json.valueArr.length; i++ ) {
+            const newValue: { name: string,  } = { name: json.valueArr[i] };
             const createdCategoryValue: Value = await prisma.value.create({
-                data: newCategoryValue
+                data: newValue
             })
             const createdOneCategoryHasManyCategoryValues: OneCategoryHasManyValues =  await prisma.oneCategoryHasManyValues.create({
                 data: { categoryId: createdCategory.id, valueId: createdCategoryValue.id }

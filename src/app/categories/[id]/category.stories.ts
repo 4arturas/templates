@@ -28,10 +28,10 @@ type Story = StoryObj<typeof meta>;
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const Primary: Story = {
   args: {
-    category: {id: '1', name: 'Country', createdAt: new Date(), updatedAt: new Date() },
+    category: {id: '1', name: 'Country', createdAt: new Date(), updatedAt: new Date(), deletedAt: null },
     categoryData: [
-      {id: '1', name: 'LT', createdAt: new Date(), updatedAt: new Date() },
-      {id: '2', name: 'DK', createdAt: new Date(), updatedAt: new Date() },
+      {id: '1', name: 'LT', createdAt: new Date(), updatedAt: new Date(), deletedAt: null },
+      {id: '2', name: 'DK', createdAt: new Date(), updatedAt: new Date(), deletedAt: null },
     ]
   },
 };

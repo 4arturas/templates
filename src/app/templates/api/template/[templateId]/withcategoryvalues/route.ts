@@ -9,9 +9,9 @@ export const getTemplateWithCategoryValues = (async (templateId: string): Promis
 })
 export async function GET(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: { templateId: string } }
 ) {
-    const templateId = params.id;
+    const templateId = params.templateId;
     const template = await prisma.template.findFirst({
         where: {
           id: templateId

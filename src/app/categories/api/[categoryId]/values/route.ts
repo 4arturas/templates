@@ -4,14 +4,14 @@ import {Value} from "@prisma/client";
 
 const _404 = "No category with ID found";
 
-export const getCategoryValuesApi = (async (id: string): Promise<Array<Value>> => {
-    return fetch(`http://localhost:3000/categories/api/${id}/values`).then((res) => res.json())
+export const getCategoryValuesApi = (async (categoryId: string): Promise<Array<Value>> => {
+    return fetch(`http://localhost:3000/categories/api/${categoryId}/values`).then((res) => res.json())
 })
 export async function GET(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: { categoryId: string } }
 ) {
-    const categoryId = params.id;
+    const categoryId = params.categoryId;
     const categoryHasCategoryValue = await prisma.oneCategoryHasManyValues.findMany({
         where: {
             categoryId: { in: [categoryId] },

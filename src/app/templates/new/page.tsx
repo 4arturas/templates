@@ -8,9 +8,9 @@ import {
     ICategorySelectItem, ICategorySelect,
 } from "@/app/utils";
 import {Value} from "@prisma/client";
-import {getCategoryValuesApi} from "@/app/categories/api/[id]/values/route";
 import {getCategoriesApi} from "@/app/categories/api/route";
 import {createNewTemplateApi} from "@/app/templates/api/route";
+import {getCategoryValuesApi} from "@/app/categories/api/[categoryId]/values/route";
 
 
 export default function TemplatesNewPage() {

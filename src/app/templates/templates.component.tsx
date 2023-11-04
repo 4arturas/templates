@@ -114,10 +114,6 @@ export const TemplatesComponent: React.FC<Props> = ({templates, deleteTemplateAn
                 to: template.to,
                 icon: <i style={{width: '32px', height: '32px'}} className="material-icons">{template.icon}</i>,
                 actions: <div>
-                    <Link href={`#`} passHref>
-                        View
-                    </Link>
-                    &nbsp;
                     <Link href={`/templates/${template.id}`} passHref>
                         Edit
                     </Link>

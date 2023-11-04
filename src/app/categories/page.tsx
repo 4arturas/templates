@@ -15,7 +15,6 @@ export default function CategoriesCategoryPage() {
     const deleteCategoryAndRefresh = async (id: string) => {
         setCategories(undefined);
         deleteCategoryApi(id).then((data) => {
-            alert( 1111 );
             fetchData();
         });
     }

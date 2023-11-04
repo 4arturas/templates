@@ -28,9 +28,12 @@ export async function DELETE(
                 valueId: valueId
             }
         })
-
-        const r3 = await prisma.value.delete({
+        
+        const r3 = await prisma.value.update({
             where: { id: valueId },
+            data: {
+                deletedAt: new Date()
+            }
         });
 
         return new NextResponse(null, { status: 204 });
@@ -56,7 +59,24 @@ export async function PATCH(
         const valueId = json.id;
         const name = json.name;
 
-        const r1 = await prisma.value.update({
+        const oldValue = await prisma.value.findFirst({
+            where: {
+                id: valueId
+            }
+        })
+
+        if ( oldValue )
+        {
+            const historyValue = await prisma.valueHistory.create({
+                data: {
+                    valueId: oldValue.id,
+                    name: oldValue.name,
+                    updatedAt: oldValue.updatedAt
+                }
+            })
+        }
+
+        const updatedValue = await prisma.value.update({
             where: {
                 id: valueId
             },
