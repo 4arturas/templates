@@ -1,7 +1,7 @@
 import {prisma} from "@/lib/prisma";
 import {NextResponse} from "next/server";
 import {
-    OneTemplateHasManyValues
+    OneTemplateHasManyValues, Prisma, Template
 } from "@prisma/client";
 import {EMethod, postData} from "@/app/utils";
 
@@ -50,17 +50,13 @@ export async function GET(request: Request) {
     }
 }
 
-export const createNewTemplateApi = (name: string, subject: string, to: string, icon: string, templateText: string, valueIdArr: Array<{
+export const createNewTemplateApi = (template: Template, values: Array<{
     categoryId: string,
     valueId: string
 }>) => {
     const data = {
-        name: name,
-        subject: subject,
-        to: to,
-        icon: icon,
-        templateText: templateText,
-        categoryValueIdArr: valueIdArr
+        template: template,
+        values: values
     };
     return postData('http://localhost:3000/templates/api', EMethod.POST, data);
 }
@@ -69,29 +65,113 @@ export async function POST(request: Request) {
     try {
         const json = await request.json();
 
-        let template;
+        let newTemplate;
         await prisma.$transaction(async (tx) => {
-            template = await prisma.template.create({
-                data: {
-                    name: json.name,
-                    subject: json.subject,
-                    to: json.to,
-                    icon: json.icon,
-                    templateText: json.templateText
-                },
+            const template = json.template;
+            newTemplate = await prisma.template.create({
+                data: { ...template, id: undefined, createdAt: undefined, updatedAt: undefined, deletedAt: undefined }
             });
 
-            for (let i = 0; i < json.categoryValueIdArr.length; i++) {
-                const categoryId: string = json.categoryValueIdArr[i].categoryId;
-                const valueId: string = json.categoryValueIdArr[i].valueId;
+            for (let i = 0; i < json.values.length; i++) {
+                const categoryId: string = json.values[i].categoryId;
+                const valueId: string = json.values[i].valueId;
                 const templateHasCategoryValue: OneTemplateHasManyValues = await prisma.oneTemplateHasManyValues.create({
-                    data: {templateId: template.id, categoryId: categoryId, valueId: valueId}
+                    data: {templateId: newTemplate.id, categoryId: categoryId, valueId: valueId}
                 })
-            }
+            } // end for
         });
 
 
-        return new NextResponse(JSON.stringify(template), {
+        return new NextResponse(JSON.stringify(newTemplate), {
+            status: 201,
+            headers: {"Content-Type": "application/json"},
+        });
+    } catch (error: any) {
+        if (error.code === "P2002") {
+            return new NextResponse("User with email already exists", {
+                status: 409,
+            });
+        }
+        return new NextResponse(error.message, {status: 500});
+    }
+}
+
+export const editTemplateApi = (template: Template, values: Array<{
+    categoryId: string,
+    valueId: string
+}>) => {
+    const data = {
+        template: template,
+        values: values
+    };
+    return postData('http://localhost:3000/templates/api', EMethod.PATCH, data);
+}
+
+export async function PATCH(request: Request) {
+    try {
+        const json = await request.json();
+
+        let updateTemplate;
+        const template = json.template;
+
+        const existingRelationships:Array<OneTemplateHasManyValues> = await prisma.oneTemplateHasManyValues.findMany({
+            where: {
+                templateId: template.id
+            }
+        });
+        const existingRelationshipsValues:Array<string> = existingRelationships.map( f => f.valueId );
+
+        await prisma.$transaction(async (tx) => {
+
+            const valuesFromUI: Array<{categoryId:string, valueId:string}> = json.values;
+            const valuesIdFromUI: Array<string> = valuesFromUI.map( m => m.valueId );
+
+            const valuesToDelete:Array<string> = existingRelationshipsValues.filter( (existing) => !valuesIdFromUI.includes( existing ) );
+            if ( valuesToDelete.length > 0 )
+            {
+                const valuesToDeleteRes = await tx.oneTemplateHasManyValues.deleteMany({
+                    where: {
+                        templateId: template.id,
+                        valueId: { in: valuesToDelete }
+                    }
+                });
+            }
+            console.log( 'valuesToDelete', valuesToDelete );
+
+            const valuesToAdd:Array<{categoryId:string, valueId:string}> = valuesFromUI.filter( (v:{categoryId:string, valueId:string}) => !valuesToDelete.includes(v.valueId) && !existingRelationshipsValues.includes(v.valueId));
+            for ( let i = 0; i < valuesToAdd.length; i++ ) {
+                const valueToAdd = valuesToAdd[i];
+                const valuesToAddRes = await tx.oneTemplateHasManyValues.create( {
+                    data: {
+                        templateId: template.id,
+                        categoryId: valueToAdd.categoryId,
+                        valueId: valueToAdd.valueId
+                    }
+                })
+            }
+            console.log( 'valuesToAdd', valuesToAdd );
+
+
+            updateTemplate = await tx.template.update({
+                where: {
+                    id: template.id
+                },
+                data: {
+                    name: template.name,
+                    subject: template.subject,
+                    to: template.to,
+                    icon: template.icon,
+                    templateText: template.templateText
+                }
+            });
+        },   {
+            maxWait: 20000, // default: 2000
+            timeout: 50000, // default: 5000
+            isolationLevel: Prisma.TransactionIsolationLevel.Serializable, // optional, default defined by database configuration
+        });
+
+
+        return new NextResponse(JSON.stringify(updateTemplate), {
             status: 201,
             headers: {"Content-Type": "application/json"},
         });

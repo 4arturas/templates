@@ -22,6 +22,7 @@ import {
     IOneTemplateHasManyValues,
     ITemplateResponse
 } from "@/app/utils";
+import EditIcon from "@mui/icons-material/Edit";
 
 interface ITmpInterface {
     category: { id: string, name: string },
@@ -121,8 +122,8 @@ export const TemplatesComponent: React.FC<Props> = ({templates, deleteTemplateAn
                 icon: <i style={{width: '32px', height: '32px'}} className="material-icons">{template.icon}</i>,
                 deletedAt: formatDate(template?.deletedAt),
                 actions: <div>
-                    <Link href={`/templates/${template.id}`} passHref>
-                        Edit
+                    <Link href={`/templates/${template.id}/edit`} passHref>
+                        <EditIcon style={{cursor: 'pointer'}}/>
                     </Link>
                     &nbsp;
                     <DeleteIcon

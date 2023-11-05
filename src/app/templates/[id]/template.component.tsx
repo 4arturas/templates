@@ -17,13 +17,14 @@ import {
     googleIconNames2,
 } from "@/app/utils";
 import {Search} from "@mui/icons-material";
+import {Template} from "@prisma/client";
 
 
 type Props = {
     templateResponse: ITemplateResponse | undefined
     categorySelectArr: Array<ICategorySelect>
     categorySelectItemArr: Array<ICategorySelectItem>
-    templateFunctionCreateNew: (name: string, subject: string, to: string, icon: string, templateText: string, valueIdArr: Array<{
+    templateFunctionCreateNew: (template: Template, values: Array<{
         categoryId: string,
         valueId: string
     }>) => void
@@ -39,7 +40,7 @@ export const TemplateComponent: React.FC<Props> = ({
     const [name, setName] = React.useState<string>(templateResponse ? templateResponse.name : '');
     const [subject, setSubject] = React.useState<string>(templateResponse ? templateResponse.subject : '');
     const [to, setTo] = React.useState<string>(templateResponse ? templateResponse.to : '');
-    const [iconSvg, setIconSvg] = React.useState<string>(templateResponse ? templateResponse.icon : '');
+    const [icon, setIcon] = React.useState<string>(templateResponse ? templateResponse.icon : '');
     const [templateText, setTemplateText] = React.useState<string>(templateResponse ? templateResponse.templateText : '');
     const [selectedElements, setSelectedElements] = React.useState<Array<ICategorySelect>>(categorySelectArr);
 
@@ -118,9 +119,9 @@ export const TemplateComponent: React.FC<Props> = ({
                                         setOpen(true)
                                     }}>Select Icon</Button>
 
-                                    {iconSvg.length > 0 &&
+                                    {icon.length > 0 &&
                                         <i style={{width: '32px', height: '32px', marginLeft: '20px'}}
-                                           className="material-icons">{iconSvg}</i>}
+                                           className="material-icons">{icon}</i>}
                                 </td>
                             </tr>
 
@@ -176,7 +177,7 @@ export const TemplateComponent: React.FC<Props> = ({
                 <tr>
                     <td colSpan={2}>
                         <Button variant="contained"
-                                disabled={name.length === 0 || subject.length === 0 || to.length === 0 || templateText.length === 0 || selectedElements.length === 0}
+                                disabled={name.length === 0 || subject.length === 0 || to.length === 0 || icon.length === 0 || templateText.length === 0 || selectedElements.length === 0}
                                 onClick={() => {
 
                                     const selectedValueIdArr: Array<{
@@ -199,7 +200,8 @@ export const TemplateComponent: React.FC<Props> = ({
                                             })
                                         } // end for j
                                     } // end for i
-                                    templateFunctionCreateNew(name, subject, to, iconSvg, templateText, selectedValueIdArr);
+                                    const templateId:string = templateResponse ? templateResponse.id : '-1';
+                                    templateFunctionCreateNew( { id: templateId, name: name, subject: subject, to: to, icon: icon, templateText: templateText, createdAt: new Date(), updatedAt: new Date(), deletedAt: new Date() }, selectedValueIdArr);
                                 }}>
                             {templateResponse ? 'Edit Template' : 'Create New Template'}
                         </Button>
@@ -237,7 +239,7 @@ export const TemplateComponent: React.FC<Props> = ({
                             return <Card key={`cardIcon${icon}`}
                                 style={{width: '40px', display: 'inline', marginRight: '10px', cursor: 'pointer'}}
                                 onClick={() => {
-                                    setIconSvg(icon);
+                                    setIcon(icon);
                                     setOpen(false);
                                 }}>
                                 <table  key={`tableIcon${icon}`} style={{display: "inline-table", marginBottom: '10px'}}>

@@ -4,25 +4,25 @@ import React, {cache, use} from "react";
 import {Template, Value} from "@prisma/client";
 import {CircularProgress} from "@mui/material";
 import {
-        ICategorySelectItem, ICategorySelect, ITemplateResponse
+    ICategorySelectItem, ICategorySelect, ITemplateResponse
 } from "@/app/utils";
 
 import {TemplateComponent} from "@/app/templates/[id]/template.component";
 import {getCategoriesApi} from "@/app/categories/api/route";
 import {getCategoryValuesApi} from "@/app/categories/api/[categoryId]/values/route";
 import {getTemplateWithCategoryValues} from "@/app/templates/api/template/[templateId]/withcategoryvalues/route";
-import {createNewTemplateApi} from "@/app/templates/api/route";
+import {createNewTemplateApi, editTemplateApi} from "@/app/templates/api/route";
 import {useRouter} from "next/navigation";
 
-export default function TemplatePage({ params }: {params: { id: string }; } ) {
+export default function TemplateEditPage({ params }: {params: { id: string }; } ) {
     const router = useRouter();
 
     const [templateResponse, setTemplateResponse] = React.useState<ITemplateResponse>();
     const [categorySelects, setCategorySelects] = React.useState<Array<ICategorySelect>>([]);
     const [categorySelectOptions, setCategorySelectOptions] = React.useState<Array<ICategorySelectItem>>([]);
 
-    const editTemplateAndRedirect = (template: Template, values:Array<{ categoryId:string, valueId:string }>) => {
-        createNewTemplateApi(template, values).then((data) => {
+    const createNewTemplateAndRedirect = (template: Template, values:Array<{ categoryId:string, valueId:string }>) => {
+        editTemplateApi(template, values).then((data) => {
             router.push('/templates', { scroll: false })
         });
     }
@@ -73,7 +73,7 @@ export default function TemplatePage({ params }: {params: { id: string }; } ) {
                     templateResponse={templateResponse}
                     categorySelectArr={categorySelects}
                     categorySelectItemArr={categorySelectOptions}
-                    templateFunctionCreateNew={()=>editTemplateAndRedirect}/>
+                    templateFunctionCreateNew={createNewTemplateAndRedirect}/>
         }
     </>
 }
