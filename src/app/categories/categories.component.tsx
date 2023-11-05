@@ -14,8 +14,10 @@ import {
 import Link from "next/link";
 import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {STRING} from "postcss-selector-parser";
+import Face5Icon from '@mui/icons-material/Face5';
 import {formatDate} from "@/app/utils";
+import EditIcon from "@mui/icons-material/Edit";
+import FileCopyIcon from '@mui/icons-material/FileCopy';
 
 type Props = {
     categories: Array<Category>,
@@ -49,12 +51,14 @@ export const CategoriesComponent: React.FC<Props> = ({categories, deleteCategory
                                 </TableCell>
                                 <TableCell align="right">
                                     <Link href={`/categories/${category.id}`} passHref>
-                                        View
+                                        <Face5Icon />
                                     </Link>
                                     &nbsp;
                                     <Link href={`/categories/${category.id}`} passHref>
-                                        Edit
+                                        <EditIcon sx={{cursor:'pointer'}} />
                                     </Link>
+                                    &nbsp;
+                                    <FileCopyIcon sx={{cursor:'pointer'}} onClick={()=>{alert('TODO: implement clone function')}} />
                                     &nbsp;
                                     <DeleteIcon sx={{cursor:'pointer'}} onClick={()=>deleteCategory(category.id)} />
                                 </TableCell>

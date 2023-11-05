@@ -19,9 +19,9 @@ import {Category, Value} from "@prisma/client";
 type Props = {
     category: Category | undefined,
     valuesArr: Array<Value>,
-    addNewCategory: (category: Category, values: Array<Value>) => void
+    categoryFunction: (category: Category, values: Array<Value>) => void
 }
-export const CategoryComponent: React.FC<Props> = ({category, valuesArr, addNewCategory}) => {
+export const CategoryComponent: React.FC<Props> = ({category, valuesArr, categoryFunction}) => {
 
     const [categoryName, setCategoryName] = React.useState<string>(category?.name || '')
     const [value, setValue] = React.useState<string>('');
@@ -97,9 +97,11 @@ export const CategoryComponent: React.FC<Props> = ({category, valuesArr, addNewC
                     <td colSpan={3} style={{float: 'right'}}>
                         <Button variant="contained"
                                 disabled={categoryName.length === 0 || values.length === 0}
-                                onClick={() => addNewCategory({ id: '', name: categoryName, createdAt: new Date(), deletedAt: null, updatedAt: new Date() }, values)}
-                        >
-                            Add New Category
+                                onClick={() => {
+                                    const categoryId = category ? category.id : '-1';
+                                    categoryFunction({ id: categoryId, name: categoryName, createdAt: new Date(), deletedAt: null, updatedAt: new Date() }, values); }
+                                }>
+                            { category ? 'Edit Category' : 'Add New Category' }
                         </Button>
                     </td>
                 </tr>

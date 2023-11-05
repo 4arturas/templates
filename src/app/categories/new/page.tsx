@@ -14,6 +14,6 @@ export default function CategoriesCategoryPage() {
         });
     }
     return <>
-            <CategoryComponent category={undefined} valuesArr={[]} addNewCategory={addNewCategory} />
+            <CategoryComponent category={undefined} valuesArr={[]} categoryFunction={addNewCategory} />
     </>
 }
