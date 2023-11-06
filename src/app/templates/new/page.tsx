@@ -28,8 +28,8 @@ export default function TemplatesNewPage() {
 
     React.useEffect( () => {
         async function startFetching() {
-            const categoriesArr = await getCategoriesApi();
-
+            const categoriesArrTmp = await getCategoriesApi();
+            const categoriesArr = categoriesArrTmp.filter( f => f.deletedAt === null );
             const _categoryOptions:Array<ICategorySelect> = [];
             const _options:Array<ICategorySelectItem> = [];
             for ( let i = 0; i < categoriesArr.length; i++ )

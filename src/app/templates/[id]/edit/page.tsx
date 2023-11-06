@@ -33,7 +33,8 @@ export default function TemplateEditPage({ params }: {params: { id: string }; } 
 
             const templateResponseTmp = await getTemplateWithCategoryValues(params.id);
 
-            const categories = await getCategoriesApi();
+            const categoriesTmp = await getCategoriesApi();
+            const categories = categoriesTmp.filter( f => f.deletedAt === null );
             const _categoryOptions:Array<ICategorySelect> = [];
             const _options:Array<ICategorySelectItem> = [];
             for ( let i = 0; i < categories.length; i++ )
