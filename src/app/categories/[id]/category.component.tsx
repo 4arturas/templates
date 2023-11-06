@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import {Add, PlusOne} from "@mui/icons-material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ReplayCircleFilledIcon from '@mui/icons-material/ReplayCircleFilled';
 import {Category, Value} from "@prisma/client";
 
 type Props = {
@@ -83,6 +84,7 @@ export const CategoryComponent: React.FC<Props> = ({category, valuesArr, categor
                                                         }}
                                                     >
                                                         <DeleteIcon/>
+                                                        TODO: restore <ReplayCircleFilledIcon/>
                                                     </Button>
                                                 </TableCell>
                                             </TableRow>
