@@ -54,7 +54,7 @@ export const CategoriesComponent: React.FC<Props> = ({categories, deleteCategory
                                         <Face5Icon />
                                     </Link>
                                     &nbsp;
-                                    <Link href={`/categories/${category.id}`} passHref>
+                                    <Link href={`/categories/${category.id}/edit`} passHref>
                                         <EditIcon sx={{cursor:'pointer'}} />
                                     </Link>
                                     &nbsp;

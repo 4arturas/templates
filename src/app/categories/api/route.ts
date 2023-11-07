@@ -101,14 +101,24 @@ export async function PATCH(request: Request) {
                 const addRelationsRes = await tx.oneCategoryHasManyValues.create({
                     data: {categoryId: categoryFromUI.id, valueId: valueAddRes.id}
                 })
-            }
+            } // end for i
 
             updateCategory = await tx.category.update({
                 where: {id: categoryFromUI.id},
                 data: {
                     name: categoryFromUI.name
                 }
-            })
+            });
+
+            const categoryHistoryRes = await tx.categoryHistory.create({
+                data: {
+                    categoryId: updateCategory?.id,
+                    name: updateCategory?.name,
+                    updatedAt: updateCategory?.updatedAt
+                }
+            });
+            console.log( categoryHistoryRes );
+
         }, {
             maxWait: 20000, // default: 2000
             timeout: 50000, // default: 5000

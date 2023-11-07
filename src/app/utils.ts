@@ -28,6 +28,11 @@ export interface IOneTemplateHasManyValues {
     category: { id: string, name: string }
 }
 
+export enum EMode {
+    NEW = 'NEW',
+    EDIT = 'EDIT',
+    VIEW = 'VIEW'
+}
 export interface ITemplateResponse {
     id: string,
     name: string,

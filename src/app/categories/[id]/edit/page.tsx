@@ -21,6 +21,12 @@ export default function CategoriesCategory( { params }: {params: { id: string };
         setCategory(await getCategoryApi(params.id));
     }
 
+    const updateCategoryAndRedirect = (category: Category, values: Array<Value>) => {
+        updateCategoryApi( category, values ).then((data) => {
+            router.push('/categories', { scroll: false })
+        });
+    }
+
     React.useEffect( () => {
 
         fetchData();
@@ -33,10 +39,10 @@ export default function CategoriesCategory( { params }: {params: { id: string };
             !category ?
                 <CircularProgress /> :
                 <CategoryComponent
-                    mode={EMode.VIEW}
+                    mode={EMode.EDIT}
                     category={category}
                     valuesArr={values}
-                    categoryFunction={()=>{}}
+                    categoryFunction={updateCategoryAndRedirect}
                 />
         }
     </div>

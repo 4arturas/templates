@@ -1,10 +1,11 @@
 "use client";
 
-import { useRouter } from 'next/navigation'
+import {useRouter} from 'next/navigation'
 import React from "react";
 import {CategoryComponent} from "@/app/categories/[id]/category.component";
 import {createCategoryApi} from "@/app/categories/api/route";
 import {Category, Value} from "@prisma/client";
+import {EMode} from "@/app/utils";
 
 export default function CategoriesCategoryPage() {
     const router = useRouter();
@@ -14,6 +15,11 @@ export default function CategoriesCategoryPage() {
         });
     }
     return <>
-            <CategoryComponent category={undefined} valuesArr={[]} categoryFunction={addNewCategory} />
+            <CategoryComponent
+                mode={EMode.NEW}
+                category={undefined}
+                valuesArr={[]}
+                categoryFunction={addNewCategory}
+            />
     </>
 }

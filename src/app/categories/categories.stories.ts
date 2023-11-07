@@ -26,13 +26,13 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {
   args: {
     categories: [
-      {id: '1', name: 'Country', createdAt: new Date(), updatedAt: new Date() },
-      {id: '2', name: 'Department', createdAt: new Date(), updatedAt: new Date() },
-      {id: '3', name: 'Product', createdAt: new Date(), updatedAt: new Date() },
-      {id: '4', name: 'Customer Type', createdAt: new Date(), updatedAt: new Date() },
-      {id: '5', name: 'Case Type', createdAt: new Date(), updatedAt: new Date() },
-      {id: '6', name: 'Customer Type', createdAt: new Date(), updatedAt: new Date() },
-      {id: '7', name: 'SU', createdAt: new Date(), updatedAt: new Date() },
+      {id: '1', name: 'Country', createdAt: new Date(), updatedAt: new Date(), deletedAt: new Date() },
+      {id: '2', name: 'Department', createdAt: new Date(), updatedAt: new Date(), deletedAt: new Date() },
+      {id: '3', name: 'Product', createdAt: new Date(), updatedAt: new Date(), deletedAt: new Date() },
+      {id: '4', name: 'Customer Type', createdAt: new Date(), updatedAt: new Date(), deletedAt: new Date() },
+      {id: '5', name: 'Case Type', createdAt: new Date(), updatedAt: new Date(), deletedAt: new Date() },
+      {id: '6', name: 'Customer Type', createdAt: new Date(), updatedAt: new Date(), deletedAt: new Date() },
+      {id: '7', name: 'SU', createdAt: new Date(), updatedAt: new Date(), deletedAt: new Date() },
     ]
   },
 };
