@@ -5,7 +5,7 @@ import {
 } from "@prisma/client";
 import {EMethod, ICategoryWithValues, ITemplateResponse, ITemplateResponseNew, postData} from "@/app/utils";
 
-export async function getTemplatesApi(): Promise<{old:Array<ITemplateResponse>, new:Array<ITemplateResponseNew>}> {
+export async function getTemplatesApi(): Promise<Array<ITemplateResponseNew>> {
     return fetch("http://localhost:3000/templates/api").then((res) => res.json());
 }
 
@@ -75,7 +75,7 @@ export async function GET(request: Request) {
             templatesResponse.push(templateResponse);
         } // end for i
 
-        return NextResponse.json({old:templates, new:templatesResponse});
+        return NextResponse.json(templatesResponse);
     } catch (error: any) {
         if (error.code === "P2002") {
             return new NextResponse("User with email already exists", {

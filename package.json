@@ -26,8 +26,7 @@
     "next": "14.0.0",
     "react": "^18",
     "react-dom": "^18",
-    "react-quill": "^2.0.0",
-    "react-virtuoso": "^4.6.2"
+    "react-quill": "^2.0.0"
   },
   "devDependencies": {
     "@storybook/addon-essentials": "^7.5.2",

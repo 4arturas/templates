@@ -97,10 +97,11 @@ interface HeadCell {
 interface EnhancedTableProps {
     headCells: Array<HeadCell>,
     rows: Array<Data>,
-    searchPhrase: string | undefined
+    searchPhrase: string | undefined,
+    deleteTemplateAndRedirect: (id: string) => void
 }
 
-const EnhancedTable: React.FC<EnhancedTableProps> = ({headCells, rows, searchPhrase}) => {
+const EnhancedTable: React.FC<EnhancedTableProps> = ({headCells, rows, searchPhrase, deleteTemplateAndRedirect}) => {
     interface EnhancedTableProps {
         numSelected: number;
         onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
@@ -186,35 +187,34 @@ const EnhancedTable: React.FC<EnhancedTableProps> = ({headCells, rows, searchPhr
         [order, orderBy, page, rowsPerPage],
     );
 
-    const emphasizeSearchFragment = (attribute:string, phrase:string|undefined) => {
-        if ( phrase === undefined )
+    const emphasizeSearchFragment = (attribute: string, phrase: string | undefined) => {
+        if (phrase === undefined)
             return attribute;
-        const str:string = String(attribute);
-        if ( str.length === 0 )
+        const str: string = String(attribute);
+        if (str.length === 0)
             return String(attribute);
 
 
         const begin = str.indexOf(phrase);
-        if ( begin === -1 )
+        if (begin === -1)
             return attribute;
 
         const regEx = new RegExp(phrase, "ig");
         const regExArray = [];
         let resultString = attribute;
-        for ( let i = 0; i < 100; i++ )
-        {
+        for (let i = 0; i < 100; i++) {
             const tmpRegExElement = regEx.exec(attribute);
-            if ( tmpRegExElement === null )
+            if (tmpRegExElement === null)
                 break;
             const key = tmpRegExElement[0];
             const value = String(Math.random());
-            regExArray.push({key:key, value:value});
-            resultString = resultString.replaceAll( key, value );
+            regExArray.push({key: key, value: value});
+            resultString = resultString.replaceAll(key, value);
         }
 
-        regExArray.forEach( elem =>{
+        regExArray.forEach(elem => {
             resultString = resultString.replaceAll(elem.value, `<span style="color:red;font-weight:bold">${elem.key}</span>`)
-        } )
+        })
 
         return resultString;
     }
@@ -239,10 +239,9 @@ const EnhancedTable: React.FC<EnhancedTableProps> = ({headCells, rows, searchPhr
                         <TableBody>
                             {
                                 visibleRows.map((row, index) => {
-                                    const regEx = new RegExp((searchPhrase===undefined)?'':searchPhrase, "ig");
+                                    const regEx = new RegExp((searchPhrase === undefined) ? '' : searchPhrase, "ig");
                                     // const renderRow: boolean = searchPhrase === undefined || searchPhrase.length === 0 ? true : (regEx.test(row.name) || regEx.test(row.subject) || regEx.test(row.to));
-                                    if ( searchPhrase !== undefined && searchPhrase.length >= 0)
-                                    {
+                                    if (searchPhrase !== undefined && searchPhrase.length >= 0) {
                                         if ((!regEx.test(row.name) && !regEx.test(row.subject) && !regEx.test(row.to)))
                                             return <></>
                                     }
@@ -253,11 +252,12 @@ const EnhancedTable: React.FC<EnhancedTableProps> = ({headCells, rows, searchPhr
                                             sx={{cursor: 'pointer'}}
                                         >
                                             {Object.keys(row).filter(r => r !== 'id').map(r => {
-                                                if  (r === 'icon')
+                                                if (r === 'icon')
                                                     return <TableCell align="center">
-                                                                <i style={{width: '32px', height: '32px'}} className="material-icons">{row[r]}</i>
-                                                            </TableCell>;
-                                                if ( r==='actions')
+                                                        <i style={{width: '32px', height: '32px'}}
+                                                           className="material-icons">{row[r]}</i>
+                                                    </TableCell>;
+                                                if (r === 'actions')
                                                     return <TableCell align="center">
                                                         <Link href={`/templates/${row['id']}/edit`} passHref>
                                                             <EditIcon style={{cursor: 'pointer'}}/>
@@ -266,7 +266,7 @@ const EnhancedTable: React.FC<EnhancedTableProps> = ({headCells, rows, searchPhr
                                                         <DeleteIcon
                                                             onClick={(e) => {
                                                                 // e.target.disabled = true;
-                                                                deleteTemplateAndRedirect(template.id);
+                                                                deleteTemplateAndRedirect(row['id']);
                                                             }}
                                                             style={{cursor: 'pointer'}}
                                                         />
@@ -313,7 +313,7 @@ type Props = {
     deleteTemplateAndRedirect: (id: string) => void
 }
 
-export const TemplatesNewComponent: React.FC<Props> = ({templates, deleteTemplateAndRedirect}) => {
+export const TemplatesComponent: React.FC<Props> = ({templates, deleteTemplateAndRedirect}) => {
 
     const [headCells, setHeadCells] = React.useState<Array<HeadCell>>([]);
     const [rows, setRows] = React.useState<Array<Data>>([]);
@@ -480,64 +480,67 @@ export const TemplatesNewComponent: React.FC<Props> = ({templates, deleteTemplat
                         ?.values.map(m => m.name)
                         .join(',');
             })
-            row['actions'] = 'Actions TODO'
+            row['actions'] = ''
             rowsArray.push(row);
         }
-        console.log(rowsArray.length);
         setRows(rowsArray)
     }
 
     return (
         <>
-            <Box style={{width: '100%', textAlign: 'center'}}>
-                <TextField
-                    label="Search"
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <Search/>
-                            </InputAdornment>
-                        ),
-                    }}
-                    style={{marginTop: '16px', marginRight: '10px'}}
-                    value={searchPhrase}
-                    autoComplete={'off'}
-                    onChange={(v) => setSearchPhrase(v.target.value)}/>
-                {(categorySelectArr.length > 0 && categorySelectItemArr.length > 0 && categorySelectItemArr.length > 0) &&
-                    selectedElements.map(function (group) {
-                        return (
-                            <FormControl key={`formControl${group.categoryId}`} variant="standard"
-                                         sx={{m: 1, width: 300, mt: 3}}>
-                                <InputLabel id={`label${group.categoryId}`}>{group.name}</InputLabel>
-                                <Select
-                                    labelId={`label${group.categoryId}`}
-                                    key={`select${group.categoryId}`}
-                                    multiple
-                                    value={group?.selectedValue || []}
-                                    onChange={(e) => onSelectionChange(e, group)}
-                                    id={group.categoryId}
-                                    renderValue={(selected) => selected.join(", ")}
-                                >
-                                    {categorySelectItemArr.map(function (option) {
-                                        if (option.categoryId === group.categoryId) {
-                                            return (
-                                                <MenuItem key={`menuItem${option.categoryValueId}`}
-                                                          value={option.name} id={option.categoryValueId}>
-                                                    <ListItemText key={`listItemText${option.categoryValueId}`}
-                                                                  primary={option.name}/>
-                                                </MenuItem>
-                                            );
-                                        }
-                                    })}
-                                </Select>
-                            </FormControl>
-                        );
-                    })}
-            </Box>
             {
                 rows.length > 0 &&
                 <React.Fragment>
-                    <EnhancedTable headCells={headCells} rows={rows} searchPhrase={searchPhrase}/>
+                    <Box style={{width: '100%', textAlign: 'center'}}>
+                        <TextField
+                            label="Search"
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <Search/>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            style={{marginTop: '16px', marginRight: '10px'}}
+                            value={searchPhrase}
+                            autoComplete={'off'}
+                            onChange={(v) => setSearchPhrase(v.target.value)}/>
+                        {(categorySelectArr.length > 0 && categorySelectItemArr.length > 0 && categorySelectItemArr.length > 0) &&
+                            selectedElements.map(function (group) {
+                                return (
+                                    <FormControl key={`formControl${group.categoryId}`} variant="standard"
+                                                 sx={{m: 1, width: 300, mt: 3}}>
+                                        <InputLabel id={`label${group.categoryId}`}>{group.name}</InputLabel>
+                                        <Select
+                                            labelId={`label${group.categoryId}`}
+                                            key={`select${group.categoryId}`}
+                                            multiple
+                                            value={group?.selectedValue || []}
+                                            onChange={(e) => onSelectionChange(e, group)}
+                                            id={group.categoryId}
+                                            renderValue={(selected) => selected.join(", ")}
+                                        >
+                                            {categorySelectItemArr.map(function (option) {
+                                                if (option.categoryId === group.categoryId) {
+                                                    return (
+                                                        <MenuItem key={`menuItem${option.categoryValueId}`}
+                                                                  value={option.name} id={option.categoryValueId}>
+                                                            <ListItemText key={`listItemText${option.categoryValueId}`}
+                                                                          primary={option.name}/>
+                                                        </MenuItem>
+                                                    );
+                                                }
+                                            })}
+                                        </Select>
+                                    </FormControl>
+                                );
+                            })}
+                    </Box>
+
+                    <React.Fragment>
+                        <EnhancedTable headCells={headCells} rows={rows} searchPhrase={searchPhrase}
+                                       deleteTemplateAndRedirect={deleteTemplateAndRedirect}/>
+                    </React.Fragment>
                 </React.Fragment>
             }
         </>
