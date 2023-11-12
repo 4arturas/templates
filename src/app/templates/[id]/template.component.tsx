@@ -13,15 +13,15 @@ import 'react-quill/dist/quill.snow.css';
 import {
     ICategorySelectItem,
     ICategorySelect,
-    ITemplateResponse,
-    googleIconNames2,
+    IDBTemplateWithCategoriesAndValues,
+    googleIconNames2, ITemplateResponseNew,
 } from "@/app/utils";
 import {Search} from "@mui/icons-material";
 import {Template} from "@prisma/client";
 
 
 type Props = {
-    templateResponse: ITemplateResponse | undefined
+    templateResponse: ITemplateResponseNew | undefined
     categorySelectArr: Array<ICategorySelect>
     categorySelectItemArr: Array<ICategorySelectItem>
     templateFunctionCreateNew: (template: Template, values: Array<{

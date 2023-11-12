@@ -33,7 +33,7 @@ export enum EMode {
     EDIT = 'EDIT',
     VIEW = 'VIEW'
 }
-export interface ITemplateResponse {
+export interface IDBTemplateWithCategoriesAndValues {
     id: string,
     name: string,
     to: string,
@@ -56,6 +56,7 @@ export interface ITemplateResponseNew {
     to: string,
     subject: string,
     icon: string,
+    templateText: string,
     categories: Array<ICategoryWithValues>
 }
 
@@ -88,4 +89,36 @@ export function formatDate(date:string|Date|undefined|null):string {
         return date.replace("T"," ").substring(0, 19);
     else
         return date.toISOString().replace("T"," ").substring(0, 19);
+}
+
+export const convert = (template:IDBTemplateWithCategoriesAndValues) :ITemplateResponseNew =>  {
+    const oneTemplateHasManyValues:any = template.OneTemplateHasManyValues;
+
+    let categoryMap:{[key: string]: ICategoryWithValues} = {};
+    for ( let j = 0; j < oneTemplateHasManyValues.length; j++ )
+    {
+        const oneTemplateHasManyValue: { category: { id: string, name: string }, values: { id: string, name: string } } = oneTemplateHasManyValues[j];
+        let category:ICategoryWithValues = categoryMap[oneTemplateHasManyValue.category.id];
+        if ( !category )
+        {
+            category = {
+                id:oneTemplateHasManyValue.category.id,
+                name: oneTemplateHasManyValue.category.name,
+                values: []
+            }
+        }
+        category.values.push( { id: oneTemplateHasManyValue.values.id, name: oneTemplateHasManyValue.values.name } );
+        categoryMap[oneTemplateHasManyValue.category.id] = category;
+    } // end for j
+    const categories:Array<ICategoryWithValues> = Object.keys(categoryMap).map( (categoryId:string) => categoryMap[categoryId])
+    const templateResponse:ITemplateResponseNew = {
+        id: template.id,
+        name: template.name,
+        to: template.to,
+        subject: template.subject,
+        icon: template.icon,
+        templateText: template.templateText,
+        categories: categories
+    };
+    return templateResponse;
 }

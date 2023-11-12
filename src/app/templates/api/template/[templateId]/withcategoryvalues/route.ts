@@ -1,9 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import {ITemplateResponse} from "@/app/utils";
+import {IDBTemplateWithCategoriesAndValues} from "@/app/utils";
 
 const _404 = "No template with ID found";
-export const getTemplateWithCategoryValues = (async (templateId: string): Promise<ITemplateResponse> => {
+export const getTemplateWithCategoryValues = (async (templateId: string): Promise<IDBTemplateWithCategoriesAndValues> => {
     const item = fetch(`http://localhost:3000/templates/api/template/${templateId}/withcategoryvalues`).then((res) => res.json())
     return item
 })

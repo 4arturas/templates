@@ -4,7 +4,7 @@ import React, {cache, use} from "react";
 import {Template, Value} from "@prisma/client";
 import {CircularProgress} from "@mui/material";
 import {
-        ICategorySelectItem, ICategorySelect, ITemplateResponse
+        ICategorySelectItem, ICategorySelect, IDBTemplateWithCategoriesAndValues
 } from "@/app/utils";
 
 import {TemplateComponent} from "@/app/templates/[id]/template.component";
@@ -17,7 +17,7 @@ import {useRouter} from "next/navigation";
 export default function TemplatePage({ params }: {params: { id: string }; } ) {
     const router = useRouter();
 
-    const [templateResponse, setTemplateResponse] = React.useState<ITemplateResponse>();
+    const [templateResponse, setTemplateResponse] = React.useState<IDBTemplateWithCategoriesAndValues>();
     const [categorySelects, setCategorySelects] = React.useState<Array<ICategorySelect>>([]);
     const [categorySelectOptions, setCategorySelectOptions] = React.useState<Array<ICategorySelectItem>>([]);
 
