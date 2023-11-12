@@ -3,23 +3,24 @@ import {NextResponse} from "next/server";
 import {
     OneTemplateHasManyValues, Prisma, Template
 } from "@prisma/client";
-import {EMethod, postData} from "@/app/utils";
+import {EMethod, ICategoryWithValues, ITemplateResponse, ITemplateResponseNew, postData} from "@/app/utils";
 
-export async function getTemplatesApi(): Promise<Array<any>> {
+export async function getTemplatesApi(): Promise<{old:Array<ITemplateResponse>, new:Array<ITemplateResponseNew>}> {
     return fetch("http://localhost:3000/templates/api").then((res) => res.json());
 }
 
 export async function GET(request: Request) {
     try {
-        const templates = await prisma.template.findMany({
+        const templates:Array<any>/*Array<ITemplateResponse>*/ = await prisma.template.findMany({
+            where: {
+                deletedAt: null
+            },
             select: {
                 id: true,
                 name: true,
                 to: true,
                 subject: true,
                 icon: true,
-                templateText: true,
-                deletedAt: true,
                 OneTemplateHasManyValues: {
                     select: {
                         values: {
@@ -31,15 +32,50 @@ export async function GET(request: Request) {
                         category: {
                             select: {
                                 id: true,
-                                name: true
+                                name: true,
                             }
                         }
                     }
                 }
             }
-        })
+        });
 
-        return NextResponse.json(templates);
+        const templatesResponse:Array<ITemplateResponseNew> = [];
+        for ( let i = 0; i < templates.length; i++ )
+        {
+            const template:ITemplateResponse = templates[i];
+            const oneTemplateHasManyValues:any = template.OneTemplateHasManyValues;
+
+            let categoryMap:{[key: string]: ICategoryWithValues} = {};
+            const groupedCategories:{[key:string]:Array<any>} = {}
+            for ( let j = 0; j < oneTemplateHasManyValues.length; j++ )
+            {
+                const oneTemplateHasManyValue: { category: { id: string, name: string }, values: { id: string, name: string } } = oneTemplateHasManyValues[j];
+                let category:ICategoryWithValues = categoryMap[oneTemplateHasManyValue.category.id];
+                if ( !category )
+                {
+                    category = {
+                        id:oneTemplateHasManyValue.category.id,
+                        name: oneTemplateHasManyValue.category.name,
+                        values: []
+                    }
+                }
+                category.values.push( { id: oneTemplateHasManyValue.values.id, name: oneTemplateHasManyValue.values.name } );
+                categoryMap[oneTemplateHasManyValue.category.id] = category;
+            } // end for j
+            const categories:Array<ICategoryWithValues> = Object.keys(categoryMap).map( (categoryId:string) => categoryMap[categoryId])
+            const templateResponse:ITemplateResponseNew = {
+                id: template.id,
+                name: template.name,
+                to: template.to,
+                subject: template.subject,
+                icon: template.icon,
+                categories: categories
+            };
+            templatesResponse.push(templateResponse);
+        } // end for i
+
+        return NextResponse.json({old:templates, new:templatesResponse});
     } catch (error: any) {
         if (error.code === "P2002") {
             return new NextResponse("User with email already exists", {

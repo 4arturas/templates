@@ -44,6 +44,21 @@ export interface ITemplateResponse {
     OneTemplateHasManyValues: Array<IOneTemplateHasManyValues>
 }
 
+export interface ICategoryWithValues {
+    id: string,
+    name: string,
+    values: Array<{id:string, name: string}>
+}
+
+export interface ITemplateResponseNew {
+    id: string,
+    name: string,
+    to: string,
+    subject: string,
+    icon: string,
+    categories: Array<ICategoryWithValues>
+}
+
 export async function postData(url = "", method: EMethod, data = {}) {
     // Default options are marked with *
     return await fetch(url, {

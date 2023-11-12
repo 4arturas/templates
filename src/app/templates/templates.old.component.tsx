@@ -20,7 +20,7 @@ import {
     ICategorySelect,
     ICategorySelectItem,
     IOneTemplateHasManyValues,
-    ITemplateResponse
+    ITemplateResponse, ITemplateResponseNew
 } from "@/app/utils";
 import EditIcon from "@mui/icons-material/Edit";
 
@@ -31,6 +31,7 @@ interface ITmpInterface {
 
 type Props = {
     templates: Array<ITemplateResponse>
+    templatesNew: Array<ITemplateResponseNew>
     deleteTemplateAndRedirect: (id: string) => void
 }
 
@@ -48,7 +49,7 @@ const VirtuosoTableComponents: TableComponents<any> = {
     )),
 };
 
-export const TemplatesComponent: React.FC<Props> = ({templates, deleteTemplateAndRedirect}) => {
+export const TemplatesOldComponent: React.FC<Props> = ({templates, templatesNew, deleteTemplateAndRedirect}) => {
 
     const [columns, setColumns] = React.useState<Array<any>>([]);
     const [rows, setRows] = React.useState<Array<any>>([]);
@@ -150,7 +151,6 @@ export const TemplatesComponent: React.FC<Props> = ({templates, deleteTemplateAn
 
                 categoryArrayForShowing.push( ...categoryValueNameArr );
             })
-            console.log( 'categoryArrayForShowing', categoryArrayForShowing, 'selectedElements', selectedElements.map( m => m.selectedValue ) );
             tmpRows.push( tmpRow );
 
         });
