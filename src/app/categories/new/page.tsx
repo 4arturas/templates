@@ -5,7 +5,7 @@ import React from "react";
 import {CategoryComponent} from "@/app/categories/[id]/category.component";
 import {createCategoryApi} from "@/app/categories/api/route";
 import {Category, Value} from "@prisma/client";
-import {EMode} from "@/app/utils";
+import {EMode} from "../../utils";
 
 export default function CategoriesCategoryPage() {
     const router = useRouter();

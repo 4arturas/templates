@@ -6,7 +6,7 @@ import {TemplateComponent} from "@/app/templates/[id]/template.component";
 import {CircularProgress} from "@mui/material";
 import {
     ICategorySelectItem, ICategorySelect,
-} from "@/app/utils";
+} from "../../utils";
 import {Template, Value} from "@prisma/client";
 import {getCategoriesApi} from "@/app/categories/api/route";
 import {createNewTemplateApi} from "@/app/templates/api/route";

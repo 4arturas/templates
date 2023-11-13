@@ -4,8 +4,8 @@ import React, {cache, use} from "react";
 import {Category, Template, Value} from "@prisma/client";
 import {CircularProgress} from "@mui/material";
 import {
-    ICategorySelectItem, ICategorySelect, IDBTemplateWithCategoriesAndValues, ITemplateResponseNew
-} from "@/app/utils";
+    ICategorySelectItem, ICategorySelect, ITemplateResponseNew
+} from "../../utils";
 
 import {TemplateComponent} from "@/app/templates/[id]/template.component";
 import {getCategoriesApi} from "@/app/categories/api/route";

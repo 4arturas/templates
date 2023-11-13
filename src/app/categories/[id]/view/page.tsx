@@ -5,10 +5,6 @@ import {Category, Value} from "@prisma/client";
 import {CircularProgress} from "@mui/material";
 import {getCategoryApi} from "@/app/categories/api/[categoryId]/route";
 import {getCategoryValuesApi} from "@/app/categories/api/[categoryId]/values/route";
-import {CategoryComponent} from "@/app/categories/[id]/category.component";
-import {updateCategoryApi} from "@/app/categories/api/route";
-import {useRouter} from "next/navigation";
-import {EMode} from "@/app/utils";
 import {CategoryViewComponent} from "@/app/categories/[id]/category.view.component";
 
 export default function CategoryViewPage( { params }: {params: { id: string }; } ) {

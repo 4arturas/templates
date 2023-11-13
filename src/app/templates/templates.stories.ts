@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import {IDBTemplateWithCategoriesAndValues, ITemplateResponseNew} from "@/app/utils";
-import {TemplatesComponent} from "@/app/templates/templates.component";
+import {ITemplateResponseNew} from "../utils";
+import {TemplatesComponent} from "../templates/templates.component";
 
 const templates:Array<ITemplateResponseNew> = [
   {

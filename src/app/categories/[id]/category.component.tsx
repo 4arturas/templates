@@ -18,7 +18,7 @@ import {Add} from "@mui/icons-material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ReplayCircleFilledIcon from '@mui/icons-material/ReplayCircleFilled';
 import {Category, Value} from "@prisma/client";
-import {EMode} from "@/app/utils";
+import {EMode} from "../../utils"
 
 type Props = {
     mode: EMode

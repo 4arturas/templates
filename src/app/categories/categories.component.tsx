@@ -16,7 +16,7 @@ import Link from "next/link";
 import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Face5Icon from '@mui/icons-material/Face5';
-import {formatDate} from "@/app/utils";
+import {formatDate} from "../utils";
 import EditIcon from "@mui/icons-material/Edit";
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import Button from "@mui/material/Button";

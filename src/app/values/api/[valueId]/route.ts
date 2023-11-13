@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import {EMethod, postData} from "@/app/utils";
 import {Value} from "@prisma/client";
 
 const _404 = "No category with ID found";

@@ -13,9 +13,8 @@ import 'react-quill/dist/quill.snow.css';
 import {
     ICategorySelectItem,
     ICategorySelect,
-    IDBTemplateWithCategoriesAndValues,
     googleIconNames2, ITemplateResponseNew,
-} from "@/app/utils";
+} from "../../utils";
 import {Search} from "@mui/icons-material";
 import {Template} from "@prisma/client";
 
@@ -43,7 +42,7 @@ export const TemplateComponent: React.FC<Props> = ({
     const [icon, setIcon] = React.useState<string>(templateResponse ? templateResponse.icon : '');
     const [templateText, setTemplateText] = React.useState<string>(templateResponse ? templateResponse.templateText : '');
     const [selectedElements, setSelectedElements] = React.useState<Array<ICategorySelect>>(categorySelectArr);
-
+console.log( categorySelectItemArr)
 
     const [open, setOpen] = React.useState<boolean>(false);
     const [searchPhrase, setSearchPhrase] = React.useState<string>('');

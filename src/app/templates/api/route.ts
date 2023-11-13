@@ -10,7 +10,7 @@ import {
     IDBTemplateWithCategoriesAndValues,
     ITemplateResponseNew,
     postData
-} from "@/app/utils";
+} from "../../utils";
 
 export async function getTemplatesApi(): Promise<Array<ITemplateResponseNew>> {
     return fetch("http://localhost:3000/templates/api").then((res) => res.json());

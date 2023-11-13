@@ -56,7 +56,7 @@ export interface ITemplateResponseNew {
     to: string,
     subject: string,
     icon: string,
-    templateText: string,
+    templateText?: string,
     categories: Array<ICategoryWithValues>
 }
 

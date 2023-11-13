@@ -8,7 +8,7 @@ import {getCategoryValuesApi} from "@/app/categories/api/[categoryId]/values/rou
 import {CategoryComponent} from "@/app/categories/[id]/category.component";
 import {updateCategoryApi} from "@/app/categories/api/route";
 import {useRouter} from "next/navigation";
-import {EMode} from "@/app/utils";
+import {EMode} from "../../../utils";
 
 export default function CategoriesCategory( { params }: {params: { id: string }; } ) {
     const router = useRouter();
