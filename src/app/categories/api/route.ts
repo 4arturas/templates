@@ -10,7 +10,9 @@ export async function getCategoriesApi(): Promise<Array<Category>> {
 }
 
 export async function GET(request: Request) {
-    const categories: Array<Category> = await prisma.category.findMany();
+    const categories: Array<Category> = await prisma.category.findMany({
+        where: { deletedAt: null }
+    });
     return NextResponse.json(categories);
 }
 

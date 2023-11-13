@@ -1,9 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import {IDBTemplateWithCategoriesAndValues} from "@/app/utils";
+import {convert, IDBTemplateWithCategoriesAndValues, ITemplateResponseNew} from "@/app/utils";
 
 const _404 = "No template with ID found";
-export const getTemplateWithCategoryValues = (async (templateId: string): Promise<IDBTemplateWithCategoriesAndValues> => {
+export const getTemplateWithCategoryValues = (async (templateId: string): Promise<ITemplateResponseNew> => {
     const item = fetch(`http://localhost:3000/templates/api/template/${templateId}/withcategoryvalues`).then((res) => res.json())
     return item
 })
@@ -12,7 +12,7 @@ export async function GET(
     { params }: { params: { templateId: string } }
 ) {
     const templateId = params.templateId;
-    const template = await prisma.template.findFirst({
+    const template:any = await prisma.template.findFirst({
         where: {
           id: templateId
         },
@@ -46,5 +46,7 @@ export async function GET(
         return new NextResponse(_404, { status: 404 });
     }
 
-    return NextResponse.json(template);
+    const templateResponse:ITemplateResponseNew = convert( template );
+
+    return NextResponse.json(templateResponse);
 }

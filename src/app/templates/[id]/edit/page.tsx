@@ -1,10 +1,10 @@
 "use client";
 
 import React, {cache, use} from "react";
-import {Template, Value} from "@prisma/client";
+import {Category, Template, Value} from "@prisma/client";
 import {CircularProgress} from "@mui/material";
 import {
-    ICategorySelectItem, ICategorySelect, IDBTemplateWithCategoriesAndValues
+    ICategorySelectItem, ICategorySelect, IDBTemplateWithCategoriesAndValues, ITemplateResponseNew
 } from "@/app/utils";
 
 import {TemplateComponent} from "@/app/templates/[id]/template.component";
@@ -17,7 +17,7 @@ import {useRouter} from "next/navigation";
 export default function TemplateEditPage({ params }: {params: { id: string }; } ) {
     const router = useRouter();
 
-    const [templateResponse, setTemplateResponse] = React.useState<IDBTemplateWithCategoriesAndValues>();
+    const [templateResponse, setTemplateResponse] = React.useState<ITemplateResponseNew>();
     const [categorySelects, setCategorySelects] = React.useState<Array<ICategorySelect>>([]);
     const [categorySelectOptions, setCategorySelectOptions] = React.useState<Array<ICategorySelectItem>>([]);
 
@@ -31,35 +31,33 @@ export default function TemplateEditPage({ params }: {params: { id: string }; } 
 
         async function startFetching() {
 
-            const templateResponseTmp = await getTemplateWithCategoryValues(params.id);
+            const templateResponseNew:ITemplateResponseNew = await getTemplateWithCategoryValues(params.id);
 
-            const categoriesTmp = await getCategoriesApi();
-            const categories = categoriesTmp.filter( f => f.deletedAt === null );
-            const _categoryOptions:Array<ICategorySelect> = [];
-            const _options:Array<ICategorySelectItem> = [];
+            const categories:Category[] = await getCategoriesApi();
+
+            const _categoryOptionsNew:Array<ICategorySelect> = [];
+            const _optionsNew:Array<ICategorySelectItem> = [];
             for ( let i = 0; i < categories.length; i++ )
             {
                 const category = categories[i];
                 const values: Array<Value> = await getCategoryValuesApi(category.id);
 
-                const templateHasValues: Array<{ id: string, name: string }> = templateResponseTmp.OneTemplateHasManyValues
-                    .filter(f => f.category.id === category.id ).map(m => m.values );
-                const selectedValue: Array<string> = templateHasValues
+                const templateHasValuesNew: Array<{ id: string, name: string }> = templateResponseNew.categories.filter( f => f.id === category.id ).flatMap( m => m.values );
+                const selectedValueNew: Array<string> = templateHasValuesNew
                     .map( m => m.name );
-                const selectedValueId: Array<string> = templateHasValues
+                const selectedValueIdNew: Array<string> = templateHasValuesNew
                     .map( m => m.id );
+                const categorySelectNew : ICategorySelect = {name:category.name, categoryId:category.id, selectedValue: selectedValueNew, selectedCategoryValueId: selectedValueIdNew };
+                _categoryOptionsNew.push(categorySelectNew);
 
-                const categorySelect : ICategorySelect = {name:category.name, categoryId:category.id, selectedValue: selectedValue, selectedCategoryValueId: selectedValueId };
-                _categoryOptions.push(categorySelect);
-
-                values.map( d => {
-                    _options.push({name:d.name, categoryValueId:d.id, categoryId:category.id})
+                values.map( (d:Value) => {
+                    _optionsNew.push({name:d.name, categoryValueId:d.id, categoryId:category.id})
                 });
             }
 
-            setCategorySelects(_categoryOptions);
-            setCategorySelectOptions(_options);
-            setTemplateResponse(templateResponseTmp);
+            setCategorySelects(_categoryOptionsNew);
+            setCategorySelectOptions(_optionsNew);
+            setTemplateResponse(templateResponseNew);
         }
         startFetching();
         // return () => { };
