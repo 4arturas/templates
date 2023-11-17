@@ -1,11 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import {TemplateComponent} from "./template.component";
-import {categorySelectArr, categorySelectItemArr, templatesResponse} from "./template.mock";
+import {ValueComponent} from "./value.component";
+import {Value} from "@prisma/client";
+
+const value:Value = {id: '1', name: 'LT', createdAt: new Date(), updatedAt: new Date(), deletedAt: null }
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta = {
-  title: 'Components/templates/template',
-  component: TemplateComponent,
+  title: 'Components/values/value',
+  component: ValueComponent,
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/react/configure/story-layout
     layout: 'centered',
@@ -14,21 +16,17 @@ const meta = {
   tags: ['autodocs'],
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {
-    categorySelectArr: categorySelectArr,
-    categorySelectItemArr: categorySelectItemArr,
-    templateResponse: [],
-    templateFunctionCreateNew: (name: string, subject: string, to: string, icon: string, templateText: string, categoryValueIdArr: Array<{categoryId: string, valueId: string}>) => { alert( 'Not implemented' ) }
+    value: {id: '1', name: 'LT'}
+
   },
-} satisfies Meta<typeof TemplateComponent>;
+} satisfies Meta<typeof ValueComponent>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
-export const Primary: Story = {
+export const View: Story = {
   args: {
-    templateResponse: templatesResponse,
-    categorySelectArr: categorySelectArr,
-    categorySelectItemArr: categorySelectItemArr,
+    value: value
   },
 };

@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import {CategoryComponent} from "./category.component";
+import {category, valuesArr} from "./category.mock";
+import {EMode} from "../../utils";
 
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
@@ -26,12 +28,18 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
-export const Primary: Story = {
+export const View: Story = {
   args: {
-    category: {id: '1', name: 'Country', createdAt: new Date(), updatedAt: new Date(), deletedAt: null },
-    valuesArr: [
-      {id: '1', name: 'LT', createdAt: new Date(), updatedAt: new Date(), deletedAt: null },
-      {id: '2', name: 'DK', createdAt: new Date(), updatedAt: new Date(), deletedAt: null },
-    ]
+    mode: EMode.VIEW,
+    category: category,
+    valuesArr: valuesArr
+  },
+};
+export const Edit: Story = {
+  args: {
+    mode: EMode.EDIT,
+    category: category,
+    valuesArr: valuesArr,
+    categoryFunction: () => alert( 'Not implemented' )
   },
 };
