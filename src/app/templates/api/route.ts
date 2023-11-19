@@ -11,6 +11,7 @@ import {
     ITemplateResponseNew,
     postData
 } from "../../utils";
+import {template} from "@babel/core";
 
 export async function getTemplatesApi(): Promise<Array<ITemplateResponseNew>> {
     return fetch("http://localhost:3000/templates/api").then((res) => res.json());
@@ -124,12 +125,55 @@ export const editTemplateApi = (template: Template, values: Array<{
     return postData('http://localhost:3000/templates/api', EMethod.PATCH, data);
 }
 
+enum EAction {
+    UPDATE = 1, DELETE = 2
+}
+async function backupTemplate( templateId:string, action:EAction ) {
+    const templateHistory:any = await prisma.template.findFirst({
+        where: {
+            id: templateId
+        },
+        select: {
+            id: true,
+            name: true,
+            to: true,
+            subject: true,
+            icon: true,
+            templateText: true,
+            OneTemplateHasManyValues: {
+                select: {
+                    values: {
+                        select: {
+                            id: true,
+                            name: true,
+                        }
+                    },
+                    category: {
+                        select: {
+                            id: true,
+                            name: true
+                        }
+                    }
+                }
+            }
+        }
+    })
+    const backupTemplateObject:ITemplateResponseNew = convert( templateHistory );
+    const resHistory = await prisma.history.create({
+        data: {
+            actionId: action,
+            json: JSON.stringify(backupTemplateObject)
+        }
+    })
+    console.log( resHistory );
+}
 export async function PATCH(request: Request) {
     try {
         const json = await request.json();
 
         let updateTemplate;
         const template = json.template;
+
 
         const existingRelationships:Array<OneTemplateHasManyValues> = await prisma.oneTemplateHasManyValues.findMany({
             where: {
@@ -139,6 +183,8 @@ export async function PATCH(request: Request) {
         const existingRelationshipsValues:Array<string> = existingRelationships.map( f => f.valueId );
 
         await prisma.$transaction(async (tx) => {
+
+            await backupTemplate( template.id, 1 );
 
             const valuesFromUI: Array<{categoryId:string, valueId:string}> = json.values;
             const valuesIdFromUI: Array<string> = valuesFromUI.map( m => m.valueId );
@@ -216,6 +262,9 @@ export async function DELETE(
     const templateId: string = json.id;
 
     try {
+
+        await backupTemplate( templateId, EAction.DELETE );
+
         const templateHasCategoryValuesArr: Array<OneTemplateHasManyValues> = await prisma.oneTemplateHasManyValues.findMany({
             where: {templateId: templateId}
         });

@@ -48,6 +48,9 @@ export const HeaderComponent: React.FC<Props> = ({pathname}) => {
                 <Link href='/categories/new'>
                     <Chip label="Add Category" variant={pathname==='/categories/new' ? 'filled':'outlined'} color={pathname==='/categories/new' ? 'primary':'secondary'} />
                 </Link>
+                <Link href='/history'>
+                    <Chip label="History" variant={pathname==='/history' ? 'filled':'outlined'} color={pathname==='/history' ? 'primary':'secondary'} />
+                </Link>
             </Breadcrumbs>
         </Stack>
     </>
