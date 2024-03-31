@@ -19,7 +19,7 @@ export const CategoryViewComponent: React.FC<Props> = ({category, values}) =>
         {values.map((val, index) => (
             <List component="nav">
                 <ListItem>
-                    <ListItemText primary={val.name}/>
+                    <ListItemText key={index} primary={val.name}/>
                 </ListItem>
                 <Divider/>
             </List>
