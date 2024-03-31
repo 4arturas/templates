@@ -253,17 +253,18 @@ const EnhancedTable: React.FC<EnhancedTableProps> = ({headCells, rows, searchPhr
                                         >
                                             {Object.keys(row).filter(r => r !== 'id').map(r => {
                                                 if (r === 'icon')
-                                                    return <TableCell align="center">
+                                                    return <TableCell align="center" key={`tableCell${index}`}>
                                                         <i style={{width: '32px', height: '32px'}}
                                                            className="material-icons">{row[r]}</i>
                                                     </TableCell>;
                                                 if (r === 'actions')
-                                                    return <TableCell align="center">
+                                                    return <TableCell align="center" key={`tableCell${index}`}>
                                                         <Link href={`/templates/${row['id']}/edit`} passHref>
-                                                            <EditIcon style={{cursor: 'pointer'}}/>
+                                                            <EditIcon style={{cursor: 'pointer'}} key={`editIcon${index}`}/>
                                                         </Link>
                                                         &nbsp;
                                                         <DeleteIcon
+                                                            key={`deleteIcon${index}`}
                                                             onClick={(e) => {
                                                                 // e.target.disabled = true;
                                                                 deleteTemplateAndRedirect(row['id']);
