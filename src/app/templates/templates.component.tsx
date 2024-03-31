@@ -273,7 +273,7 @@ const EnhancedTable: React.FC<EnhancedTableProps> = ({headCells, rows, searchPhr
                                                         />
                                                     </TableCell>;
 
-                                                return <TableCell align="center">{row[r]}</TableCell>
+                                                return <TableCell align="center" key={`tableCell${index}`}>{row[r]}</TableCell>
                                                 /*return <TableCell align="center">
                                                             <span dangerouslySetInnerHTML={{__html: emphasizeSearchFragment(row[r], searchPhrase)}} />
                                                         </TableCell>*/
