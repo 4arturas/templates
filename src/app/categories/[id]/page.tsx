@@ -3,12 +3,9 @@
 import React from "react";
 import {Category, Value} from "@prisma/client";
 import {CircularProgress} from "@mui/material";
-import {getCategoryApi} from "@/app/categories/api/[categoryId]/route";
-import {getCategoryValuesApi} from "@/app/categories/api/[categoryId]/values/route";
 import {CategoryComponent} from "@/app/categories/[id]/category.component";
-import {updateCategoryApi} from "@/app/categories/api/route";
 import {useRouter} from "next/navigation";
-import {EMode} from "../../utils";
+import {EMode, getCategoryApi, getCategoryValuesApi} from "../../utils";
 
 export default function CategoriesCategory( { params }: {params: { id: string }; } ) {
     const router = useRouter();
