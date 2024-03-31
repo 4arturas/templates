@@ -34,7 +34,7 @@ export const HistoryComponent: React.FC<Props> = ({history}) => {
     return (
         <>
             <TableContainer component={Paper}>
-                <Table sx={{minWidth: 650}} aria-label="simple table">
+                {/*<Table sx={{minWidth: 650}} aria-label="simple table">
                     <TableHead>
                         <TableRow>
                             <TableCell>Type</TableCell>
@@ -47,10 +47,10 @@ export const HistoryComponent: React.FC<Props> = ({history}) => {
                     </TableHead>
                     <TableBody>
                         {visibleRows.map((row: History, index: number) => {
-                            const jSonHist = JSON.parse(row.json);
+                            const jSonHist = JSON.parse(row['json']);
                             let action: string;
-                            if (row.actionId === 1) action = 'Temp. Update';
-                            if (row.actionId === 2) action = 'Temp. Delete';
+                            if (row['actionId'] === 1) action = 'Temp. Update';
+                            if (row['actionId'] === 2) action = 'Temp. Delete';
                             return (
                                 <TableRow
                                     key={row.id}
@@ -71,7 +71,7 @@ export const HistoryComponent: React.FC<Props> = ({history}) => {
                             )
                         })}
                     </TableBody>
-                </Table>
+                </Table>*/}
             </TableContainer>
             <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
