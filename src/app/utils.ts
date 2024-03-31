@@ -82,6 +82,74 @@ export async function postData(url = "", method: EMethod, data = {}) {
     fetch("http://localhost:3000/templates/api").then((res) => res.json())
 );*/
 
+export const getCategoryApi = (async (categoryId: string): Promise<Category> => {
+    return fetch(`http://localhost:3000/categories/api/${categoryId}`).then((res) => res.json())
+})
+
+export const getTemplateWithCategoryValues = (async (templateId: string): Promise<ITemplateResponseNew> => {
+    const item = fetch(`http://localhost:3000/templates/api/template/${templateId}/withcategoryvalues`).then((res) => res.json())
+    return item
+})
+
+export async function getCategoriesApi(): Promise<Array<Category>> {
+    return fetch(`http://localhost:3000/categories/api`).then((res) => res.json())
+}
+export const getValueApi = (async (valueId: string): Promise<Value> => {
+    return fetch(`http://localhost:3000/values/api/${valueId}`).then((res) => res.json())
+})
+export async function getTemplatesApi(): Promise<Array<ITemplateResponseNew>> {
+    return fetch("http://localhost:3000/templates/api").then((res) => res.json());
+}
+export const createNewTemplateApi = (template: Template, values: Array<{
+    categoryId: string,
+    valueId: string
+}>) => {
+    const data = {
+        template: template,
+        values: values
+    };
+    return postData('http://localhost:3000/templates/api', EMethod.POST, data);
+}
+export const createCategoryApi = async (category: Category, values: Array<Value>) => {
+    const data = {category: category, values: values};
+    return postData('http://localhost:3000/categories/api', EMethod.POST, data);
+}
+export async function getHistoryApi(): Promise<Array<History>> {
+    return fetch(`http://localhost:3000/history/api`).then((res) => res.json())
+}
+export const updateCategoryApi = async (category: Category, values: Array<Value>) => {
+    const data = {category: category, values: values};
+    return postData('http://localhost:3000/categories/api', EMethod.PATCH, data);
+}
+export const deleteValueApi = (id: string)  => {
+    const data = {id: id};
+    return postData( 'http://localhost:3000/values/api', EMethod.DELETE, data );
+}
+export const getCategoryValuesApi = (async (categoryId: string): Promise<Array<Value>> => {
+    return fetch(`http://localhost:3000/categories/api/${categoryId}/values`).then((res) => res.json())
+})
+export const updateValueApi = (valueId: string, newValue: string)  => {
+    const data = {id: valueId, name: newValue};
+    return postData( 'http://localhost:3000/values/api', EMethod.PATCH, data );
+}
+export const deleteCategoryApi = (id: string) => {
+    const data = {id: id};
+    return postData('http://localhost:3000/categories/api', EMethod.DELETE, data);
+}
+export const editTemplateApi = (template: Template, values: Array<{
+    categoryId: string,
+    valueId: string
+}>) => {
+    const data = {
+        template: template,
+        values: values
+    };
+    return postData('http://localhost:3000/templates/api', EMethod.PATCH, data);
+}
+export const deleteTemplateApi = (templateId: string)  => {
+    const data = {id: templateId};
+    return postData( 'http://localhost:3000/templates/api', EMethod.DELETE, data );
+}
 export function formatDate(date:string|Date|undefined|null):string {
     if ( !date )
         return ''

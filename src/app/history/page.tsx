@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import {getHistoryApi} from "@/app/history/api/route";
 import {CircularProgress} from "@mui/material";
 import {HistoryComponent} from "@/app/history/history.component";
+import {getHistoryApi} from "@/app/utils";
 
 export default function HistoryPage() {
 

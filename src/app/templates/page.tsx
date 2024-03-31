@@ -2,8 +2,7 @@
 
 import React from "react";
 import {CircularProgress} from "@mui/material";
-import {IDBTemplateWithCategoriesAndValues, ITemplateResponseNew} from "../utils";
-import {deleteTemplateApi, getTemplatesApi} from "@/app/templates/api/route";
+import {deleteTemplateApi, getTemplatesApi, ITemplateResponseNew} from "../utils";
 import {TemplatesComponent} from "@/app/templates/templates.component";
 
 export default function TemplatesPage() {

@@ -3,9 +3,8 @@
 import React from "react";
 import {Category, Value} from "@prisma/client";
 import {CircularProgress} from "@mui/material";
-import {getCategoryApi} from "@/app/categories/api/[categoryId]/route";
-import {getCategoryValuesApi} from "@/app/categories/api/[categoryId]/values/route";
 import {CategoryViewComponent} from "@/app/categories/[id]/category.view.component";
+import {getCategoryApi, getCategoryValuesApi} from "@/app/utils";
 
 export default function CategoryViewPage( { params }: {params: { id: string }; } ) {
 

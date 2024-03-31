@@ -3,10 +3,7 @@ import { NextResponse } from "next/server";
 import {convert, IDBTemplateWithCategoriesAndValues, ITemplateResponseNew} from "../../../../../utils";
 
 const _404 = "No template with ID found";
-export const getTemplateWithCategoryValues = (async (templateId: string): Promise<ITemplateResponseNew> => {
-    const item = fetch(`http://localhost:3000/templates/api/template/${templateId}/withcategoryvalues`).then((res) => res.json())
-    return item
-})
+
 export async function GET(
     request: Request,
     { params }: { params: { templateId: string } }

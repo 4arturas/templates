@@ -4,10 +4,6 @@ import {Category} from "@prisma/client";
 
 const _404 = "No category with ID found";
 
-
-export const getCategoryApi = (async (categoryId: string): Promise<Category> => {
-    return fetch(`http://localhost:3000/categories/api/${categoryId}`).then((res) => res.json())
-})
 export async function GET(
     request: Request,
     { params }: { params: { categoryId: string } }

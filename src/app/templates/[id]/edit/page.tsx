@@ -6,12 +6,14 @@ import {CircularProgress} from "@mui/material";
 
 
 import {TemplateComponent} from "@/app/templates/[id]/template.component";
-import {getCategoriesApi} from "@/app/categories/api/route";
-import {getCategoryValuesApi} from "@/app/categories/api/[categoryId]/values/route";
-import {getTemplateWithCategoryValues} from "@/app/templates/api/template/[templateId]/withcategoryvalues/route";
-import {editTemplateApi} from "@/app/templates/api/route";
 import {useRouter} from "next/navigation";
-import {ICategorySelect, ICategorySelectItem, ITemplateResponseNew} from "../../../../app/utils";
+import {
+    editTemplateApi, getCategoriesApi, getCategoryValuesApi,
+    getTemplateWithCategoryValues,
+    ICategorySelect,
+    ICategorySelectItem,
+    ITemplateResponseNew
+} from "../../../../app/utils";
 
 export default function TemplateEditPage({ params }: {params: { id: string }; } ) {
     const router = useRouter();

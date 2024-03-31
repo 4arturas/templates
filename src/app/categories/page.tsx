@@ -4,7 +4,7 @@ import React, {cache, use} from "react";
 import {Category} from "@prisma/client";
 import {CategoriesComponent} from "@/app/categories/categories.component";
 import {CircularProgress} from "@mui/material";
-import {deleteCategoryApi, getCategoriesApi} from "@/app/categories/api/route";
+import {deleteCategoryApi, getCategoriesApi} from "@/app/utils";
 
 
 export default function CategoriesCategoryPage() {

@@ -5,12 +5,9 @@ import React, {cache} from "react";
 import {TemplateComponent} from "@/app/templates/[id]/template.component";
 import {CircularProgress} from "@mui/material";
 import {
-    ICategorySelectItem, ICategorySelect,
+    ICategorySelectItem, ICategorySelect, createNewTemplateApi, getCategoriesApi, getCategoryValuesApi,
 } from "../../utils";
 import {Template, Value} from "@prisma/client";
-import {getCategoriesApi} from "@/app/categories/api/route";
-import {createNewTemplateApi} from "@/app/templates/api/route";
-import {getCategoryValuesApi} from "@/app/categories/api/[categoryId]/values/route";
 
 
 export default function TemplatesNewPage() {

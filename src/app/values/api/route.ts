@@ -4,10 +4,6 @@ import {EMethod, postData} from "../../utils";
 
 const _404 = "No category with ID found";
 
-export const deleteValueApi = (id: string)  => {
-    const data = {id: id};
-    return postData( 'http://localhost:3000/values/api', EMethod.DELETE, data );
-}
 export async function DELETE(
     request: Request,
     { params }: { params: { id: string } }
@@ -46,10 +42,6 @@ export async function DELETE(
     }
 }
 
-export const updateValueApi = (valueId: string, newValue: string)  => {
-    const data = {id: valueId, name: newValue};
-    return postData( 'http://localhost:3000/values/api', EMethod.PATCH, data );
-}
 export async function PATCH(
     request: Request
 ) {

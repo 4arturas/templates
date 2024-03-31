@@ -5,10 +5,6 @@ import {EMethod, postData} from "../../utils";
 
 const _404 = "No category with ID found";
 
-export async function getCategoriesApi(): Promise<Array<Category>> {
-    return fetch(`http://localhost:3000/categories/api`).then((res) => res.json())
-}
-
 export async function GET(request: Request) {
     const categories: Array<Category> = await prisma.category.findMany({
         where: { deletedAt: null }
@@ -16,10 +12,6 @@ export async function GET(request: Request) {
     return NextResponse.json(categories);
 }
 
-export const createCategoryApi = async (category: Category, values: Array<Value>) => {
-    const data = {category: category, values: values};
-    return postData('http://localhost:3000/categories/api', EMethod.POST, data);
-}
 
 export async function POST(request: Request) {
     try {
@@ -52,11 +44,6 @@ export async function POST(request: Request) {
         }
         return new NextResponse(error.message, {status: 500});
     }
-}
-
-export const updateCategoryApi = async (category: Category, values: Array<Value>) => {
-    const data = {category: category, values: values};
-    return postData('http://localhost:3000/categories/api', EMethod.PATCH, data);
 }
 
 export async function PATCH(request: Request) {
@@ -139,11 +126,6 @@ export async function PATCH(request: Request) {
         }
         return new NextResponse(error.message, {status: 500});
     }
-}
-
-export const deleteCategoryApi = (id: string) => {
-    const data = {id: id};
-    return postData('http://localhost:3000/categories/api', EMethod.DELETE, data);
 }
 
 export async function DELETE(

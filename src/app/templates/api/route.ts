@@ -11,11 +11,7 @@ import {
     ITemplateResponseNew,
     postData
 } from "../../utils";
-import {template} from "@babel/core";
 
-export async function getTemplatesApi(): Promise<Array<ITemplateResponseNew>> {
-    return fetch("http://localhost:3000/templates/api").then((res) => res.json());
-}
 
 export async function GET(request: Request) {
     try {
@@ -68,17 +64,6 @@ export async function GET(request: Request) {
     }
 }
 
-export const createNewTemplateApi = (template: Template, values: Array<{
-    categoryId: string,
-    valueId: string
-}>) => {
-    const data = {
-        template: template,
-        values: values
-    };
-    return postData('http://localhost:3000/templates/api', EMethod.POST, data);
-}
-
 export async function POST(request: Request) {
     try {
         const json = await request.json();
@@ -112,17 +97,6 @@ export async function POST(request: Request) {
         }
         return new NextResponse(error.message, {status: 500});
     }
-}
-
-export const editTemplateApi = (template: Template, values: Array<{
-    categoryId: string,
-    valueId: string
-}>) => {
-    const data = {
-        template: template,
-        values: values
-    };
-    return postData('http://localhost:3000/templates/api', EMethod.PATCH, data);
 }
 
 enum EAction {
@@ -249,11 +223,6 @@ export async function PATCH(request: Request) {
 }
 
 const _404 = "No Template with ID found";
-
-export const deleteTemplateApi = (templateId: string)  => {
-    const data = {id: templateId};
-    return postData( 'http://localhost:3000/templates/api', EMethod.DELETE, data );
-}
 
 export async function DELETE(
     request: Request
