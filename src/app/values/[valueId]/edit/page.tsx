@@ -3,10 +3,9 @@
 import React, {cache, use} from "react";
 import {Value} from "@prisma/client";
 import {CircularProgress} from "@mui/material";
-import {getValueApi} from "@/app/values/api/[valueId]/route";
 import {ValueEditComponent} from "@/app/values/[valueId]/edit/valueedit.component";
-import {updateValueApi} from "@/app/values/api/route";
 import {useRouter} from "next/navigation";
+import {getValueApi, updateValueApi} from "@/app/utils";
 
 
 export default function ValuePage({ params }: {params: { valueId: string }; }) {
