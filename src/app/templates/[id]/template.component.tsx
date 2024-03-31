@@ -176,7 +176,7 @@ console.log( categorySelectItemArr)
                 <tr>
                     <td colSpan={2}>
                         <Button variant="contained"
-                                disabled={name.length === 0 || subject.length === 0 || to.length === 0 || icon.length === 0 || templateText.length === 0 || selectedElements.length === 0}
+                                disabled={name.length === 0 || subject.length === 0 || to.length === 0 || icon.length === 0 || templateText?.length === 0 || selectedElements.length === 0}
                                 onClick={() => {
 
                                     const selectedValueIdArr: Array<{
@@ -200,7 +200,7 @@ console.log( categorySelectItemArr)
                                         } // end for j
                                     } // end for i
                                     const templateId:string = templateResponse ? templateResponse.id : '-1';
-                                    templateFunctionCreateNew( { id: templateId, name: name, subject: subject, to: to, icon: icon, templateText: templateText, createdAt: new Date(), updatedAt: new Date(), deletedAt: new Date() }, selectedValueIdArr);
+                                    templateFunctionCreateNew( { id: templateId, name: name, subject: subject, to: to, icon: icon, templateText: templateText || '', createdAt: new Date(), updatedAt: new Date(), deletedAt: new Date() }, selectedValueIdArr);
                                 }}>
                             {templateResponse ? 'Edit Template' : 'Create New Template'}
                         </Button>
