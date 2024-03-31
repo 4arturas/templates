@@ -17,9 +17,9 @@ export const CategoryViewComponent: React.FC<Props> = ({category, values}) =>
             {category.name}
         </InputLabel>
         {values.map((val, index) => (
-            <List component="nav">
-                <ListItem>
-                    <ListItemText key={index} primary={val.name}/>
+            <List key={`List${index}`} component="nav">
+                <ListItem key={`ListItem${index}`}>
+                    <ListItemText key={`ListItemText${index}`} primary={val.name}/>
                 </ListItem>
                 <Divider/>
             </List>
