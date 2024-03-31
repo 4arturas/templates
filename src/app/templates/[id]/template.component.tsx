@@ -40,7 +40,7 @@ export const TemplateComponent: React.FC<Props> = ({
     const [subject, setSubject] = React.useState<string>(templateResponse ? templateResponse.subject : '');
     const [to, setTo] = React.useState<string>(templateResponse ? templateResponse.to : '');
     const [icon, setIcon] = React.useState<string>(templateResponse ? templateResponse.icon : '');
-    const [templateText, setTemplateText] = React.useState<string>(templateResponse ? templateResponse.templateText : '');
+    const [templateText, setTemplateText] = React.useState<string | undefined>(templateResponse ? templateResponse.templateText : '');
     const [selectedElements, setSelectedElements] = React.useState<Array<ICategorySelect>>(categorySelectArr);
 console.log( categorySelectItemArr)
 
