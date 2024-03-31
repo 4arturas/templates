@@ -3,8 +3,8 @@
 import React, {cache, use} from "react";
 import {Value} from "@prisma/client";
 import {CircularProgress} from "@mui/material";
-import {getValueApi} from "@/app/values/api/[valueId]/route";
 import {ValueComponent} from "@/app/values/[valueId]/value.component";
+import {getValueApi} from "@/app/utils";
 
 
 export default function ValuePage({ params }: {params: { valueId: string }; }) {
