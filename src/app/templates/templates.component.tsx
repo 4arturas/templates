@@ -267,7 +267,7 @@ const EnhancedTable: React.FC<EnhancedTableProps> = ({headCells, rows, searchPhr
                                                             key={`deleteIcon${index}`}
                                                             onClick={(e) => {
                                                                 // e.target.disabled = true;
-                                                                deleteTemplateAndRedirect(row['id']);
+                                                                deleteTemplateAndRedirect(String(row['id']));
                                                             }}
                                                             style={{cursor: 'pointer'}}
                                                         />
