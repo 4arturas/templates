@@ -25,9 +25,7 @@ export default function CategoriesCategory( { params }: {params: { id: string };
     }
 
     React.useEffect( () => {
-
         fetchData();
-
     }, []);
 
 
