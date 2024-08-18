@@ -20,7 +20,7 @@ import {Template} from "@prisma/client";
 
 
 type Props = {
-    templateResponse: ITemplateResponseNew | undefined
+    templateResponse: ITemplateResponseNew | null
     categorySelectArr: Array<ICategorySelect>
     categorySelectItemArr: Array<ICategorySelectItem>
     templateFunctionCreateNew: (template: Template, values: Array<{

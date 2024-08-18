@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from 'next/navigation'
-import React, {cache} from "react";
+import React from "react";
 import {TemplateComponent} from "@/app/templates/[id]/template.component";
 import {CircularProgress} from "@mui/material";
 import {
@@ -45,7 +45,6 @@ export default function TemplatesNewPage() {
             setInitialized(true)
         }
         startFetching();
-        // return () => { };
     }, []);
 
     return <>
@@ -53,7 +52,7 @@ export default function TemplatesNewPage() {
                 <CircularProgress />
                 :
                 <TemplateComponent
-                    templateResponse={undefined}
+                    templateResponse={null}
                     categorySelectArr={categorySelects}
                     categorySelectItemArr={categorySelectOptions}
                     templateFunctionCreateNew={createNewTemplateAndRedirect}
