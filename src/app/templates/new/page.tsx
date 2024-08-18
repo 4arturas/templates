@@ -24,7 +24,27 @@ export default function TemplatesNewPage() {
     }
 
     React.useEffect( () => {
+        async function startFetching() {
+            const categoriesArrTmp = await getCategoriesApi();
+            const categoriesArr = categoriesArrTmp.filter( f => f.deletedAt === null );
+            const _categoryOptions:Array<ICategorySelect> = [];
+            const _options:Array<ICategorySelectItem> = [];
+            for ( let i = 0; i < categoriesArr.length; i++ )
+            {
+                const category = categoriesArr[i];
+                const categoryDataArr: Array<Value> = await getCategoryValuesApi(category.id);
+                _categoryOptions.push({name:category.name, categoryId:category.id, selectedValue: [], selectedCategoryValueId: []});
 
+                categoryDataArr.map( d => {
+                    _options.push({name:d.name, categoryValueId:d.id, categoryId:category.id})
+                });
+            }
+
+            setCategorySelects(_categoryOptions);
+            setCategorySelectOptions(_options);
+            setInitialized(true)
+        }
+        startFetching();
     }, []);
 
     return <>
