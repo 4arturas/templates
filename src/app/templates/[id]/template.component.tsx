@@ -16,14 +16,14 @@ import {
     googleIconNames2, ITemplateResponseNew,
 } from "../../utils";
 import {Search} from "@mui/icons-material";
-import {Template} from "@prisma/client";
+// import {Template} from "@prisma/client";
 
 
 type Props = {
     templateResponse: ITemplateResponseNew | null
     categorySelectArr: Array<ICategorySelect>
     categorySelectItemArr: Array<ICategorySelectItem>
-    templateFunctionCreateNew: (template: Template, values: Array<{
+    templateFunctionCreateNew: (template: any/*Template*/, values: Array<{
         categoryId: string,
         valueId: string
     }>) => void
